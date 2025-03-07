@@ -1,33 +1,25 @@
 import sys
 
-#~
-from core import Root, forest
-from app import core_fn, tool_fn
+#~>
+from app import tokenize
+from core.forest import forest, CoreTree
+
 
 def main() -> None:
     data: list[str] = sys.argv
-    data.pop(0)
+    data.pop(0) # remove <main.py>
 
-    # ['a', 'b', 'c', ...]
+    for command in data:
+        raw: list[str] = tokenize(command) # ['!', 'cmd_name', ]
+        if not raw: continue
 
-    for cmd in data:
-        tree: str = cmd[0]
+        tree: object | None = forest.get(raw[0])
 
-        if tree.isalnum():
-            Root(cmd)
+        if tree is None:
+            CoreTree(raw)
             continue
 
-        use: object | None = forest.get(tree)
-
-        if use is None:
-            raise ValueError('Invalid Syntax')
-
-        use(cmd.removeprefix(tree))
-
-
-
-
-
+        tree(raw[1:])
 
 
 

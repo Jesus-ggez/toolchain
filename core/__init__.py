@@ -1,1 +1,2 @@
-from core.root.app import RootTree
+def foo():
+    print('ok')

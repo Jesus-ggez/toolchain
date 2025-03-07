@@ -1,18 +1,28 @@
-from src import (
-    create_template,
-    create_project,
-    use_template,
-    use_project,
-    replace,
-)
+def tokenize(raw: str) -> list:
+    data: list = []
+    word: str = ''
+    mark: str = ''
 
-core_fn: dict = {
-    'project': use_project,
-    'make': create_project,
-    'use': use_template,
-}
+    for character in raw:
+        if character.isalnum() or character == '_':
+            word += character
+            if mark:
+                data.append(mark)
+                mark = ''
+            continue
+        mark += character
+        if word:
+            data.append(word)
+            word = ''
 
-tool_fn: dict = {
-    'add': create_template,
-    'replace': replace,
-}
+    if mark:
+        data.append(mark)
+    if word:
+        data.append(word)
+
+    return data
+
+
+if __name__ == '__main__':
+    test: list = tokenize('!example:root->value_1')
+    print(test)  # ['!', 'example', ':', 'root', '->', 'value_1']
