@@ -4,7 +4,7 @@ try:
     from snippet.get_one import get_snippet
     from snippet.get_all import get_all
 
-except:
+except ImportError:
     from .snippet.disable import disable_snippet
     from .snippet.create import create_snippet
     from .snippet.get_one import get_snippet
@@ -28,14 +28,19 @@ class ForgeTree:
         )
 
 
-    def get_snippet(self, identifier: str) -> None:
-        get_snippet(
+    def get_snippet(self, identifier: str) -> dict:
+        snippet: str = get_snippet(
             identifier=identifier,
         )
+        return snippet
 
 
     def get_all(self) -> list:
         return get_all()
+
+
+    def use_snippet(self, identifier: str) -> None:
+        self.file_manager.write.as_str()
 
 
 

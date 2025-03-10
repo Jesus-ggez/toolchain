@@ -1,4 +1,5 @@
 use futures::executor::block_on;
+use pyo3::types::PyDict;
 use pyo3::prelude::*;
 use sea_orm::*;
 
@@ -19,6 +20,27 @@ pub struct SnippetData {
     pub content: String,
     #[pyo3(get)]
     pub _type: String,
+}
+
+#[pymethods]
+impl SnippetData {
+    #[new]
+    fn new(id: i32, name: String, content: String, _type: String) -> Self {
+        SnippetData {
+            content,
+            _type,
+            name,
+            id,
+        }
+    }
+    fn to_dict<'a>(&self, py: Python<'a>) -> PyResult<Bound<'a, PyDict>> {
+        let dict = PyDict::new(py);
+        dict.set_item("content", &self.content)?;
+        dict.set_item("_type", &self._type)?;
+        dict.set_item("name", &self.name)?;
+        dict.set_item("id", self.id)?;
+        Ok(dict)
+    }
 }
 
 /*   ···   */

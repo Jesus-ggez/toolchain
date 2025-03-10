@@ -2,7 +2,7 @@ try:
     from file_manager import FileManager
     from to_pkg import build_pkg
 
-except:
+except ImportError:
     from .file_manager import FileManager
     from .to_pkg import build_pkg
 

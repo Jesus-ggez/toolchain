@@ -1,17 +1,16 @@
 try:
-    from forge.mod import data
-    from core.mod import data
+    from forge.mod import data as forge_data
+    from core.mod import data as core_data
     print('try')
 
-except:
-    from .forge.mod import data
-    from .core.mod import data
+except ImportError:
+    from .forge.mod import data as forge_data
+    from .core.mod import data as core_data
     print('except')
 
 
-
 forest: dict = {
-    'core': data,
-    '': data,
+    'core': core_data,
+    'forge': forge_data,
 }
 
