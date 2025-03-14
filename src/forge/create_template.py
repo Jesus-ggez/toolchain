@@ -16,6 +16,7 @@ def __use_rule(base: str, tags: list, action: dict) -> bool:
 
 
 def create_template(tempname: str) -> None:
+    print('creando')
     meta: dict = {}
     new_doc: list = []
 
@@ -33,15 +34,16 @@ def create_template(tempname: str) -> None:
 
         new_doc.append(line)
 
-    FileManager().write.from_list(
-        content=new_doc,
-        name=tempname,
-    )
-
     SnippetDb.add_in(
         name=tempname,
         version=meta.get('version', '0.0.1'),
         _type=meta.get('type', 'base'),
         content=''.join(new_doc),
     )
+
+    FileManager().write.from_list(
+        content=new_doc,
+        name=tempname,
+    )
+
 

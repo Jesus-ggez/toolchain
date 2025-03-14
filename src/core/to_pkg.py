@@ -26,26 +26,39 @@ def __mv_node(filename: str, lang: str, depth: int | None, current: str) -> None
             os.chdir(current)
 
 def __only_dir(config) -> None:
-    pura_cmd: list[str] = sys.argv[1:]
+    n: int = 0
+    if sys.argv[0].endswith('.py'):
+        n += 1
+
+    pura_cmd: list[str] = sys.argv[n:]
+
+    print(pura_cmd)
 
     if len(pura_cmd) == 1:
+        print(f'solo en: {pura_cmd[0]}')
         if os.path.isdir(pura_cmd[0]):
             os.chdir(pura_cmd[0])
             return
 
     if len(pura_cmd) == 2:
+        print('con flag')
         flag, dirname = pura_cmd
 
-        if not os.path.isdir(pura_cmd[0]):
+        print(os.getcwd())
+        if not os.path.isdir(dirname):
             return
 
         os.chdir(dirname)
-        flags = {
+        print(os.getcwd())
+        flags: dict = {
             'reset': lambda : os.remove(config.pkg_name)
         }
 
         if flag.startswith('--'):
-            flags[flag.removeprefix('--')]()
+            try:
+                flags[flag.removeprefix('--')]()
+            except:
+                ...
         return
 
 
