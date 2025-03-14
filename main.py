@@ -31,17 +31,18 @@ def main() -> None:
     tree_name, action = _tree.split(':')
 
     tree: dict = use_dict(
-        msg='Tree not found',
+        msg=f'Tree not found: {tree_name}',
         value=tree_name,
         data=forest,
     )
-    branch: dict = use_dict(
-        msg='Action not found',
-        value=action,
-        data=tree,
-    )
-    if action == '?':
-        branch: dict = tree
+
+    branch: dict = tree
+    if action != '?':
+        branch: dict = use_dict(
+            msg=f'Action not found: {action}',
+            value=action,
+            data=tree,
+        )
 
     _fn_line: str = get_argv()
     fn_name, values = _fn_line.split('.')
