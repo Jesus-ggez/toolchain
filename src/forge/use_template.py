@@ -21,6 +21,6 @@ def use_template(identifier: str) -> None:
 
     FileManager().write.from_str(
         content=record.content,
-        name=record.name,
+        name=record.name,#.strip(),
     )
 

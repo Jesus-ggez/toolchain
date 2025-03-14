@@ -7,8 +7,8 @@ from src.core import FileManager
 
 def __use_rule(base: str, tags: list, action: dict) -> bool:
     for tag in tags:
-        if base.startswith(f'__{tag}__'):
-            action[tag] = base.split(':')[-1]
+        if base.strip().startswith(f'__{tag}__'):
+            action[tag] = base.split(':')[-1].strip()
             return True
 
     return False
@@ -16,7 +16,6 @@ def __use_rule(base: str, tags: list, action: dict) -> bool:
 
 
 def create_template(tempname: str) -> None:
-    print('creando')
     meta: dict = {}
     new_doc: list = []
 
@@ -35,7 +34,7 @@ def create_template(tempname: str) -> None:
         new_doc.append(line)
 
     SnippetDb.add_in(
-        name=tempname,
+        name=meta.get('name', tempname),
         version=meta.get('version', '0.0.1'),
         _type=meta.get('type', 'base'),
         content=''.join(new_doc),

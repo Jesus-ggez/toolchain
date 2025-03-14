@@ -1,9 +1,12 @@
 import sys
+from dotenv import load_dotenv
 
 #~>
 from src.forge import data as fdata
 from src.core import data as cdata
 
+
+load_dotenv()
 
 forest: dict = {
     'core': cdata,

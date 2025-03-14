@@ -7,6 +7,7 @@ data: dict = {
     'new': {
         'snippet': create_template,
         'project': create_project,
+
     },
     'use': {
         'snippet': use_template,
