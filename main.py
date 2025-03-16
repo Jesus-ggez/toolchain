@@ -17,7 +17,8 @@ forest: dict = {
 def get_argv() -> str:
     if sys.argv:
         return sys.argv.pop(0)
-    return ''
+
+    raise ValueError('Args not found')
 
 
 def use_dict(data: dict, value: str, msg: str) -> dict:
