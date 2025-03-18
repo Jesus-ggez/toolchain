@@ -3,10 +3,10 @@ from .file_actions import (
     ReadManager,
     FileManager
 )
+from .del_pycache import delpy
 from .to_pkg import to_pkg
 
-
 data: dict = {
-    'file': FileManager(),
-    'pkg': to_pkg
+    'pkg': to_pkg,
+    'delpy': delpy
 }

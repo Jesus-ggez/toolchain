@@ -2,68 +2,33 @@ import sys
 from dotenv import load_dotenv
 
 #~>
-from src.forge import data as fdata
-from src.core import data as cdata
+from utils.tokens import tokenize
+from app.cmd import is_empty_cmd, get_raw_token
+from app.struct import create_struct
+from app.alias import use_alias
 
 
 load_dotenv()
 
-forest: dict = {
-    'core': cdata,
-    'forge': fdata,
-}
-
-
-def get_argv() -> str:
-    if sys.argv:
-        return sys.argv.pop(0)
-
-    raise ValueError('Args not found')
-
-
-def use_dict(data: dict, value: str, msg: str) -> dict:
-    _data = data.get(value)
-    if _data is None:
-        raise ValueError(msg)
-    return _data
-
 
 def main() -> None:
     sys.argv.pop(0)
+    if is_empty_cmd():
+        return
 
-    _tree: str = get_argv()
-    tree_name, action = _tree.split(':')
+    if use_alias():
+        return
 
-    tree: dict = use_dict(
-        msg=f'Tree not found: {tree_name}',
-        value=tree_name,
-        data=forest,
-    )
+    # main tree
+    for argument in sys.argv:
+        if argument.startswith('--'):
+            break
 
-    branch: dict = tree
-    if action != '?':
-        branch: dict = use_dict(
-            msg=f'Action not found: {action}',
-            value=action,
-            data=tree,
+        tokens: list[str] = tokenize(
+            raw=get_raw_token(),
         )
-
-    _fn_line: str = get_argv()
-    fn_name, values = _fn_line.split('.')
-
-    fn = branch.get(fn_name)
-    if fn is None:
-        raise ValueError('Invalid Action')
-
-    if values == '->':
-        fn(get_argv())
-        return
-
-    if not values:
-        fn()
-        return
-
-    fn(*values.split(','))
+        print(tokens)
+        create_struct(tokens)
 
 
 if __name__ == '__main__':
