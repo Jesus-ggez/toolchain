@@ -27,7 +27,6 @@ def main() -> None:
         tokens: list[str] = tokenize(
             raw=get_raw_token(),
         )
-        print(tokens)
         create_struct(tokens)
 
 
