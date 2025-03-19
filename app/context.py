@@ -6,6 +6,9 @@ from app.errors import (
 )
 
 
+spacer: str = '@'
+
+
 class CreateContext:
     def __init__(
         self,
@@ -13,6 +16,9 @@ class CreateContext:
         token: str,
     ) -> None:
         self.__validate(context=context,token=token)
+
+        if self._token == spacer:
+            return
 
         if self.__is_initial():
             return
@@ -50,11 +56,14 @@ class CreateContext:
             '::': {
                 'exec': context.select_call,
                 'args': '?',
-                'need_args': False
+                'need_args': False,
+                'fn': '',
             }
         }
 
     def __await_args(self) -> bool:
+        if not self._context['timer'] == '?':
+            return False
         is_symbol_keyword: bool = self._token == '·'
         state: bool = self._context['action']['need_args']
 
@@ -72,14 +81,14 @@ class CreateContext:
         active: bool = self._context['timer'] == '?'
 
         if active:
-            self._context['action']['func'] = self._token
+            self._context['action']['fn'] = self._token
             self._context['timer'] = 0
 
         return active
 
 
     def __exec_action(self) -> None:
-        self._context['action'](self._context, self._token)
+        self._context['action']['exec'](self._context, self._token)
         self.__clean_exec_context()
 
 
@@ -95,7 +104,7 @@ class CreateContext:
             if not (self._token in self._tokens):
                 raise TokenError(f'Invalid Token: {self._token}')
 
-            self._context['action'] = self._tokens[self._token]['exec']
+            self._context['action'] = self._tokens[self._token]
             self._context['timer'] = self._tokens[self._token]['args']
 
         return not active
@@ -111,9 +120,6 @@ class CreateContext:
         self._tokens: dict = self.__tokens()
         self._context: dict = context
         self._token: str = token
-
-        if self._token == ';':
-            return
 
 
     def __is_initial(self) -> bool:

@@ -39,11 +39,13 @@ def main() -> None:
             )
             continue
 
-        if argument.startswith('--'):
+        _raw_token: str =  get_raw_token()
+        if _raw_token.startswith('--'):
             break
 
+
         tokens: list[str] = tokenize(
-            raw=get_raw_token(),
+            raw=_raw_token,
         )
         create_struct(
             context=global_context[identifier],

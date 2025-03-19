@@ -25,29 +25,30 @@ class IContext:
 
     def select_call(self, context: dict, argument: str) -> None:
         if not context['args']:
-            self.call_single_arg(
+            self.__call_single_arg(
                 argument=argument,
                 context=context,
             )
             return
-        self.call_with_args(
+        self.__call_with_args(
             context=context,
         )
 
 
-    def call_single_arg(self, context: dict, argument: str) -> None:
+    def __call_single_arg(self, context: dict, argument: str) -> None:
         self.move_next_node(
-            node_name=context['action']['func'],
+            node_name=context['action']['fn'],
             context=context,
         )
         context['node_pointer'](argument)
 
 
-    def call_with_args(self, context: dict) -> None:
+    def __call_with_args(self, context: dict) -> None:
         self.move_next_node(
-            node_name=context['action']['func'],
+            node_name=context['action']['fn'],
             context=context,
         )
+        print(context['args'])
         context['node_pointer'](*context['args'])
 
 
