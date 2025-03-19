@@ -18,7 +18,6 @@ class WriteManager:
             data.writelines(content)
 
 
-
 class ReadManager:
     def as_str(self, name: str) -> str:
         with open(name, 'r') as data:

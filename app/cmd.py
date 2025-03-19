@@ -3,6 +3,7 @@ import sys
 #~>
 from app.errors import TokenError
 
+
 def is_empty_cmd() -> bool:
     return sys.argv == []
 

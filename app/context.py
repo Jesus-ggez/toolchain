@@ -17,21 +17,19 @@ class CreateContext:
         if self.__is_initial():
             return
 
-        print('initialized')
-
         if self.__no_action():
             return
 
-        print('with action')
-
-        if self.__is_active_timer():
-            print('with timer')
+        if self.__await_to_call():
             return
 
-        print('pre exec')
+        if self.__await_args():
+            return
+
+        if self.__is_active_timer():
+            return
 
         self.__exec_action()
-        print('callado')
 
 
     def __tokens(self) -> dict:
@@ -48,13 +46,40 @@ class CreateContext:
             '.': {
                 'exec': context.call,
                 'args': 0,
+            },
+            '::': {
+                'exec': context.select_call,
+                'args': '?',
+                'need_args': False
             }
         }
+
+    def __await_args(self) -> bool:
+        is_symbol_keyword: bool = self._token == '·'
+        state: bool = self._context['action']['need_args']
+
+        if is_symbol_keyword:
+            state: bool = self._context['action']['need_args']
+            self._context['action']['need_args'] = not state
+
+        if not is_symbol_keyword:
+            self._context['args'].append(self._token)
+
+        return self._context['action']['need_args']
+
+
+    def __await_to_call(self) -> bool:
+        active: bool = self._context['timer'] == '?'
+
+        if active:
+            self._context['action']['func'] = self._token
+            self._context['timer'] = 0
+
+        return active
 
 
     def __exec_action(self) -> None:
         self._context['action'](self._context, self._token)
-        print('in call')
         self.__clean_exec_context()
 
 
@@ -86,6 +111,9 @@ class CreateContext:
         self._tokens: dict = self.__tokens()
         self._context: dict = context
         self._token: str = token
+
+        if self._token == ';':
+            return
 
 
     def __is_initial(self) -> bool:

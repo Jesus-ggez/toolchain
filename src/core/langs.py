@@ -1,5 +1,7 @@
 from typing import NamedTuple
 
+#~>
+
 
 class Lang(NamedTuple): #<·
     import_line: object

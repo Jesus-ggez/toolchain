@@ -2,6 +2,7 @@ import shutil, os
 
 #~>
 
+
 def delpy() -> None:
     raw: list[str] = os.listdir()
 
