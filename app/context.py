@@ -6,7 +6,7 @@ from app.errors import (
 )
 
 
-spacer: str = '@'
+spacer: str = '...'
 
 
 class CreateContext:
