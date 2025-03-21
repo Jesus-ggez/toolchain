@@ -6,12 +6,6 @@ from .result import (
 )
 
 
-class _(Exception):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
-
-
-
 def safe_exec(func):
     def wrapper(*args, **kwargs) -> Result[T, Exception]:
         try:
