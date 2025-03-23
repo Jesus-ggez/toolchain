@@ -2,11 +2,10 @@ import sys
 from dotenv import load_dotenv
 
 #~>
+from utils.terminal import is_empty_cmd, get_next_arg
+from app_v1.struct import create_struct
 from utils.tokens import tokenize
-from app.cmd import is_empty_cmd, get_raw_token
-from app.mod_context import modify_context
-from app.struct import create_struct
-from app.alias import use_alias
+from utils.result import Result
 
 
 
@@ -19,8 +18,8 @@ def main() -> None:
     if is_empty_cmd():
         return
 
-    if use_alias():
-        return
+    #if use_alias():
+    #    return
 
     global_context: dict = {
         'num_token': 0,
@@ -28,36 +27,37 @@ def main() -> None:
     identifier: int = global_context['num_token']
 
     # main tree
-    for argument in sys.argv:
+    for _ in sys.argv:
         global_context[identifier] = {}
 
-        if argument.startswith('·-'):
-            argument.removeprefix('·-')
-            modify_context(
-                context=global_context[identifier],
-                argument=argument,
-            )
-            continue
+        _raw_token: Result = get_next_arg()
+        if _raw_token.is_err():
+            print(_raw_token)
+            return
 
-        _raw_token: str =  get_raw_token()
-        if _raw_token.startswith('--'):
+        raw_token: str = _raw_token.data
+        if raw_token.startswith('--'):
             break
 
-
         tokens: list[str] = tokenize(
-            raw=_raw_token,
+            raw=raw_token,
         )
-        create_struct(
+
+        # ._.
+        action: Result = create_struct(
             context=global_context[identifier],
             tokens=tokens,
         )
+        if action.is_err():
+            return
         global_context['num_token'] += 1
 
 
 if __name__ == '__main__':
-    main()
-
-
+    try:
+        main()
+    except Exception as e:
+        print(f'__main__ | {e}')
 
 
 

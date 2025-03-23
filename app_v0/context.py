@@ -43,7 +43,7 @@ class CreateContext:
         return {
             ':': {
                 'exec': context.move_next_node,
-                'args': 1,
+                'args': 0,
             },
             '?': {
                 'exec': context.or_else_node,

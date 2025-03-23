@@ -87,7 +87,6 @@ def to_pkg(lang: str, depth: int | None = None) -> None:
             filename=file,
         ): continue
 
-        print('ok')
         if os.path.isdir(file):
             __mv_node(
                 current=current,
@@ -146,6 +145,7 @@ def to_pkg(lang: str, depth: int | None = None) -> None:
     if not pkg_values: return
     pkg_name: str = config.pkg_name
 
+    print('ok')
     for filename, exports in pkg_values.items():
         if len(exports) == 1:
             FileManager().write.ensure_exists(

@@ -29,7 +29,7 @@ class Result(NamedTuple, Generic[T, E]):
         return f'Err(error={self.error})'
 
 
-def Ok(data: T) -> Result[T, E]:
+def Ok(data: T = None) -> Result[T, E]:
     return Result(ok=True, data=data)
 
 

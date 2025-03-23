@@ -1,24 +1,24 @@
-from .result import (
-    Result,
-    Err,
-    Ok,
-    T,
-)
+# main
+class SnippetError(Exception):
+    def __init__(self, line: int, message: str) -> None:
+        msg: str = f'{line:^4} | {message}'
+        super().__init__(msg)
 
 
-class _(Exception):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
+class TerminalError(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)
+
+
+class SnippetMetaError(SnippetError):
+    def __init__(self, line: int, message: str) -> None:
+        super().__init__(line, message)
 
 
 
-def safe_exec(func):
-    def wrapper(*args, **kwargs) -> Result[T, Exception]:
-        try:
-            result = func(*args, **kwargs)
-            return Ok(result)
 
-        except Exception as e:
-            return Err(e)
-
-    return wrapper
+# derive
+class SnippetMetaImplError(SnippetMetaError):
+    def __init__(self, line: int, message: str, _err) -> None:
+        print(_err)
+        super().__init__(line, message)

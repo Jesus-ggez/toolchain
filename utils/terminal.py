@@ -1,20 +1,30 @@
 from sys import argv as arguments
 
 #~>
+from utils.result import (
+    Result,
+    Err,
+    Ok,
+)
+
 
 def is_empty_cmd() -> bool:
     return not arguments
 
 
-def get_next_arg() -> str:
+def get_next_arg() -> Result[str, Exception]:
     if is_empty_cmd():
-        raise ValueError('Not found arguments')
+        return Err(error=ValueError(
+            'Not found arguments'
+        ))
 
-    return arguments.pop(0)
+    return Ok(data=arguments.pop(0))
 
 
-def get_copy_next_arg() -> str:
+def get_copy_next_arg() -> Result[str, Exception]:
     if is_empty_cmd():
-        raise ValueError('Not found arguments')
+        return Err(error=ValueError(
+            'Not found next argument to copy'
+        ))
 
-    return arguments[0]
+    return Ok(data=arguments[0])

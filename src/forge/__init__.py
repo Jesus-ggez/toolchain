@@ -1,6 +1,7 @@
-from .snippet.mod import Snippet
-from .project.mod import Project
-
+from .snippet.prelude import SnippetManager
 
 data: dict = {
+    'snippet': {
+        'new': SnippetManager().create_manager
+    }
 }

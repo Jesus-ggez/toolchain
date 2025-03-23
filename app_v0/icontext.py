@@ -4,6 +4,7 @@ from app.errors import TreeError
 
 class IContext:
     def move_next_node(self, context: dict, node_name: str) -> None:
+        print(node_name)
         if not (node_name in context['node_pointer']):
             raise TreeError(f'Invalid name branch: {node_name}')
 

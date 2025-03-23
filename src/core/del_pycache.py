@@ -1,9 +1,26 @@
 import shutil, os
 
 #~>
+from utils.result import (
+    Result,
+    Err,
+    Ok,
+)
 
 
-def delpy() -> None:
+def recursive_call(dirname: str) -> Result[None, Exception]:
+    try:
+        os.chdir(dirname)
+        delpy()
+
+    except Exception as e:
+        print(e)
+        return Err(error=e)
+
+    return Ok()
+
+
+def delpy() -> Result[None, Exception]:
     raw: list[str] = os.listdir()
 
     for dirname in raw:
@@ -17,16 +34,13 @@ def delpy() -> None:
         if not os.path.isdir(dirname):
             continue
 
-        try:
-            os.chdir(dirname)
-            delpy()
-
-        except Exception as e:
-            print(e)
-
-        finally:
+        _action: Result = recursive_call(
+            dirname=dirname,
+        )
+        if _action.is_err():
             os.chdir('..')
-    return
+
+    return Ok()
 
 
 if __name__ == '__main__':
