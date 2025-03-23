@@ -4,14 +4,15 @@ from dotenv import load_dotenv
 #~>
 from utils.terminal import is_empty_cmd, get_next_arg
 from app_v1.struct import create_struct
+from utils.errors import safe_exec
 from utils.tokens import tokenize
 from utils.result import Result
-
 
 
 load_dotenv()
 
 
+@safe_exec
 def main() -> None:
     sys.argv.pop(0)
 
@@ -54,10 +55,7 @@ def main() -> None:
 
 
 if __name__ == '__main__':
-    try:
-        main()
-    except Exception as e:
-        print(f'__main__ | {e}')
+    init: Result = main()
 
-
-
+    if init.is_err():
+        print(init)
