@@ -20,7 +20,7 @@ def recursive_call(dirname: str) -> Result[None, Exception]:
     return Ok()
 
 
-def delpy() -> Result[None, Exception]:
+def delpy() -> None:
     raw: list[str] = os.listdir()
 
     for dirname in raw:
@@ -38,9 +38,8 @@ def delpy() -> Result[None, Exception]:
             dirname=dirname,
         )
         if _action.is_err():
-            os.chdir('..')
-
-    return Ok()
+            print(_action)
+        os.chdir('..')
 
 
 if __name__ == '__main__':

@@ -8,9 +8,7 @@ class TokenFactory:
         self._error: Result = Ok()
         self._context: dict = context
         self._token: str = token
-
-        print(f'Ok | {self.__class__.__name__}')
-
+        #print(self.__class__.__name__)
 
     def check_error(self) -> Result[None, FactoryError]:
         return self._error
@@ -20,3 +18,10 @@ class TokenFactory:
         self._error: Result = v
 
 
+    def _is_handler(self) -> bool:
+        return self._context['handler'] != None
+
+
+    def _use_handler(self, instance: type) -> None:
+        self._context['handler'] = instance
+        #print(self.__class__.__name__, self._context)

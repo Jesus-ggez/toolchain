@@ -1,6 +1,6 @@
 #~>
-from app_v1.context import ContextManager
-from app_v1.data import forest
+from app.v1.context import ContextManager
+from app.v1.data import forest
 from utils.result import (
     Result,
     Err,
@@ -18,7 +18,7 @@ def create_struct(tokens: list[str], context: dict) -> Result[None, Exception]:
         }
     )
 
-    if tokens[0].isalnum():
+    if tokens[0].replace('_', 's').isalnum():
         tokens.insert(0, ':')
 
     for token in tokens:
@@ -29,7 +29,7 @@ def create_struct(tokens: list[str], context: dict) -> Result[None, Exception]:
 
         if action.check_error().is_err():
             return Err(error=Exception(
-                f'Token has error | from create_struct | {token}'
+                f'Token has error | from create_struct | Token: {token}\nAction: {action.check_error().error}'
             ))
 
     return Ok()

@@ -14,7 +14,7 @@ class ActionsFactory:
     def get_factory(name: str) -> Result[TokenFactory, TokenError]:
         factory = all_data.get(name)
 
-        if not factory:
+        if factory is None:
             return Err(error=TokenError(
                 message='Token not found',
                 filename=__name__,

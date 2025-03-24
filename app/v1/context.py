@@ -18,9 +18,12 @@ class ContextManager:
             self._use_error(constructor)
             return
 
-        # handler: None | TokenFactory
+        # handler: None | TokenFactory ['.']
         if self._context['handler']:
-            action: TokenFactory = self._context['handler'](self._token, self._context)
+            action: TokenFactory = self._context['handler'](
+                self._context,
+                self._token,
+            )
             if action.check_error().is_err():
                 self._use_error(action.check_error())
 
@@ -44,7 +47,6 @@ class ContextManager:
 
 
     def _use_error(self, v: Result) -> None:
-        print(v)
         self._error: Result = v
 
 
@@ -57,7 +59,7 @@ class ContextManager:
             return Err(error=ContextError(
                 message='Context is empty',
                 filename=__name__,
-                line=56,
+                line=58,
             ))
 
         if not token:
@@ -65,11 +67,10 @@ class ContextManager:
                 message='Invalid Token',
                 filename=__name__,
                 token=token,
-                line=63,
+                line=65,
             ))
 
         self._context: dict = context
         self._token: str = token
 
         return Ok()
-

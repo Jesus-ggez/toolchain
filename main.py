@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 #~>
 from utils.terminal import is_empty_cmd, get_next_arg
-from app_v1.struct import create_struct
+from app.v1.struct import create_struct
 from utils.errors import safe_exec
 from utils.tokens import tokenize
 from utils.result import Result
@@ -50,7 +50,9 @@ def main() -> None:
             tokens=tokens,
         )
         if action.is_err():
+            print(action.error)
             return
+
         global_context['num_token'] += 1
 
 
@@ -58,4 +60,4 @@ if __name__ == '__main__':
     init: Result = main()
 
     if init.is_err():
-        print(init)
+        print(f'python: {init}')
