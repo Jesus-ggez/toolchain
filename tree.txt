@@ -1,0 +1,106 @@
+.
+├── _databases
+│   ├── snippet.db
+│   └── test_snippet.db
+├── _libs
+│   ├── lab
+│   │   ├── Cargo.lock
+│   │   ├── Cargo.toml
+│   │   └── src
+│   │       └── main.rs
+│   └── snippet_db
+│       ├── Cargo.lock
+│       ├── Cargo.toml
+│       ├── src
+│       │   ├── config_db.rs
+│       │   ├── entities
+│       │   │   ├── mod.rs
+│       │   │   ├── prelude.rs
+│       │   │   ├── project.rs
+│       │   │   └── snippet.rs
+│       │   ├── identifier.rs
+│       │   ├── lib.rs
+│       │   ├── migrator
+│       │   │   ├── m20250301_000001_snippet.rs
+│       │   │   ├── m20250301_000002_project.rs
+│       │   │   ├── main.rs
+│       │   │   └── mod.rs
+│       │   └── py_rs
+│       │       ├── mod.rs
+│       │       ├── prelude.rs
+│       │       ├── project
+│       │       │   ├── __init__.py
+│       │       │   ├── mod.rs
+│       │       │   ├── prelude.rs
+│       │       │   ├── pure_delete.rs
+│       │       │   ├── pure_insert.rs
+│       │       │   └── pure_read.rs
+│       │       └── snippet
+│       │           ├── __init__.py
+│       │           ├── mod.rs
+│       │           ├── prelude.rs
+│       │           ├── pure_delete.rs
+│       │           ├── pure_insert.rs
+│       │           └── pure_read.rs
+│       └── tests
+│           ├── code.db
+│           ├── foo.py
+│           └── main.py
+├── app
+│   ├── v0
+│   │   ├── context.py
+│   │   ├── icontext.py
+│   │   └── mod_context.py
+│   └── v1
+│       ├── alias.py
+│       ├── context.py
+│       ├── data.py
+│       ├── errors.py
+│       ├── factories
+│       │   ├── base_factory.py
+│       │   ├── call_with_arg.py
+│       │   ├── call_with_args.py
+│       │   ├── data.py
+│       │   ├── errors.py
+│       │   ├── move_node.py
+│       │   └── only_call.py
+│       ├── struct.py
+│       └── token_factory.py
+├── compilated
+│   └── snippet_db
+├── main.py
+├── src
+│   ├── __init__.py
+│   ├── core
+│   │   ├── __init__.py
+│   │   ├── cls_to.py
+│   │   ├── del_pycache.py
+│   │   ├── file_actions.py
+│   │   ├── filters.py
+│   │   ├── langs.py
+│   │   └── to_pkg.py
+│   └── forge
+│       ├── __init__.py
+│       ├── basic
+│       │   ├── cmd.py
+│       │   ├── errors.py
+│       │   └── prelude.py
+│       └── snippet
+│           ├── cmd.py
+│           ├── errors.py
+│           ├── managers
+│           │   ├── ___.tc
+│           │   ├── basic.tc
+│           │   ├── data.py
+│           │   └── mod.py
+│           ├── meta.py
+│           └── prelude.py
+├── tree.txt
+└── utils
+    ├── __init__.py
+    ├── errors.py
+    ├── result.py
+    ├── terminal.py
+    └── tokens.py
+
+25 directories, 79 files
