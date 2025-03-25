@@ -1,39 +1,51 @@
 #~>
-from .managers.mod import get_manager
-from src.core import FileManager
+from .metadata.errors import SnippetMetadataError
+from .metadata.mod import SnippetMetadata
+from .start.mod import StartManager
 from .errors import SnippetError
 from .cmd import Terminal
 from utils.result import (
     Result,
-    Err,
-    Ok,
 )
 
 
 class SnippetManager:
-    def create_manager(self) -> Result[None, SnippetError]:
-        actor: FileManager = FileManager()
-        content: list = []
+    def start(self) -> None:
+        name: str = self.__class__.__name__
+        temp_name: Result = Terminal.get_tempname()
+        if temp_name.is_err():
+            raise SnippetError(
+                message='The argument are not valid for a starter template',
+                filename=name,
+                line=15,
+            )
 
-        _value: Result =  Terminal().get_manager()
-        if _value.is_ok():
-            _new_content: Result = get_manager(name=_value.data)
-            if _new_content.is_err():
-                return Err(error=SnippetError(
-                    message=f'create_manager | {_new_content.error}',
-                    line=21,
-                ))
-            content.extend(_new_content.data)
-
-        action: Result = actor.write.from_list(
-            content=content,
-            name='___.tc',
-        )
-
+        action: Result = StartManager.build(template=temp_name.data)
         if action.is_err():
-            print(action.error)
-            return Err(error=action.error)
+            raise SnippetError(
+                message='Error building startup configuration',
+                filename=name,
+                line=23,
+            )
 
-        return Ok()
+
+    def build(self) -> None:
+        name: str = self.__class__.__name__
+        file: dict = {}
+        metadata: SnippetMetadata = SnippetMetadata(
+            context=file,
+        )
+        if metadata.check_error().is_err():
+            raise metadata.check_error().error
+
+        get_metadata: Result = metadata.generate()
+        if get_metadata.is_err():
+            raise SnippetMetadataError(
+                message=f'Fields not found: {get_metadata.error}',
+                filename=name,
+                line=39,
+            )
 
 
+    def use(self) -> None:
+        ...

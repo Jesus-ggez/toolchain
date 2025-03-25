@@ -9,19 +9,46 @@ from utils.result import (
 
 
 class Terminal:
-    def get_manager(self) -> Result[str, TerminalError]:
-        _arg: Result = get_copy_next_arg()
-        if _arg.is_err():
+    @staticmethod
+    def get_tempname() -> Result[str, TerminalError]:
+        _value: Result = get_copy_next_arg()
+        if _value.is_err():
             return Err(error=TerminalError(
-                message='Not arguments',
+                message='Invalid Argument',
             ))
 
-        if not _arg.data.startswith('--'):
+        value: Result = get_next_arg()
+        if value.is_err():
             return Err(error=TerminalError(
-                message='Invalid flag',
+                message='Unknown Error, copy != original',
             ))
 
-        flag: str = _arg.data.removeprefix('--')
-        get_next_arg()
+        if value.data != _value.data:
+            return Err(error=TerminalError(
+                message='Unknown Error, copy != original',
+            ))
 
-        return Ok(data=flag)
+        if not value.data.startswith('--'):
+            return Err(error=TerminalError(
+                message='Invalid Flag'
+            ))
+
+        flag: str = value.data.removeprefix('--')
+        if not flag.startswith('tempname'):
+            return Err(error=TerminalError(
+                message='Invalid flag name'
+            ))
+
+        kv: list = flag.split('[')
+        if len(kv) != 2:
+            return Err(error=TerminalError(
+                message='Invalid syntax',
+            ))
+
+        tempname: str = kv[1]
+        if not tempname.endswith(']'):
+            return Err(error=TerminalError(
+                message='Invalid syntax',
+            ))
+
+        return Ok(tempname.removesuffix(']'))
