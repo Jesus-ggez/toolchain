@@ -1,4 +1,8 @@
-class SnippetMetadataError(Exception):
-    def __init__(self, message: str, filename: str, line: int) -> None:
-        msg: str = f'{filename} | {line:^4} | {message}'
-        super().__init__(msg)
+class TerminalError(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+
+class SnippetError(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)

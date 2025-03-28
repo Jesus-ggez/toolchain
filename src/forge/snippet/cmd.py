@@ -1,5 +1,6 @@
 #~>
 from utils.terminal import get_copy_next_arg, get_next_arg
+from .start.utils import print_help
 from .errors import TerminalError
 from utils.result import (
     Result,
@@ -10,45 +11,33 @@ from utils.result import (
 
 class Terminal:
     @staticmethod
-    def get_tempname() -> Result[str, TerminalError]:
-        _value: Result = get_copy_next_arg()
-        if _value.is_err():
+    def get_name() -> Result[str, TerminalError]:
+        _name: Result = get_copy_next_arg()
+        if _name.is_err():
+            return Ok('blank')
+
+        name: str = _name.data
+        if name == '--help':
+            print_help()
+            return Ok('_')
+
+        if name != get_next_arg().data:
             return Err(error=TerminalError(
-                message='Invalid Argument',
+                'Unknown Error, get_next_arg != get_copy_next_arg',
+            ))
+        if not name.startswith('--'):
+            return Err(error=TerminalError(
+                'Invalid argument',
             ))
 
-        value: Result = get_next_arg()
-        if value.is_err():
+        cmd: str = name.removeprefix('--')
+        content: list[str] = cmd.split(sep='[')
+
+        if len(content) != 2 or not content[1].endswith(']'):
             return Err(error=TerminalError(
-                message='Unknown Error, copy != original',
+                'Invalid syntax',
             ))
 
-        if value.data != _value.data:
-            return Err(error=TerminalError(
-                message='Unknown Error, copy != original',
-            ))
+        final: str = content[1].removesuffix(']')
 
-        if not value.data.startswith('--'):
-            return Err(error=TerminalError(
-                message='Invalid Flag'
-            ))
-
-        flag: str = value.data.removeprefix('--')
-        if not flag.startswith('tempname'):
-            return Err(error=TerminalError(
-                message='Invalid flag name'
-            ))
-
-        kv: list = flag.split('[')
-        if len(kv) != 2:
-            return Err(error=TerminalError(
-                message='Invalid syntax',
-            ))
-
-        tempname: str = kv[1]
-        if not tempname.endswith(']'):
-            return Err(error=TerminalError(
-                message='Invalid syntax',
-            ))
-
-        return Ok(tempname.removesuffix(']'))
+        return Ok(final)

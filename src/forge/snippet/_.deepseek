@@ -1,9 +1,0 @@
-actualmente tengo una herramienta que es tal cual lo que se ha hablado, capaz de crear proyectos mas personalizados que con cookiecutter ya que puedo crear proyectos dinamicamente desde terminal sin necesidad de pensar tanto
-ya tiene componentes de negocio, logicos, abstracciones, generadores, etc para poder hacer desde un API 100% segura desde un inicio al tener casi todo testeado, manejo de errores inspirados en rust con una capacidad de no existir fallos mas alla que la logica de negocio o errores logicos de el desarrollador (como 'abc'[key], tratar de obtener una posicion de un str pensando que es un diccionario), crear variables que no existen, etc
-la herramienta puede crear UI web movil y desktop en una base de codigo usando para:
-web -> web components, html y css
-movil -> kotlin para android, arkts para huawei y dart para swift en lo que aprendo swift e incluso pwas con js puro
-pc -> flutter o iced.rs para ello
-
-la capacidad de hacer todo tipo de cosas asi, tambien, en caso de que necesitara cambiar x db muy acoplada al sistema, tiene utilidades para reemplazar esas lineas en todo el proyecto
-hacer paquetes sin contexto, eliminar cache conflictiva, acelerara areas complejas, etc

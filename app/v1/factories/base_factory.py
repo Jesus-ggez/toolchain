@@ -1,21 +1,14 @@
 #~>
+from src.utils.base_safe import SafeClass
 from utils.result import Result, Ok
-from .errors import FactoryError
 
 
-class TokenFactory:
+class TokenFactory(SafeClass):
     def __init__(self, context: dict, token: str) -> None:
         self._error: Result = Ok()
         self._context: dict = context
         self._token: str = token
         #print(self.__class__.__name__)
-
-    def check_error(self) -> Result[None, FactoryError]:
-        return self._error
-
-
-    def _use_error(self, v: Result) -> None:
-        self._error: Result = v
 
 
     def _is_handler(self) -> bool:

@@ -1,19 +1,19 @@
 from typing import (
     NamedTuple,
-    Optional,
     Generic,
     TypeVar,
+    Any,
 )
 
 
-T = TypeVar('T')
+T = TypeVar('T', bound=Any)
 E = TypeVar('E', bound=Exception)
 
 
 class Result(NamedTuple, Generic[T, E]):
     ok: bool
-    error: Optional[E] = None
-    data: Optional[T] = None
+    error: Any | E = None
+    data: Any | T = None
 
     def is_ok(self) -> bool:
         return self.ok

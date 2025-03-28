@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 #~>
 from utils.terminal import is_empty_cmd, get_next_arg
 from app.v1.struct import create_struct
+from app.v1.alias import use_alias
 from utils.errors import safe_exec
 from utils.tokens import tokenize
 from utils.result import Result
@@ -14,13 +15,16 @@ load_dotenv()
 
 @safe_exec
 def main() -> None:
-    sys.argv.pop(0)
+    get_next_arg() # del "main.py" from arguments = []
 
     if is_empty_cmd():
         return
 
-    #if use_alias():
-    #    return
+    """
+    if ( alias := use_alias() ):
+        print(alias.error or alias.data)
+        return
+    """
 
     global_context: dict = {
         'num_token': 0,

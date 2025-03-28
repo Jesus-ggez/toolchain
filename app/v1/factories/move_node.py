@@ -11,6 +11,7 @@ from utils.result import (
 class MoveNodeFactory(TokenFactory):
     tag: str = ':'
     def __init__(self, context: dict, token: str) -> None:
+        self.name: str = self.__class__.__name__
         super().__init__(context, token)
 
         if not self._is_handler():
@@ -35,15 +36,15 @@ class MoveNodeFactory(TokenFactory):
         if type(current) != dict:
             return Err(error=FactoryError(
                 message='Impossible move to other node',
-                filename=self.__class__.__name__,
-                line=35,
+                filename=self.name,
+                line=36,
             ))
 
         if not (self._token in current):
             return Err(error=FactoryError(
                 message='Node not found: ' + self._token,
-                filename=self.__class__.__name__,
-                line=42,
+                filename=self.name,
+                line=43,
             ))
 
         self._context['node_pointer'] = current[self._token]

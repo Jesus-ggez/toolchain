@@ -2,6 +2,7 @@
 from .token_factory import ActionsFactory, TokenFactory
 from .errors import ContextError, TokenError
 from .factories.errors import FactoryError
+from src.utils.base_safe import SafeClass
 from utils.result import (
     Result,
     Err,
@@ -9,7 +10,7 @@ from utils.result import (
 )
 
 
-class ContextManager:
+class ContextManager(SafeClass):
     def __init__(self, context: dict, token: str) -> None:
         self._error: Result = Ok()
 
@@ -44,14 +45,6 @@ class ContextManager:
             self._use_error(action.check_error())
 
         return
-
-
-    def _use_error(self, v: Result) -> None:
-        self._error: Result = v
-
-
-    def check_error(self) -> Result[None, FactoryError]:
-        return self._error
 
 
     def constructor(self, context: dict, token: str) -> Result[None, ContextError]:
