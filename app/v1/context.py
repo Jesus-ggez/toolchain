@@ -1,7 +1,6 @@
 #~>
 from .token_factory import ActionsFactory, TokenFactory
 from .errors import ContextError, TokenError
-from .factories.errors import FactoryError
 from src.utils.base_safe import SafeClass
 from utils.result import (
     Result,
@@ -37,7 +36,7 @@ class ContextManager(SafeClass):
             return
 
         # handler::None -> TokenFactory
-        action: TokenFactory = handler.data(
+        action: TokenFactory = handler.value(
             context=self._context,
             token=self._token,
         )

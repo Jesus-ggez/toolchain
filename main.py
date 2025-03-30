@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 #~>
 from utils.terminal import is_empty_cmd, get_next_arg
 from app.v1.struct import create_struct
-from app.v1.alias import use_alias
+#from app.v1.alias import use_alias
 from utils.errors import safe_exec
 from utils.tokens import tokenize
 from utils.result import Result
@@ -40,7 +40,7 @@ def main() -> None:
             print(_raw_token)
             return
 
-        raw_token: str = _raw_token.data
+        raw_token: str = _raw_token.value
         if raw_token.startswith('--'):
             break
 

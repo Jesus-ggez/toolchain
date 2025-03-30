@@ -18,7 +18,7 @@ def get_next_arg() -> Result[str, Exception]:
             'Not found arguments'
         ))
 
-    return Ok(data=arguments.pop(0))
+    return Ok(arguments.pop(0))
 
 
 def get_copy_next_arg() -> Result[str, Exception]:
@@ -27,4 +27,4 @@ def get_copy_next_arg() -> Result[str, Exception]:
             'Not found next argument to copy'
         ))
 
-    return Ok(data=arguments[0])
+    return Ok(arguments[0])

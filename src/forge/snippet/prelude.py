@@ -15,7 +15,7 @@ class SnippetManager:
         if name.is_err():
             raise name.error
 
-        action: StartManager = StartManager(name.data)
+        action: StartManager = StartManager(name.value)
         if action.check_error().is_err():
             raise action.check_error().error
 

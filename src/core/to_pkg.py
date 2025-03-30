@@ -2,6 +2,8 @@ import sys
 import os
 
 #~>
+from utils.result import Result
+
 try: # package file
     from .file_actions import FileManager
     from .filters import _is_invalid_file
@@ -100,12 +102,16 @@ def to_pkg(lang: str, depth: int | None = None) -> None:
             continue
 
         # document reader
-        original_content: list[str] = FileManager().read.as_list(name=file)
+        original_content: Result = FileManager().read.as_list(name=file)
+        if original_content.is_err():
+            print(original_content.error)
+            return
+
         export_content: list[str] = []
 
         force_ignore: str = '#<·'
         force_add: str = '#·>' #<·
-        for line in original_content:
+        for line in original_content.value:
             if force_ignore in line:
                 continue
 
@@ -148,10 +154,11 @@ def to_pkg(lang: str, depth: int | None = None) -> None:
     print('ok')
     for filename, exports in pkg_values.items():
         if len(exports) == 1:
-            FileManager().write.ensure_exists(
+            if ( err := FileManager().write.ensure_exists(
                 content=config.import_line(filename) + exports.pop(),
                 name=pkg_name,
-            )
+            ) ):
+                print(err)
             continue
 
         tab: str = '    '
@@ -162,10 +169,11 @@ def to_pkg(lang: str, depth: int | None = None) -> None:
             ',\n'.join(exports),
             '\n)\n'
         ]
-        FileManager().write.ensure_exists(
+        if ( err := FileManager().write.ensure_exists(
             content=_content,
             name=pkg_name,
-        )
+        ) ):
+            print(err)
 
 
 if __name__ == '__main__':

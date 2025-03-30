@@ -13,7 +13,7 @@ E = TypeVar('E', bound=Exception)
 class Result(NamedTuple, Generic[T, E]):
     ok: bool
     error: Any | E = None
-    data: Any | T = None
+    value: Any | T = None
 
     def is_ok(self) -> bool:
         return self.ok
@@ -25,12 +25,12 @@ class Result(NamedTuple, Generic[T, E]):
 
     def __str__(self) -> str:
         if self.ok:
-            return f'Ok(data={self.data})'
+            return f'Ok(value={self.value})'
         return f'Err(error={self.error})'
 
 
-def Ok(data: T = None) -> Result[T, E]:
-    return Result(ok=True, data=data)
+def Ok(value: T = None) -> Result[T, E]:
+    return Result(ok=True, value=value)
 
 
 def Err(error: E) -> Result[T, E]:

@@ -1,6 +1,5 @@
 #~>
 from .base_factory import TokenFactory
-from utils.errors import safe_exec
 from .errors import FactoryError
 from utils.result import (
     Result,

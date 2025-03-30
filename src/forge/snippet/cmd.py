@@ -16,12 +16,12 @@ class Terminal:
         if _name.is_err():
             return Ok('blank')
 
-        name: str = _name.data
+        name: str = _name.value
         if name == '--help':
             print_help()
             return Ok('_')
 
-        if name != get_next_arg().data:
+        if name != get_next_arg().value:
             return Err(error=TerminalError(
                 'Unknown Error, get_next_arg != get_copy_next_arg',
             ))
