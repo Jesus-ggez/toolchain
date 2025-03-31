@@ -1,0 +1,7 @@
+#·!
+name = "foo"
+content = "foo.py"
+version = "0.0.1"
+_type = "test"
+lang = "py"
+

@@ -36,7 +36,7 @@ class OnlyCallFactory(TokenFactory):
         call: Result = self.__wrap()
         if call.is_err():
             return Err(error=FactoryError(
-                message=f'The function has failed, it says: {call}',
+                message=f'The function has failed, it says: \n{call}',
                 filename=self.name,
                 line=38,
             ))
@@ -51,6 +51,6 @@ class OnlyCallFactory(TokenFactory):
         except Exception as e:
             return Err(error=FactoryError(
                 message=f'Error in exec: {e}',
-                filename=self.name,
+                filename=self._context['node_pointer'].__name__,
                 line=49,
             ))
