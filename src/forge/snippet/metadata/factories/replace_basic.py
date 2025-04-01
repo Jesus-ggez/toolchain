@@ -24,4 +24,5 @@ class BasicFactory(Factory):
                 line=21
             )))
 
-        self._raw[self.token_name] = data.value[2].replace("'", "")
+        kw: str = data.value[2]
+        self._raw[self.token_name] = kw.removeprefix("'").removesuffix("'")

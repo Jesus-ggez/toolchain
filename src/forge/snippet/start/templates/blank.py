@@ -1,7 +1,7 @@
 temp: str = """#·!
 name = ''
-content = ''
+target = ''
 version = ''
-_type = ''
+type = ''
 lang = ''
 """

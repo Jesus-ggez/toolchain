@@ -50,7 +50,7 @@ class OnlyCallFactory(TokenFactory):
 
         except Exception as e:
             return Err(error=FactoryError(
-                message=f'Error in exec: {e}',
+                message=f'Error in exec: \n{e}',
                 filename=self._context['node_pointer'].__name__,
                 line=49,
             ))

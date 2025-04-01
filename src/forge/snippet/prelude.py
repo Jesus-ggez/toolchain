@@ -20,7 +20,7 @@ class SnippetManager:
             raise err.error
 
 
-    def new(self) -> None: # ·here·
+    def new(self) -> None: # Ok
         metadata: MetadataManager = MetadataManager()
         if ( err := metadata.check_error() ).is_err():
             raise err.error
@@ -30,17 +30,14 @@ class SnippetManager:
         if ( err := metadata.check_error() ).is_err():
             raise err.error
 
-        # .
         action: CreatorManager = CreatorManager(
             data=metadata.data,
         )
         if ( err := action.check_error() ).is_err():
-            print('err CreatorManager')
             raise err.error
-        print('new is OK')
 
 
-    def use(self, identifier: str) -> None:
+    def use(self, identifier: str) -> None: # ·here·
         if not identifier:
             raise SnippetError(
                 'Identifier must not be empty'
