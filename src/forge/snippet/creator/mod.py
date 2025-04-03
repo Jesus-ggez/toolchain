@@ -1,3 +1,6 @@
+import os
+
+
 #~>
 from src.utils.base_safe import SafeClass
 from .errors import CreatorManagerError
@@ -39,6 +42,8 @@ class CreatorManager(SafeClass):
             self._use_error(err)
             return
 
+        os.remove('___.tc')
+
 
     def __exists(self) -> Result[None, CreatorManagerError]:
         for token in self.basic:
@@ -48,7 +53,6 @@ class CreatorManager(SafeClass):
                     filename=self.name,
                     line=45,
                 ))
-
 
         return Ok()
 

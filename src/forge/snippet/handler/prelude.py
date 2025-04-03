@@ -32,7 +32,9 @@ class SnippetMainHandler(SafeClass):
             self._use_error(actor)
             return
 
-        action: Result = actor.value.build(content.value)
+        action: Result = actor.value.build(
+            self._content,
+        )
         if action.is_err():
             self._use_error(action)
             return
@@ -54,5 +56,4 @@ class SnippetMainHandler(SafeClass):
             self._content: SnippetData = SnippetDb.find_by_name(v)
 
         except Exception as e:
-            print('dbErr')
             return Err(error=e)

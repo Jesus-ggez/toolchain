@@ -53,7 +53,7 @@ def main() -> None:
             tokens=tokens,
         )
         if action.is_err():
-            print(f'\nmain\n{action.error}\n')
+            print(action.error)
             return
 
         global_context['num_token'] += 1
