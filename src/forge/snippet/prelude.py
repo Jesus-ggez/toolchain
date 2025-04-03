@@ -1,5 +1,5 @@
 #~>
-from .main_handler.prelude import SnippetMainHandler
+from .handler.prelude import SnippetMainHandler
 from .metadata.mod import MetadataManager
 from .creator.mod import CreatorManager
 from .start.mod import StartManager

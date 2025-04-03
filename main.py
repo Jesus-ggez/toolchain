@@ -37,7 +37,6 @@ def main() -> None:
 
         _raw_token: Result = get_next_arg()
         if _raw_token.is_err():
-            print(_raw_token)
             return
 
         raw_token: str = _raw_token.value
@@ -54,7 +53,7 @@ def main() -> None:
             tokens=tokens,
         )
         if action.is_err():
-            print(action)
+            print(f'\nmain\n{action.error}\n')
             return
 
         global_context['num_token'] += 1

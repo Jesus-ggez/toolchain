@@ -36,7 +36,7 @@ class OnlyCallFactory(TokenFactory):
         call: Result = self.__wrap()
         if call.is_err():
             return Err(error=FactoryError(
-                message=f'The function has failed, it says: \n{call}',
+                message=f'The function has failed, it says: \n{call.error}',
                 filename=self.name,
                 line=38,
             ))

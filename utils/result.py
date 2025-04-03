@@ -1,3 +1,4 @@
+#import traceback
 from typing import (
     NamedTuple,
     Generic,
@@ -34,5 +35,6 @@ def Ok(value: T = None) -> Result[T, E]:
 
 
 def Err(error: E) -> Result[T, E]:
+    #traceback.print_exc()
     return Result(ok=False, error=error)
 

@@ -25,27 +25,34 @@ class SnippetMainHandler(SafeClass):
             self._use_error(content)
             return
 
-        actor: Result = HandlerFactory.get_factory(content.value._type)
+        actor: Result = HandlerFactory.get_factory(
+            self._content._type,
+        )
         if actor.is_err():
             self._use_error(actor)
             return
 
-        action: Result = actor.value(content)
+        action: Result = actor.value.build(content.value)
         if action.is_err():
             self._use_error(action)
             return
 
 
     def get_content(self, v: str) -> Result[None, Exception]:
-        actor = SnippetDb.find_by_name
-
-        if len(v) <= 2:
-            actor = SnippetDb.find_by_id
-            v = Identifier.to_number(v)
+        if not v.isalnum():
+            return Err(error=Exception(
+                f'Invalid syntax: {v}'
+            ))
 
         try:
-            self._content: SnippetData = actor(v)
-            return Ok()
+            if len(v) <= 2:
+                self._content: SnippetData = SnippetDb.find_by_id(
+                    Identifier.to_number(v)
+                )
+                return Ok()
+
+            self._content: SnippetData = SnippetDb.find_by_name(v)
 
         except Exception as e:
+            print('dbErr')
             return Err(error=e)

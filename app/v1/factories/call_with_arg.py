@@ -34,7 +34,7 @@ class CallWithArgFactory(TokenFactory):
         call: Result = self.__wrap()
         if call.is_err():
             return Err(error=FactoryError(
-                message=f'There was an error while calling: {call.error}',
+                message=f'The function has failed, it says: \n{call.error}',
                 filename=self.name,
                 line=35,
             ))
@@ -48,7 +48,7 @@ class CallWithArgFactory(TokenFactory):
 
         except Exception as e:
             return Err(error=FactoryError(
-                message=f'Error in exec: {e}',
+                message=f'Error in exec: \n{e}',
                 filename=self.name,
                 line=46,
             ))

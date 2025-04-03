@@ -14,7 +14,7 @@ class HandlerFactory:
     def get_factory(name: str) -> Result[Factory, FactoryError]:
         if not (name in data):
             return Err(error=FactoryError(
-                message='',
+                message=f'Invalid factory name: {name}',
                 filename='HandlerFactory',
                 line=15,
             ))
