@@ -5,13 +5,14 @@ from .fname import NameFactory
 from .flang import LangFactory
 from .ftype import TypeFactory
 
+basic: tuple = (
+    VersionFactory,
+    TargetFactory,
+    NameFactory,
+    LangFactory,
+    TypeFactory,
+)
 
 data: dict = {
-    '#·!': [
-        VersionFactory,
-        TargetFactory,
-        NameFactory,
-        LangFactory,
-        TypeFactory,
-    ],
+    '#·!': basic,
 }

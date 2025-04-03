@@ -51,7 +51,7 @@ class CreatorManager(SafeClass):
                 return Err(error=CreatorManagerError(
                     message=f'Invalid metadata content | {token} not in metadata',
                     filename=self.name,
-                    line=45,
+                    line=50,
                 ))
 
         return Ok()
@@ -63,7 +63,7 @@ class CreatorManager(SafeClass):
             return Err(error=CreatorManagerError(
                 message='Content var not found',
                 filename=self.name,
-                line=58,
+                line=62,
             ))
 
         name: str = self._data[var]

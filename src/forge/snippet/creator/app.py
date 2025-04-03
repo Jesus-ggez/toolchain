@@ -16,6 +16,11 @@ class SnippetCreator(SafeClass):
         self._content: dict = content
 
         super().__init__()
+        self._params: tuple = (
+            'lang',
+        )
+
+        self.__add_metadata()
 
         action: Result = self.__save()
         if action.is_err():
@@ -36,3 +41,18 @@ class SnippetCreator(SafeClass):
 
         except Exception as e:
             return Err(error=e)
+
+
+    def __add_metadata(self) -> None:
+        if not ('lang' in self._content):
+            return
+
+        # magic! str
+        new_line = lambda key: f'{key}.' + self._content[key] + ';'
+
+        custom: list = [new_line(key=key) for key in self._params]
+        custom.append('<~>')
+        _original: list = self._content['target']
+
+        self._content['target'] = custom + _original
+
