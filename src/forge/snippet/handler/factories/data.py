@@ -1,5 +1,5 @@
 #~>
-from .simple import Simple
+from .fsimple import Simple
 
 
 _data: set = {

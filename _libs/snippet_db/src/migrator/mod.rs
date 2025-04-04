@@ -3,7 +3,6 @@ use sea_orm_migration::prelude::*;
 
 //~>
 mod m20250301_000001_snippet;
-mod m20250301_000002_project;
 
 //<
 pub struct Migrator;
@@ -14,7 +13,6 @@ impl MigratorTrait for Migrator {
         vec![
             //Box::new(m202503::Migration),
             Box::new(m20250301_000001_snippet::Migration),
-            Box::new(m20250301_000002_project::Migration),
         ]
     }
 }

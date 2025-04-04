@@ -16,15 +16,14 @@ class Terminal:
         if _name.is_err():
             return Ok('blank')
 
+        get_next_arg()
         name: str = _name.value
         if name == '--help':
             print_help()
             return Ok('_')
 
-        get_next_arg()
-
         divider: str = '-'
-        prx: str =  '--tempname'
+        prx: str = '--name'
         if not name.startswith(prx):
             return Err(error=TerminalError(
                 'Invalid argument',
@@ -41,3 +40,4 @@ class Terminal:
         final: str = content[1]
 
         return Ok(final)
+
