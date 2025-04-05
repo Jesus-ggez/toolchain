@@ -47,7 +47,7 @@ class SnippetMainHandler(SafeClass):
             ))
 
         try:
-            if len(v) <= 2:
+            if len(v) <= 3:
                 self._content: SnippetData = SnippetDb.find_by_id(
                     Identifier.to_number(v)
                 )

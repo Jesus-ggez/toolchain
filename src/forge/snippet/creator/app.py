@@ -12,8 +12,9 @@ from utils.result import (
 
 
 class SnippetCreator(SafeClass):
-    def __init__(self, content: dict) -> None:
+    def __init__(self, content: dict, db = SnippetDb) -> None:
         self._content: dict = content
+        self._db = db
 
         super().__init__()
         self._params: tuple = (
@@ -30,7 +31,7 @@ class SnippetCreator(SafeClass):
 
     def __save(self) -> Result[None, Exception]:
         try:
-            SnippetDb.add_in(
+            self._db.add_in(
                 name=self._content['name'],
                 version=self._content['version'],
                 content=''.join(self._content['target']),

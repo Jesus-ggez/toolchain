@@ -10,6 +10,12 @@ from utils.result import (
 
 
 class Terminal:
+    DEFAULT_NAME: str = '_'
+    PREFIX: str = '--tempname'
+    DIVIDER: str = '-'
+
+
+
     @staticmethod
     def get_name() -> Result[str, TerminalError]:
         _name: Result = get_copy_next_arg()
@@ -19,23 +25,21 @@ class Terminal:
         name: str = _name.value
         if name == '--help':
             print_help()
-            return Ok('_')
+            return Ok(Terminal.DEFAULT_NAME)
 
         get_next_arg()
 
-        divider: str = '-'
-        prx: str =  '--tempname'
-        if not name.startswith(prx):
+        if not name.startswith(Terminal.PREFIX):
             return Err(error=TerminalError(
-                'Invalid argument',
+                f'Expected "{Terminal.PREFIX}-value", got something else',
             ))
 
-        cmd: str = name.removeprefix(prx)
-        content: list[str] = cmd.split(divider)
+        cmd: str = name.removeprefix(Terminal.PREFIX)
+        content: list[str] = cmd.split(Terminal.DIVIDER)
 
         if len(content) != 2:
             return Err(error=TerminalError(
-                'Invalid syntax',
+                f'Invalid syntax in {name}',
             ))
 
         final: str = content[1]

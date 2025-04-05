@@ -2,12 +2,12 @@ use futures::executor::block_on;
 use pyo3::prelude::*;
 use sea_orm::*;
 
-//·>
-use crate::config_db::open_session;
+//~>
+use crate::database::open_session;
 use crate::entities::prelude::Snippet;
 use crate::entities::snippet;
 
-//<
+//<·
 async fn op_async_discard(id: i32) -> Result<(), DbErr> {
     let db = open_session().await?;
     let snippet = Snippet::find_by_id(id)

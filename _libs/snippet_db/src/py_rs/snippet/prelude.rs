@@ -1,11 +1,11 @@
 use pyo3::prelude::*;
 
-//·>
+//~>
 use crate::py_rs::snippet::pure_delete::discard_record;
 use crate::py_rs::snippet::pure_insert::use_record;
 use crate::py_rs::snippet::pure_read::{find_all, find_by_id, find_by_name, SnippetData};
 
-//<
+//<·
 #[pyclass]
 pub struct SnippetDb;
 

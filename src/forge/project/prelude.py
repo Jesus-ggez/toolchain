@@ -1,7 +1,7 @@
 #~>
 from .start.mod import StartManager
-from .terminal import Terminal
 from utils.result import Result
+from .cmd import Terminal
 
 
 class ProjectManager:

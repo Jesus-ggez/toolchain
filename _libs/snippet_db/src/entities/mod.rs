@@ -2,5 +2,4 @@
 
 pub mod prelude;
 
-pub mod project;
 pub mod snippet;

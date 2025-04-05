@@ -3,12 +3,14 @@ use pyo3::types::PyDict;
 use pyo3::prelude::*;
 use sea_orm::*;
 
-//·>
-use crate::config_db::open_session;
+//~>
+use crate::database::open_session;
 use crate::entities::prelude::Snippet;
 use crate::entities::snippet;
 
-//<
+//<·
+/// i dont know why I added the `to_dict` method
+/// it exists for some reason so Ill just leave it as is
 #[pyclass]
 #[derive(Debug, Clone)]
 pub struct SnippetData {
