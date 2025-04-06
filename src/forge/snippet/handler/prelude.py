@@ -17,7 +17,7 @@ from utils.result import (
 
 
 class SnippetMainHandler(SafeClass):
-    def __init__(self, identifier: str) -> None:
+    def __init__(self, identifier: str, alias: str) -> None:
         super().__init__()
 
         content: Result = self.get_content(identifier)
@@ -25,8 +25,15 @@ class SnippetMainHandler(SafeClass):
             self._use_error(content)
             return
 
+        if alias:
+            old: dict = self._content.to_dict()
+            old['name'] = alias
+            self._content = SnippetData(
+                **old
+            )
+
         actor: Result = HandlerFactory.get_factory(
-            self._content._type,
+            name=self._content._type,
         )
         if actor.is_err():
             self._use_error(actor)
@@ -54,6 +61,7 @@ class SnippetMainHandler(SafeClass):
                 return Ok()
 
             self._content: SnippetData = SnippetDb.find_by_name(v)
+            return Ok()
 
         except Exception as e:
             return Err(error=e)

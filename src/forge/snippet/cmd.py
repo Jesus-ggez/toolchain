@@ -10,10 +10,10 @@ from utils.result import (
 
 
 class Terminal:
+    PREFIX_NAME: str = '--tempname'
+    PREFIX_ALIAS: str = '--alias'
     DEFAULT_NAME: str = '_'
-    PREFIX: str = '--tempname'
     DIVIDER: str = '-'
-
 
 
     @staticmethod
@@ -29,12 +29,12 @@ class Terminal:
 
         get_next_arg()
 
-        if not name.startswith(Terminal.PREFIX):
+        if not name.startswith(Terminal.PREFIX_NAME):
             return Err(error=TerminalError(
-                f'Expected "{Terminal.PREFIX}-value", got something else',
+                f'Expected "{Terminal.PREFIX_NAME}-value", got something else',
             ))
 
-        cmd: str = name.removeprefix(Terminal.PREFIX)
+        cmd: str = name.removeprefix(Terminal.PREFIX_NAME)
         content: list[str] = cmd.split(Terminal.DIVIDER)
 
         if len(content) != 2:
@@ -45,3 +45,23 @@ class Terminal:
         final: str = content[1]
 
         return Ok(final)
+
+
+    @staticmethod
+    def get_alias() -> str:
+        copy: Result = get_copy_next_arg()
+        if copy.is_err():
+            return ''
+
+        get_next_arg()
+        value: str = copy.value
+        if not value.startswith(Terminal.PREFIX_ALIAS):
+            return ''
+
+        content: list = value.removeprefix(Terminal.PREFIX_ALIAS).split(Terminal.DIVIDER)
+        if len(content) != 2:
+            return ''
+
+        final: str = content[1]
+
+        return final

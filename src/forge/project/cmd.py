@@ -1,6 +1,5 @@
 #~>
 from utils.terminal import get_copy_next_arg, get_next_arg
-from .start.utils import print_help
 from .errors import TerminalError
 from utils.result import (
     Result,
@@ -10,35 +9,33 @@ from utils.result import (
 
 
 class Terminal:
+    PREFIX_NAME: str = '--name'
     DEFAULT_NAME: str = '_'
-    PREFIX: str = '--name'
     DIVIDER: str = '-'
 
 
     @staticmethod
     def get_name() -> Result[str, TerminalError]:
-        _name: Result = get_copy_next_arg()
-        if _name.is_err():
-            return Ok('blank')
-
-        get_next_arg()
-        name: str = _name.value
-        if name == '--help':
-            print_help()
+        copy: Result = get_copy_next_arg()
+        if copy.is_err():
             return Ok(Terminal.DEFAULT_NAME)
 
-        if not name.startswith(Terminal.PREFIX):
+        get_next_arg()
+        value: str = copy.value
+
+        if not value.startswith(Terminal.PREFIX_NAME):
             return Err(error=TerminalError(
-                'Expected "--name-value", got something else',
+                filename=__name__,
+                message='Invalid flag',
             ))
 
-        cmd: str = name.removeprefix(Terminal.PREFIX)
-        content: list[str] = cmd.split(Terminal.DIVIDER)
-
-        if len(content) != 2:
+        data: list = value.removeprefix(Terminal.PREFIX_NAME).split(Terminal.DIVIDER)
+        if len(data) != 2:
             return Err(error=TerminalError(
-                'Invalid syntax in "{name}"',
+                filename=__name__,
+                message='Invalid arguments'
             ))
 
-        return Ok(content[1])
+        final: str = data[1]
 
+        return Ok(final)

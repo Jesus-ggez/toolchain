@@ -14,18 +14,11 @@ class StartManager(SafeClass):
         self.name: str = self.__class__.__name__
         super().__init__()
 
-        if not tempname:
-            self._use_error(Err(error=StartError(
-                message='Invalid tempname',
-                filename=self.name,
-            )))
-            return
-
         # only read
         if tempname == '_':
             return
 
-        if not (tempname in data):
+        if not tempname or not (tempname in data):
             self._use_error(Err(error=StartError(
                 message='Invalid tempname',
                 filename=self.name,

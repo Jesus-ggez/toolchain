@@ -43,8 +43,10 @@ class SnippetManager:
                 'Identifier must not be empty'
             )
 
+        alias: str = Terminal.get_alias()
         action: SnippetMainHandler = SnippetMainHandler(
             identifier=identifier,
+            alias=alias,
         )
         if ( err := action.check_error() ).is_err():
             raise err.error

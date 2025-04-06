@@ -16,6 +16,7 @@ class MetadataManager(SafeClass):
 
         if _data.is_err():
             print(_data)
+            self._use_error(_data)
             return
 
         data: list[str] = _data.value
