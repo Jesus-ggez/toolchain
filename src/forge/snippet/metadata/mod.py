@@ -11,8 +11,7 @@ class MetadataManager(SafeClass):
 
         super().__init__()
         # file
-        file: FileManager = FileManager()
-        _data: Result = file.read.as_list('./___.tc')
+        _data: Result = FileManager().read.as_list('./___.tc')
 
         if _data.is_err():
             print(_data)

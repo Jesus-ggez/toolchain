@@ -1,6 +1,6 @@
 class StartError(Exception):
-    def __init__(self, message: str, filename: str) -> None:
-        msg: str = f'{filename} | {message}'
+    def __init__(self, message: str, source: str, call: str) -> None:
+        msg: str = f'{source} | {call} | {message}'
         super().__init__(msg)
 
 

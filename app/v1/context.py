@@ -24,8 +24,8 @@ class ContextManager(SafeClass):
                 self._context,
                 self._token,
             )
-            if action.check_error().is_err():
-                self._use_error(action.check_error())
+            if ( err := action.check_error() ).is_err():
+                self._use_error(err)
 
             return
 
@@ -49,17 +49,17 @@ class ContextManager(SafeClass):
     def constructor(self, context: dict, token: str) -> Result[None, ContextError]:
         if not context:
             return Err(error=ContextError(
+                call='ContextManager.constructor',
                 message='Context is empty',
-                filename=__name__,
-                line=58,
+                source=__name__,
             ))
 
         if not token:
             return Err(error=TokenError(
+                call='ContextManager.constructor',
                 message='Invalid Token',
-                filename=__name__,
+                source=__name__,
                 token=token,
-                line=65,
             ))
 
         self._context: dict = context

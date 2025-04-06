@@ -16,8 +16,8 @@ class MetaFactory:
             print(token in data)
             return Err(error=FactoryError(
                 message='Invalid struct of document',
-                filename='MetaFactory',
-                line=-1,
+                call='MetaFactory.get_factory',
+                source=__name__,
             ))
 
         return Ok(data[token])

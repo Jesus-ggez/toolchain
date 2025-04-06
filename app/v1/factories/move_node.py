@@ -36,18 +36,17 @@ class MoveNodeFactory(TokenFactory):
         if type(current) != dict:
             return Err(error=FactoryError(
                 message='Impossible move to other node',
-                filename=self.name,
-                line=36,
+                call='MoveNodeFactory.__move',
+                source=__name__,
             ))
 
         if not (self._token in current):
             return Err(error=FactoryError(
                 message='Node not found: ' + self._token,
-                filename=self.name,
-                line=43,
+                call='MoveNodeFactory.__move',
+                source=__name__,
             ))
 
         self._context['node_pointer'] = current[self._token]
-        #print(self._context['node_pointer'])
 
         return Ok()

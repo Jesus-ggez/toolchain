@@ -1,5 +1,6 @@
-class CreatorManagerError(Exception):
-    def __init__(self, message: str, line: int, filename: str) -> None:
-        msg: str = f'{filename} | {line:^4} | {message}'
+class BaseError(Exception):
+    def __init__(self, source: str, call: str, message: str) -> None:
+        msg: str = f'{source} | {call} | {message}'
         super().__init__(msg)
 
+class CreatorManagerError(BaseError): ...

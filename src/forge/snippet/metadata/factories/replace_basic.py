@@ -4,7 +4,6 @@ from .base import Factory
 from utils.result import (
     Result,
     Err,
-    Ok,
 )
 
 
@@ -20,8 +19,8 @@ class BasicFactory(Factory):
         if len(data.value) < 3:
             self._use_error(Err(error=FactoryError(
                 message='Invalid syntax',
-                filename=self.name,
-                line=21
+                call='BasicFactory()',
+                source=__name__,
             )))
 
         kw: str = data.value[2]

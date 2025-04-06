@@ -14,8 +14,9 @@ class StartManager:
     def get_factory(name: str) -> Result[Factory, StartError]:
         if not (name in data):
             return Err(error=StartError(
-                filename=__name__,
+                call='StartManager.get_factory',
                 message='Invalid tempname',
+                source=__name__,
             ))
 
         factory: Factory = data[name]

@@ -40,7 +40,9 @@ class SnippetManager:
     def use(self, identifier: str) -> None: # ·here·
         if not identifier:
             raise SnippetError(
-                'Identifier must not be empty'
+                message='Identifier must not be empty',
+                call='SnippetManager.use',
+                source=__name__,
             )
 
         alias: str = Terminal.get_alias()

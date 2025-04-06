@@ -1,6 +1,7 @@
 #~>
-from utils.result import Result
+from .creator import CreatorManager
 from .start import StartManager
+from utils.result import Result
 from .cmd import Terminal
 
 
@@ -16,8 +17,13 @@ class ProjectManager:
 
         action: Result = actor.value.build()
         if action.is_err():
+            raise action.error
+
+
+    def new(self) -> None:
+        actor: CreatorManager = CreatorManager()
+        if ( err := actor.check_error() ).is_err():
             raise err.error
 
 
-    def new(self) -> None: ...
     def use(self) -> None: ...

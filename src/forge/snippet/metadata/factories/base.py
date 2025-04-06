@@ -16,18 +16,18 @@ class Factory(SafeClass):
 
 
     def constructor(self, raw: dict) -> None:
-        if not raw['file']:
+        if not raw.get('file'):
             self._use_error(Err(error=FactoryError(
                 message='Context not found',
-                filename=self.name,
-                line=0,
+                call='Factory.constructor',
+                source=__name__,
             )))
 
         if not ('file' in raw):
             self._use_error(Err(error=FactoryError(
                 message='File content not found',
-                filename=self.name,
-                line=0,
+                call='Factory.constructor',
+                source=__name__,
             )))
 
         self._raw: dict = raw
@@ -39,7 +39,7 @@ class Factory(SafeClass):
                 return Ok(item.split())
 
         return Err(error=FactoryError(
-            message='Token not found',
-            filename=self.name,
-            line=0
+            message=f'Token not found, token : {token}',
+            call='Factory.build',
+            source=__name__,
         ))

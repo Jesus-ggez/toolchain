@@ -31,7 +31,9 @@ class Terminal:
 
         if not name.startswith(Terminal.PREFIX_NAME):
             return Err(error=TerminalError(
-                f'Expected "{Terminal.PREFIX_NAME}-value", got something else',
+                message=f'Expected "{Terminal.PREFIX_NAME}-value", got something else',
+                call='Terminal.get_name',
+                source=__name__,
             ))
 
         cmd: str = name.removeprefix(Terminal.PREFIX_NAME)
@@ -39,7 +41,9 @@ class Terminal:
 
         if len(content) != 2:
             return Err(error=TerminalError(
-                f'Invalid syntax in {name}',
+                message=f'Invalid syntax in {name}',
+                call='Terminal.get_name',
+                source=__name__,
             ))
 
         final: str = content[1]

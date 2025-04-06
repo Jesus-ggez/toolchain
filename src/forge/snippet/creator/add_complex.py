@@ -8,6 +8,8 @@ from utils.result import (
 
 
 class ComplexMetadata(SafeClass):
-    self._use_error(Exception(
-        'Impl in future'
-    ))
+    def __init__(self) -> None:
+        super().__init__()
+        self._use_error(Exception(
+            'Impl in future'
+        ))

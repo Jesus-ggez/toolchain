@@ -1,4 +1,7 @@
-class FactoryError(Exception):
-    def __init__(self, filename: str, line: int, message: str) -> None:
-        msg: str = f'{filename} | {line:^4} | {message}'
+class BaseError(Exception):
+    def __init__(self, source: str, call: str, message: str) -> None:
+        msg: str = f'{source} | {call} | {message}'
         super().__init__(msg)
+
+
+class FactoryError(BaseError): ...

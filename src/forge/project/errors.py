@@ -1,6 +1,6 @@
 class OperationError(Exception):
-    def __init__(self, filename: str, message: str) -> None:
-        msg: str = f'{filename} | {message}'
+    def __init__(self, source: str, message: str, call: str) -> None:
+        msg: str = f'{source} | {call} | {message}'
         super().__init__(msg)
 
 

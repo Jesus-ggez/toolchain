@@ -14,12 +14,6 @@ class OnlyCallFactory(TokenFactory):
         self.name: str = self.__class__.__name__
         super().__init__(context, token)
 
-        """
-        if not self._is_handler():
-            self._use_handler(instance=OnlyCallFactory)
-            return
-
-        """
         action: Result = self.__call()
         if action.is_err():
             self._use_error(action)
@@ -29,16 +23,16 @@ class OnlyCallFactory(TokenFactory):
         if not callable(self._context['node_pointer']):
             return Err(error=FactoryError(
                 message=f'This node are not a function: ' + self._token,
-                filename=self.name,
-                line=30,
+                call='OnlyCallFactory.__call',
+                source=__name__,
             ))
 
         call: Result = self.__wrap()
         if call.is_err():
             return Err(error=FactoryError(
                 message=f'The function has failed, it says: \n{call.error}',
-                filename=self.name,
-                line=38,
+                call='OnlyCallFactory.__call',
+                source=__name__,
             ))
 
         return Ok()
@@ -51,6 +45,6 @@ class OnlyCallFactory(TokenFactory):
         except Exception as e:
             return Err(error=FactoryError(
                 message=f'Error in exec: \n{e}',
-                filename=self._context['node_pointer'].__name__,
-                line=49,
+                call='OnlyCallFactory.__wrap',
+                source=__name__,
             ))

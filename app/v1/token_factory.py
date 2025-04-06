@@ -12,15 +12,13 @@ from utils.result import (
 class ActionsFactory:
     @staticmethod
     def get_factory(name: str) -> Result[TokenFactory, TokenError]:
-        factory = all_data.get(name)
-
-        if factory is None:
+        if not (name in all_data):
             return Err(error=TokenError(
                 message='Token not found',
-                filename=__name__,
+                call='ActionsFactory.get_factory',
+                source=__name__,
                 token=name,
-                line=17,
             ))
 
-        return Ok(factory)
+        return Ok(all_data[name])
 

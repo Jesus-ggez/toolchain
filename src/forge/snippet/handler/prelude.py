@@ -8,6 +8,7 @@ from snippet_db import (
 
 #~>
 from src.utils.base_safe import SafeClass
+from .errors import HandlerError
 from .app import HandlerFactory
 from utils.result import (
     Result,
@@ -47,10 +48,12 @@ class SnippetMainHandler(SafeClass):
             return
 
 
-    def get_content(self, v: str) -> Result[None, Exception]:
+    def get_content(self, v: str) -> Result[None, HandlerError]:
         if not v.isalnum():
-            return Err(error=Exception(
-                f'Invalid syntax: {v}'
+            return Err(error=HandlerError(
+                call='SnippetMainHandler.get_content',
+                message=f'Invalid syntax: {v}',
+                source=__name__,
             ))
 
         try:

@@ -27,9 +27,9 @@ def create_struct(tokens: list[str], context: dict) -> Result[None, Exception]:
             token=token,
         )
 
-        if action.check_error().is_err():
+        if ( err := action.check_error() ).is_err():
             return Err(error=Exception(
-                f'Token has error | from create_struct | Token: {token}\nAction: {action.check_error().error}'
+                f'Token has error | from create_struct | Token: {token}\nAction: {err.error}'
             ))
 
     return Ok()

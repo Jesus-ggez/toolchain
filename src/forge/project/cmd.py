@@ -25,15 +25,17 @@ class Terminal:
 
         if not value.startswith(Terminal.PREFIX_NAME):
             return Err(error=TerminalError(
-                filename=__name__,
+                call='Terminal.get_name',
                 message='Invalid flag',
+                source=__name__,
             ))
 
         data: list = value.removeprefix(Terminal.PREFIX_NAME).split(Terminal.DIVIDER)
         if len(data) != 2:
             return Err(error=TerminalError(
-                filename=__name__,
-                message='Invalid arguments'
+                message='Invalid arguments',
+                call='Terminal.get_name',
+                source=__name__,
             ))
 
         final: str = data[1]

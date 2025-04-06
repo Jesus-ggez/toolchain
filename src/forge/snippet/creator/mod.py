@@ -50,8 +50,8 @@ class CreatorManager(SafeClass):
             if not (token in self._data):
                 return Err(error=CreatorManagerError(
                     message=f'Invalid metadata content | {token} not in metadata',
-                    filename=self.name,
-                    line=50,
+                    call='CreatorManager.__exists',
+                    source=__name__,
                 ))
 
         return Ok()
@@ -61,9 +61,9 @@ class CreatorManager(SafeClass):
         var: str = 'target'
         if not (var in self._data):
             return Err(error=CreatorManagerError(
+                call='CreatorManager.get_content',
                 message='Content var not found',
-                filename=self.name,
-                line=62,
+                source=__name__,
             ))
 
         name: str = self._data[var]

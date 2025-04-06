@@ -21,8 +21,8 @@ class Factory(SafeClass):
     def build(self, content: type) -> Result[None, Exception]:
         return Err(error=FactoryError(
             message='Not implemented',
-            filename='Factory',
-            line=-1,
+            call='Factory.build',
+            source=__name__,
         ))
 
 
@@ -48,8 +48,10 @@ class Factory(SafeClass):
     def create_metadata(self, content) -> Result[None, Exception]:
         base_data: list = content.content.split(self.divider)
         if len(base_data) != 2:
-            return Err(error=Exception(
-                'hasnt basic data',
+            return Err(error=FactoryError(
+                call='Factory.create_metadata',
+                message='hasnt basic data',
+                source=__name__,
             ))
 
         self.file_content: str = base_data[1]

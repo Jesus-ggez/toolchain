@@ -15,8 +15,8 @@ class HandlerFactory:
         if not (name in data):
             return Err(error=FactoryError(
                 message=f'Invalid factory name: {name}',
-                filename='HandlerFactory',
-                line=15,
+                call='HandlerFactory.get_factory',
+                source=__name__,
             ))
 
         return Ok(data[name])
