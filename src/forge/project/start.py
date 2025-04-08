@@ -1,7 +1,9 @@
 #~>
-from .factories.model import Factory
-from .factories.data import data
-from .errors import StartError
+from src.utils.base_safe import SafeClass
+from src.utils.const import Constants
+from .errors import StartProjectError
+from src.core import FileManager
+from .fstart.data import data
 from utils.result import (
     Result,
     Err,
@@ -9,15 +11,33 @@ from utils.result import (
 )
 
 
-class StartManager:
-    @staticmethod
-    def get_factory(name: str) -> Result[Factory, StartError]:
-        if not (name in data):
-            return Err(error=StartError(
-                call='StartManager.get_factory',
-                message='Invalid tempname',
+class StartProject(SafeClass):
+    def __init__(self, name: str) -> None:
+        super().__init__()
+
+        if not name:
+            self._use_error(Err(error=StartProjectError(
+                message='Must',
+                call='StartProject()',
+                source=__name__,
+            )))
+
+        self._name: str = name
+
+
+    def build(self) -> Result[None, StartProjectError]:
+        if not (self._name in data):
+            return Err(error=StartProjectError(
+                message='Invalid template name',
+                call='StartProject.build',
                 source=__name__,
             ))
 
-        factory: Factory = data[name]
-        return Ok(factory)
+        action: Result = FileManager().write.from_str(
+            name=Constants.START,
+            content=data[self._name]
+        )
+        if action.is_err():
+            return action
+
+        return Ok()

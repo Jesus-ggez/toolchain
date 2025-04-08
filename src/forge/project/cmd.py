@@ -9,35 +9,59 @@ from utils.result import (
 
 
 class Terminal:
-    PREFIX_NAME: str = '--name'
+    PREFIX_NAME: str = '--tempname'
+    PREFIX_ALIAS: str = '--alias'
     DEFAULT_NAME: str = '_'
     DIVIDER: str = '-'
 
 
     @staticmethod
     def get_name() -> Result[str, TerminalError]:
-        copy: Result = get_copy_next_arg()
-        if copy.is_err():
-            return Ok(Terminal.DEFAULT_NAME)
+        _content: Result = get_copy_next_arg()
+        if _content.is_err():
+            return _content
 
         get_next_arg()
-        value: str = copy.value
+        content: str = _content.value
+        if not content:
+            return Ok(Terminal.DEFAULT_NAME)
 
-        if not value.startswith(Terminal.PREFIX_NAME):
+        if not content.startswith(Terminal.PREFIX_NAME):
             return Err(error=TerminalError(
                 call='Terminal.get_name',
                 message='Invalid flag',
                 source=__name__,
             ))
 
-        data: list = value.removeprefix(Terminal.PREFIX_NAME).split(Terminal.DIVIDER)
-        if len(data) != 2:
+        raw_content: str = content.removeprefix(Terminal.PREFIX_NAME)
+        pre_final: list[str] = raw_content.split(Terminal.DIVIDER)
+
+        if len(pre_final) != 2:
             return Err(error=TerminalError(
-                message='Invalid arguments',
+                message='Invalid format of flag',
                 call='Terminal.get_name',
                 source=__name__,
             ))
 
-        final: str = data[1]
-
+        final: str = pre_final[1]
         return Ok(final)
+
+
+    @staticmethod
+    def get_alias() -> str:
+        if get_copy_next_arg().is_err():
+            return Terminal.DEFAULT_NAME
+
+        content: str = get_next_arg().value
+
+        if not content.startswith(Terminal.PREFIX_ALIAS):
+            return Terminal.DEFAULT_NAME
+
+        raw_content: str = content.removeprefix(Terminal.PREFIX_ALIAS)
+        pre_final: list[str] = raw_content.split(Terminal.DIVIDER)
+
+        if len(pre_final) != 2:
+            return Terminal.DEFAULT_NAME
+
+        final: str = pre_final[1]
+        return final
