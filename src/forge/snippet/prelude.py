@@ -11,7 +11,6 @@ from .cmd import Terminal
 class SnippetManager:
     def start(self) -> None: # Ok
         name: Result = Terminal.get_name()
-
         if name.is_err():
             raise name.error
 
@@ -26,7 +25,6 @@ class SnippetManager:
             raise err.error
 
         metadata.create_meta()
-
         if ( err := metadata.check_error() ).is_err():
             raise err.error
 

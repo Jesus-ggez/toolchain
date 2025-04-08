@@ -20,7 +20,7 @@ class ProjectManager:
             raise action.error
 
 
-    def new(self) -> None:
+    def new(self) -> None: # <----
         actor: CreatorManager = CreatorManager()
         if ( err := actor.check_error() ).is_err():
             raise err.error

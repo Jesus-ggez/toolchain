@@ -4,6 +4,7 @@ import os
 #~>
 from src.utils.base_safe import SafeClass
 from .errors import CreatorManagerError
+from src.utils.const import Constants
 from src.core import FileManager
 from .app import SnippetCreator
 from utils.result import (
@@ -42,7 +43,7 @@ class CreatorManager(SafeClass):
             self._use_error(err)
             return
 
-        os.remove('___.tc')
+        os.remove(Constants.START)
 
 
     def __exists(self) -> Result[None, CreatorManagerError]:

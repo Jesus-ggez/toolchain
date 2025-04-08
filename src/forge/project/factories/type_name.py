@@ -1,0 +1,3 @@
+class TypeName:
+    ...
+    # impl future

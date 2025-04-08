@@ -1,5 +1,6 @@
 #~>
 from src.forge.project.templates.blank import blank
+from src.utils.const import Constants
 from src.core import FileManager
 from .model import Factory
 from utils.result import (
@@ -15,12 +16,11 @@ class Blank(Factory):
 
 
     def build(self) -> Result[None, Exception]:
-        action: Result = FileManager().write.from_str(
-            name='___.tc',
+        document: Result = FileManager().write.from_str(
+            name=Constants.START,
             content=blank,
         )
-
-        if action.is_err():
-            return action
+        if document.is_err():
+            return document
 
         return Ok()

@@ -1,5 +1,6 @@
 #~>
 from src.utils.base_safe import SafeClass
+from src.utils.const import Constants
 from src.core import FileManager
 from .errors import StartError
 from .data import data
@@ -28,8 +29,8 @@ class StartManager(SafeClass):
         content: str = data[tempname]
 
         action: Result = FileManager().write.from_list(
+            name=Constants.START,
             content=[content],
-            name='___.tc',
         )
         if action.is_err():
             self._use_error(action)

@@ -1,5 +1,6 @@
 #~>
 from src.utils.base_safe import SafeClass
+from src.utils.const import Constants
 from src.core import FileManager
 from utils.result import Result
 from .app import MetaFactory
@@ -11,7 +12,7 @@ class MetadataManager(SafeClass):
 
         super().__init__()
         # file
-        _data: Result = FileManager().read.as_list('./___.tc')
+        _data: Result = FileManager().read.as_list('./' + Constants.START)
 
         if _data.is_err():
             print(_data)
