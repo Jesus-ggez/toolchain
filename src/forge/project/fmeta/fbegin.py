@@ -1,10 +1,9 @@
 #~>
-from .model import Factory
+from .model import FactoryMeta
 
 
-class BeginFactory(Factory):
-    def __init__(self, content: list[str]) -> None:
-        super().__init__(content)
+class BeginFactoryMeta(FactoryMeta):
+    def __init__(self) -> None:
+        super().__init__()
 
         self._use_tag('begin')
-        self.build()

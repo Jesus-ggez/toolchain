@@ -33,6 +33,8 @@ class ProjectManager:
         if action.is_err():
             raise action.error
 
+        print(actor._meta_content)
+
 
     def use(self, identifier: str) -> None:
         if not identifier:

@@ -5,7 +5,7 @@ ignore = []
 langs = []
 _type = ""
 entrypoints = []
-venv = []
+env = []
 commands = []
 
 '''

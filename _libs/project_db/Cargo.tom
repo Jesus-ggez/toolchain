@@ -3,12 +3,8 @@ name = "project_db"
 version = "0.1.0"
 edition = "2021"
 
-[lib]
-name = "project_db"
-crate-type = ["cdylib"]
-
 [dependencies]
 sea-orm = { version = "^0.12.0", features = [ "sqlx-sqlite", "runtime-async-std-native-tls", "macros" ] }
-pyo3 = { version = "^0.23.4", features =["extension-module"] }
+sea-orm-migration = "^0.12.0"
 futures = "^0.3.28"
 dotenvy = "0.15.7"

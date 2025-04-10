@@ -1,10 +1,9 @@
 #~>
-from .model import Factory
+from .model import FactoryMeta
 
 
-class _TypeFactory(Factory):
-    def __init__(self, content: list[str]) -> None:
-        super().__init__(content)
+class _TypeFactoryMeta(FactoryMeta):
+    def __init__(self) -> None:
+        super().__init__()
 
         self._use_tag('_type')
-        self.build()

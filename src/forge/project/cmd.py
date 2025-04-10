@@ -19,13 +19,10 @@ class Terminal:
     def get_name() -> Result[str, TerminalError]:
         _content: Result = get_copy_next_arg()
         if _content.is_err():
-            return _content
+            return Ok(Terminal.DEFAULT_NAME)
 
         get_next_arg()
         content: str = _content.value
-        if not content:
-            return Ok(Terminal.DEFAULT_NAME)
-
         if not content.startswith(Terminal.PREFIX_NAME):
             return Err(error=TerminalError(
                 call='Terminal.get_name',

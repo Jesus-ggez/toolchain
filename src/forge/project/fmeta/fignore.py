@@ -1,10 +1,9 @@
 #~>
-from .model import Factory
+from .model import FactoryMetaList
 
 
-class IgnoreFactory(Factory):
-    def __init__(self, content: list[str]) -> None:
-        super().__init__(content)
+class IgnoreFactoryMeta(FactoryMetaList):
+    def __init__(self) -> None:
+        super().__init__()
 
         self._use_tag('ignore')
-        self.build()

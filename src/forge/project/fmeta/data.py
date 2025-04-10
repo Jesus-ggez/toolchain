@@ -1,23 +1,23 @@
 #~>
-from .fcommands import CommandsFactory
-from .fdotenv import DotEnvFactory
-from .fignore import IgnoreFactory
-from .fentry import EntryFactory
-from .f_type import _TypeFactory
-from .fbegin import BeginFactory
-from .flangs import LangsFactory
-from .fname import NameFactory
+from .fcommands import CommandsFactoryMeta
+from .fdotenv import DotEnvFactoryMeta
+from .fignore import IgnoreFactoryMeta
+from .fentry import EntryFactoryMeta
+from .f_type import _TypeFactoryMeta
+from .fbegin import BeginFactoryMeta
+from .flangs import LangsFactoryMeta
+from .fname import NameFactoryMeta
 
 
 data: dict = {
-    'blank': [
-        CommandsFactory,
-        DotEnvFactory,
-        IgnoreFactory,
-        EntryFactory,
-        _TypeFactory,
-        BeginFactory,
-        LangsFactory,
-        NameFactory,
+    '#<~>': [
+        CommandsFactoryMeta(),
+        DotEnvFactoryMeta(),
+        IgnoreFactoryMeta(),
+        EntryFactoryMeta(),
+        _TypeFactoryMeta(),
+        BeginFactoryMeta(),
+        LangsFactoryMeta(),
+        NameFactoryMeta(),
     ]
 }

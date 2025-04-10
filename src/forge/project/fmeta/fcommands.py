@@ -1,10 +1,9 @@
 #~>
-from .model import Factory
+from .model import FactoryMetaList
 
 
-class CommandsFactory(Factory):
-    def __init__(self, content: list[str]) -> None:
-        super().__init__(content)
+class CommandsFactoryMeta(FactoryMetaList):
+    def __init__(self) -> None:
+        super().__init__()
 
         self._use_tag('commands')
-        self.build()
