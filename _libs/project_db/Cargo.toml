@@ -1,14 +1,8 @@
 [package]
 name = "project_db"
 version = "0.1.0"
-edition = "2021"
-
-[lib]
-name = "project_db"
-crate-type = ["cdylib"]
+edition = "2024"
 
 [dependencies]
-sea-orm = { version = "^0.12.0", features = [ "sqlx-sqlite", "runtime-async-std-native-tls", "macros" ] }
-pyo3 = { version = "^0.23.4", features =["extension-module"] }
-futures = "^0.3.28"
-dotenvy = "0.15.7"
+diesel = { version = "2.2.0", features = ["sqlite", "returning_clauses_for_sqlite_3_35"] }
+dotenvy = "0.15"
