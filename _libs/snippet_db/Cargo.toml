@@ -1,14 +1,16 @@
 [package]
 name = "snippet_db"
-version = "0.1.0"
-edition = "2021"
+version = "0.2.0"
+edition = "2024"
 
 [lib]
-name = "snippet_db"
+name = "snippet_db" # lib name == package name
 crate-type = ["cdylib"]
 
 [dependencies]
-sea-orm = { version = "^0.12.0", features = [ "sqlx-sqlite", "runtime-async-std-native-tls", "macros" ] }
-pyo3 = { version = "^0.23.4", features =["extension-module"] }
-futures = "^0.3.28"
-dotenvy = "0.15.7"
+diesel = { version = "2.2.0", features = ["sqlite", "returning_clauses_for_sqlite_3_35"] }
+pyo3 = { version = "0.24.1", features = ["extension-module"] }
+libsqlite3-sys = { version = "0.30", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+dotenvy = "0.15"

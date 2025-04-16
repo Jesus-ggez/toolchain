@@ -26,7 +26,7 @@ class CallWithArgFactory(TokenFactory):
     def __call(self) -> Result[None, FactoryError]:
         if not callable(self._context['node_pointer']):
             return Err(error=FactoryError(
-                message=f'This node are not a function: ' + self._token,
+                message=f'This node are not a function:\t' + self._token,
                 call='CallWithArgFactory.__call',
                 source=__name__,
             ))
@@ -34,24 +34,18 @@ class CallWithArgFactory(TokenFactory):
         call: Result = self.__wrap()
         if call.is_err():
             return Err(error=FactoryError(
-                message=f'The function has failed, it says: \n{call.error}',
-                call='CallWithArgFactory.__call',
+                message=f'The function has failed, it says:\n\n{call.error}',
+                call='CallWithArgFactory.__call <-> __wrap',
                 source=__name__,
             ))
 
         return Ok()
 
-    def __wrap(self) -> Result[None, FactoryError]:
+    def __wrap(self) -> Result[None, Exception]:
         try:
             self._context['node_pointer'](self._token)
             return Ok()
 
         except Exception as e:
-            return Err(error=FactoryError(
-                message=f'Error in exec: \n{e}',
-                call='CallWithArgFactory.__wrap',
-                source=__name__,
-            ))
-
-
+            return Err(e)
 

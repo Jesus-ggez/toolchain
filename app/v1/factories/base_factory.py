@@ -16,3 +16,4 @@ class TokenFactory(SafeClass):
 
     def _use_handler(self, instance: type) -> None:
         self._context['handler'] = instance
+

@@ -1,10 +1,11 @@
 def tokenize(raw: str) -> list:
+    secure: tuple = ('_', '-')
     data: list = []
     word: str = ''
     mark: str = ''
 
     for character in raw:
-        if character.isalnum() or character == '_':
+        if character.isalnum() or character in secure:
             word += character
             if mark:
                 data.append(mark)

@@ -22,14 +22,12 @@ def create_struct(tokens: list[str], context: dict) -> Result[None, Exception]:
         tokens.insert(0, ':')
 
     for token in tokens:
-        action: ContextManager= ContextManager(
+        action: ContextManager = ContextManager(
             context=context,
             token=token,
         )
 
         if ( err := action.check_error() ).is_err():
-            return Err(error=Exception(
-                f'Token has error | from create_struct | Token: {token}\nAction: {err.error}'
-            ))
+            return err
 
     return Ok()

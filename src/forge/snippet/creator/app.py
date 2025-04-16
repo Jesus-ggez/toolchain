@@ -41,6 +41,7 @@ class SnippetCreator(SafeClass):
             return Ok()
 
         except Exception as e:
+            print('error de db')
             return Err(error=e)
 
 

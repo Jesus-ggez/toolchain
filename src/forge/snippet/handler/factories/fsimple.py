@@ -13,12 +13,12 @@ class Simple(Factory):
         self._use_type('simple')
 
 
-    def build(self, content: type) -> Result[None, Exception]:
+    def build(self, content: dict) -> Result[None, Exception]:
         if ( err := self.create_metadata(content=content) ).is_err():
             return err
 
         action: Result = FileManager().write.from_str(
-            name=content.name + '.' + self.metadata.get('lang', '.txt'),
+            name=content['name'] + '.' + self.metadata.get('lang', '.txt'),
             content=self.file_content,
         )
         if action.is_err():

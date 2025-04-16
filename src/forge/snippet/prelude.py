@@ -35,7 +35,8 @@ class SnippetManager:
             raise err.error
 
 
-    def use(self, identifier: str) -> None: # ·here·
+    # ·here·
+    def use(self, identifier: str) -> None:
         if not identifier:
             raise SnippetError(
                 message='Identifier must not be empty',
@@ -44,6 +45,7 @@ class SnippetManager:
             )
 
         alias: str = Terminal.get_alias()
+
         action: SnippetMainHandler = SnippetMainHandler(
             identifier=identifier,
             alias=alias,

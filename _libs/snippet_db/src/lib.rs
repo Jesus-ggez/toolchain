@@ -1,21 +1,19 @@
 use pyo3::prelude::*;
 
-//~>
-mod database;
-mod entities;
+mod db;
+mod schema;
+mod logic;
+mod main_py;
 mod identifier;
-mod py_rs;
+mod models;
 
-//·>
 use identifier::Identifier;
-use py_rs::prelude::*;
+use main_py::SnippetDb;
 
-//<
+//<·
 #[pymodule]
 fn snippet_db(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    let _ = m.add_class::<SnippetData>();
-    let _ = m.add_class::<Identifier>();
-    let _ = m.add_class::<SnippetDb>();
-
+    let _ = m.add_class::<Identifier>()?;
+    let _ = m.add_class::<SnippetDb>()?;
     Ok(())
 }

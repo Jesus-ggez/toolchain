@@ -18,7 +18,7 @@ class Factory(SafeClass):
         self.type: str = v
 
 
-    def build(self, content: type) -> Result[None, Exception]:
+    def build(self, content: dict) -> Result[None, Exception]:
         return Err(error=FactoryError(
             message='Not implemented',
             call='Factory.build',
@@ -46,7 +46,7 @@ class Factory(SafeClass):
 
 
     def create_metadata(self, content) -> Result[None, Exception]:
-        base_data: list = content.content.split(self.divider)
+        base_data: list = content['content'].split(self.divider)
         if len(base_data) != 2:
             return Err(error=FactoryError(
                 call='Factory.create_metadata',
