@@ -34,10 +34,10 @@ fn run_migrations(conn: &mut SqliteConnection) {
         r#"
         CREATE TABLE IF NOT EXISTS snippet (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
             version TEXT NOT NULL,
             content TEXT UNIQUE,
             type_ TEXT NOT NULL,
-            name TEXT NOT NULL,
             active INTEGER
         );
         "#,

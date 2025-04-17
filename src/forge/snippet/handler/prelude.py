@@ -9,7 +9,6 @@ from snippet_db import (
 
 #~>
 from src.utils.base_safe import SafeClass
-from .errors import HandlerError
 from .app import HandlerFactory
 from utils.result import (
     Result,
@@ -29,7 +28,6 @@ class SnippetMainHandler(SafeClass):
 
         if alias:
             self._content['name'] = alias
-
         actor: Result = HandlerFactory.get_factory(
             name=self._content['type_']
         )
@@ -46,7 +44,7 @@ class SnippetMainHandler(SafeClass):
 
 
 
-    def get_content(self, v: str) -> Result[None, HandlerError]:
+    def get_content(self, v: str) -> Result[None, Exception]:
         try:
             if len(v) <= 3 and v.isalnum():
                 v = '00' + v
@@ -59,14 +57,6 @@ class SnippetMainHandler(SafeClass):
             raw: str = SnippetDb.find_by_name(v)
             self._content: dict = json.loads(raw)
             return Ok()
-
-            """
-            return Err(error=HandlerError(
-                call='SnippetMainHandler.get_content',
-                message=f'Invalid syntax: {v}',
-                source=__name__,
-            ))
-            #"""
 
         except Exception as e:
             return Err(error=e)

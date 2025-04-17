@@ -1,11 +1,11 @@
 use pyo3::prelude::*;
 
 mod db;
-mod schema;
 mod logic;
 mod main_py;
-mod identifier;
 mod models;
+mod schema;
+mod identifier;
 
 use identifier::Identifier;
 use main_py::SnippetDb;
