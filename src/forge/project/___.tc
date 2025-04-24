@@ -1,9 +1,10 @@
 #<~>
-name = "Name"
+name = "Name" ·
+
 begin = "Begin"
 ignore = [ "Ignore" ]
-langs = [ "Langs", "Langs1" ]
-_type = "Type"
-entrypoints = [ "Entrypoints" ]
-env = [ "Env" ]
-commands = [ "Commands" ]
+
+entrypoints = [ "Entrypoints" ] ·
+langs = [ "Langs", "Langs1" ] ·
+commands = [ "Commands" ] ·
+env = [ "Env" ] ·
