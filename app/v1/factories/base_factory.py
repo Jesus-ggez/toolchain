@@ -1,5 +1,5 @@
 #~>
-from src.utils.base_safe import SafeClass
+from src.core.safe_cls import SafeClass
 from utils.result import Result, Ok
 
 

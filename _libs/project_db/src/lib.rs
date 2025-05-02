@@ -1,7 +1,6 @@
 use pyo3::prelude::*;
 
 mod db;
-//mod logic;
 mod main_py;
 mod models;
 mod schema;

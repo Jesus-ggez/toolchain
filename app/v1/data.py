@@ -1,14 +1,12 @@
 #~>
-from src.forge import data as fdata
-from src.core import data as cdata
+from src.snippet import data as sdata
 
 
 def print_ok(): print('Ok')
 def print_ok_with_args(*args): print(*args)
 
 forest: dict = {
-    'forge': fdata,
-    'core': cdata,
+    'snippet': sdata,
     }
 
 test: dict = {
