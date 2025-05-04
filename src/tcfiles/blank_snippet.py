@@ -1,0 +1,7 @@
+blank_snippet: str = '''#·!
+name = "test"
+target = "sample.py"
+version = "0.0.0"
+type = "test"
+lang = "py"
+'''

@@ -9,6 +9,7 @@ from .result import (
 )
 
 
+#<·
 class TcErr(Exception):
     def __init__(self, source: str, call: str, message: str) -> None:
         msg: str = f'{source} | {call} | {message}'

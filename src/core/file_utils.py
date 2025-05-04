@@ -7,6 +7,7 @@ from .result import (
 )
 
 
+#<·
 class Reader:
     @staticmethod
     def as_list(filename: str) -> Result[list, FileReaderError]:

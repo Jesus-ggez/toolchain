@@ -1,16 +1,19 @@
 #~>
-from .token_factory import ActionsFactory, TokenFactory
-from .errors import ContextError, TokenError
 from src.core.safe_cls import SafeClass
-from utils.result import (
+from src.core.result import (
     Result,
     Err,
     Ok,
 )
 
+#.?
+from .token_factory import ActionsFactory, TokenFactory
+from .errors import ContextError, TokenError
 
+#<·
 class ContextManager(SafeClass):
     def __init__(self, context: dict, token: str) -> None:
+        super().__init__()
         self._error: Result = Ok()
 
         constructor: Result = self.constructor(context=context, token=token)

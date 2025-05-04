@@ -1,18 +1,24 @@
 #~>
-from .base_factory import TokenFactory
-from .errors import FactoryError
-from utils.result import (
+from src.core.result import (
     Result,
     Err,
     Ok,
 )
 
+#.?
+from .base_factory import TokenFactory
+from .errors import FactoryError
 
-class OnlyCallFactory(TokenFactory):
-    tag: str = '.'
+#<·
+class CallWithArgFactory(TokenFactory):
+    tag: str = '::'
     def __init__(self, context: dict, token: str) -> None:
         self.name: str = self.__class__.__name__
         super().__init__(context, token)
+
+        if not self._is_handler():
+            self._use_handler(instance=CallWithArgFactory)
+            return
 
         action: Result = self.__call()
         if action.is_err():
@@ -23,7 +29,7 @@ class OnlyCallFactory(TokenFactory):
         if not callable(self._context['node_pointer']):
             return Err(error=FactoryError(
                 message=f'This node are not a function:\t' + self._token,
-                call='OnlyCallFactory.__call',
+                call='CallWithArgFactory.__call',
                 source=__name__,
             ))
 
@@ -31,7 +37,7 @@ class OnlyCallFactory(TokenFactory):
         if call.is_err():
             return Err(error=FactoryError(
                 message=f'The function has failed, it says:\n\n{call.error}',
-                call='OnlyCallFactory.__call <-> __wrap',
+                call='CallWithArgFactory.__call <-> __wrap',
                 source=__name__,
             ))
 
@@ -39,8 +45,9 @@ class OnlyCallFactory(TokenFactory):
 
     def __wrap(self) -> Result[None, Exception]:
         try:
-            self._context['node_pointer']()
+            self._context['node_pointer'](self._token)
             return Ok()
 
         except Exception as e:
             return Err(e)
+

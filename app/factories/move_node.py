@@ -1,13 +1,15 @@
 #~>
-from .base_factory import TokenFactory
-from .errors import FactoryError
-from utils.result import (
+from src.core.result import (
     Result,
     Err,
     Ok,
 )
 
+#.?
+from .base_factory import TokenFactory
+from .errors import FactoryError
 
+#<·
 class MoveNodeFactory(TokenFactory):
     tag: str = ':'
     def __init__(self, context: dict, token: str) -> None:

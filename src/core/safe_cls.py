@@ -5,6 +5,7 @@ from .result import (
 )
 
 
+#<·
 class SafeClass:
     def __init__(self) -> None:
         self._state: Result = Ok()

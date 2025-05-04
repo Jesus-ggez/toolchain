@@ -6,6 +6,8 @@ from src.core.result import (
     Ok
 )
 
+
+#<·
 def get_property(item: str, name: str) -> Result[str, PropertyError]:
     if not item.startswith(name):
         return Err(error=PropertyError(
@@ -14,7 +16,7 @@ def get_property(item: str, name: str) -> Result[str, PropertyError]:
             source=__name__,
         ))
 
-    parts: list = item.split(sep='=')
+    parts: list[str] = item.split(sep='=')
 
     if len(parts) != 2:
         return Err(error=PropertyError(
@@ -23,6 +25,4 @@ def get_property(item: str, name: str) -> Result[str, PropertyError]:
             source=__name__,
         ))
 
-    return Ok(parts[1])
-
-
+    return Ok(parts[1].strip().replace('"', ''))

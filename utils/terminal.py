@@ -1,7 +1,7 @@
 from sys import argv as arguments
 
 #~>
-from utils.result import (
+from src.core.result import (
     Result,
     Err,
     Ok,

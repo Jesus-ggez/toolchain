@@ -1,8 +1,8 @@
-class ContextError(Exception):
-    def __init__(self, source: str, call: str, message: str) -> None:
-        msg: str = f'{source} | {call} | {message}'
-        super().__init__(msg)
+#~>
+from src.core.errors import BaseError
 
+#<·
+class ContextError(BaseError): ...
 
 class TokenError(ContextError):
     def __init__(self, source: str, call: str, message: str, token: str) -> None:

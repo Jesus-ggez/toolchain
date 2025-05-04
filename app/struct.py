@@ -1,13 +1,15 @@
 #~>
-from app.v1.context import ContextManager
-from app.v1.data import forest
-from utils.result import (
+from src.core.result import (
     Result,
-    Err,
     Ok,
 )
 
+#.?
+from .context import ContextManager
+from .data import forest
 
+
+#<·
 def create_struct(tokens: list[str], context: dict) -> Result[None, Exception]:
     context.update(
         {

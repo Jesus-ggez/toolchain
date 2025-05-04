@@ -3,11 +3,11 @@ from dotenv import load_dotenv
 
 #~>
 from utils.terminal import is_empty_cmd, get_next_arg
-from app.v1.struct import create_struct
+from app.struct import create_struct
 #from app.v1.alias import use_alias
 from utils.errors import safe_exec
 from utils.tokens import tokenize
-from utils.result import Result
+from src.core.result import Result
 
 
 load_dotenv()

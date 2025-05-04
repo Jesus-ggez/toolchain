@@ -7,6 +7,7 @@ from typing import (
 )
 
 
+#<·
 T = TypeVar('T', bound=Any)
 E = TypeVar('E', bound=Exception)
 

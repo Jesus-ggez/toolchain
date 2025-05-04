@@ -1,7 +1,10 @@
+import os
+
 #~>
 from src.core.file_utils import Reader, Writer
 from src.tcfiles.data import data_templates
 from src.core.safe_cls import SafeClass
+from src.core.errors import safe_exec
 from src.core.errors import TcErr
 from src.core.result import (
     Result,
@@ -23,6 +26,8 @@ class TcFileReader(SafeClass):
         self._filters: list = []
         self._final_content: dict = {}
 
+
+    def build(self) -> None:
         begin: Result = self._read_file()
         if begin.is_err():
             self._use_error(begin)
@@ -33,13 +38,18 @@ class TcFileReader(SafeClass):
             self._use_error(mid)
             return
 
+        rm_file: Result = self.__remove_document()
+        if rm_file.is_err():
+            self._use_error(rm_file)
+            return
 
-    def _read_file(self, ) -> Result[None, TcErr]:
+
+    def _read_file(self) -> Result[None, TcErr]:
         res: Result = Reader.as_list(TcConfig.FILE_NAME)
         if res.is_err():
             return res
 
-        self._file_content.extend(res.value)
+        self._file_content.extend(res.value[1:])
         return Ok()
 
 
@@ -77,10 +87,15 @@ class TcFileReader(SafeClass):
                 return Ok()
 
         return Err(error=TcFmtError(
-            message='Missing property for this document',
+            message=f'Missing property for this document {item}',
             call='TcFileReader._use_filters',
             source=__name__,
         ))
+
+
+    @safe_exec
+    def __remove_document(self) -> None:
+        os.remove(TcConfig.FILE_NAME)
 
 
     @property
@@ -88,10 +103,10 @@ class TcFileReader(SafeClass):
         return self._final_content
 
 
-
 class TcFileCreator(SafeClass):
     def __init__(self) -> None:
         super().__init__()
+        self._data_templates: dict = data_templates['snippet']
 
 
     def create_document(self, tempname: str) -> None:
@@ -102,7 +117,7 @@ class TcFileCreator(SafeClass):
                 source=__name__,
             ))); return
 
-        if not (tempname in data_templates):
+        if not (tempname in self._data_templates):
             self._use_error(Err(error=TcFmtError(
                 call='TcFileCreator.create_document',
                 message='Invalid template name',
@@ -110,7 +125,7 @@ class TcFileCreator(SafeClass):
             ))); return
 
         action: Result = Writer.from_str(
-            content=data_templates[tempname],
+            content=self._data_templates[tempname],
             name=TcConfig.FILE_NAME,
         )
 

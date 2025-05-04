@@ -1,7 +1,7 @@
 import traceback
 
 #~>
-from .result import (
+from src.core.result import (
     Result,
     Err,
     Ok,
