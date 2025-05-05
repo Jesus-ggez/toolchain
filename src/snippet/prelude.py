@@ -4,12 +4,17 @@ from src.c_terminal.prelude import Terminal
 from src.core.result import Result
 
 #.?
+from .save_snippet import save_snippet
+from .constants import TcSnippetConfig
+from .errs import SnippetError
+from .use import UseSnippet
 
 #<·
+
 class SnippetManager:
-    @staticmethod
+    @staticmethod # Ok
     def start() -> None:
-        temp_name: Terminal = Terminal(field='temp_name')
+        temp_name: Terminal = Terminal(field=TcSnippetConfig.TEMPLATE_NAME)
 
         if ( err := temp_name.check_error() ).is_err():
             raise err.error
@@ -20,7 +25,7 @@ class SnippetManager:
 
         action: TcFileCreator = TcFileCreator()
         action.create_document(
-            tempname=value.value or '_',
+            tempname=value.value,
         )
 
         if ( err := action.check_error() ).is_err():
@@ -44,6 +49,34 @@ class SnippetManager:
         if ( err := action.check_error() ).is_err():
             raise err.error
 
-        print(action.final_content)
+        saved: Result = save_snippet(metadata=action.final_content)
+        if saved.is_err():
+            raise saved.error
+
+        print(f'new record with id: {saved.value}')
 
 
+    @staticmethod # Ok
+    def use(identifier: str) -> None:
+        if not identifier:
+            raise SnippetError(
+                message='Invalid identifier',
+                call='SnippetManager.use',
+                source=__name__,
+            )
+
+        alias: Terminal = Terminal(field=TcSnippetConfig.ALIAS)
+        if ( err := alias.check_error() ).is_err():
+            raise err.error
+
+        alias_v: Result = alias.get_field()
+        if alias_v.is_err():
+            raise alias_v.error
+
+        action: UseSnippet = UseSnippet(
+            identifier=identifier,
+            alias=alias_v.value,
+        )
+
+        if ( err := action.check_error() ).is_err():
+            raise err.error

@@ -1,5 +1,3 @@
-import os
-
 #~>
 from src.core.file_utils import Reader, Writer
 from src.tcfiles.data import data_templates
@@ -36,11 +34,6 @@ class TcFileReader(SafeClass):
         mid: Result = self._read_data()
         if mid.is_err():
             self._use_error(mid)
-            return
-
-        rm_file: Result = self.__remove_document()
-        if rm_file.is_err():
-            self._use_error(rm_file)
             return
 
 
@@ -91,11 +84,6 @@ class TcFileReader(SafeClass):
             call='TcFileReader._use_filters',
             source=__name__,
         ))
-
-
-    @safe_exec
-    def __remove_document(self) -> None:
-        os.remove(TcConfig.FILE_NAME)
 
 
     @property

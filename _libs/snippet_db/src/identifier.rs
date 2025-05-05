@@ -32,6 +32,7 @@ impl Identifier {
         let chars: Vec<_> = s.chars().collect();
 
         if chars.len() != 3 {
+            println!("{:?}", chars);
             return None;
         }
 

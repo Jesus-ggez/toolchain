@@ -1,4 +1,4 @@
-import traceback
+# import traceback
 
 #~>
 from .result import (
@@ -25,8 +25,7 @@ def safe_exec(func):
             return Ok(result)
 
         except Exception as e:
-            traceback.print_exc()
+            #traceback.print_exc()
             return Err(e)
-
     return wrapper
 
