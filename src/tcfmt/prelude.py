@@ -92,9 +92,15 @@ class TcFileReader(SafeClass):
 
 
 class TcFileCreator(SafeClass):
-    def __init__(self) -> None:
+    def __init__(self, root: str) -> None:
         super().__init__()
-        self._data_templates: dict = data_templates['snippet']
+        if not root:
+            self._use_error(Err(error=TcErr(
+                message='Invalid tree name',
+                call='TcFileCreator()',
+                source=__name__,
+            )))
+        self._data_templates: dict = data_templates[root]
 
 
     def create_document(self, tempname: str) -> None:

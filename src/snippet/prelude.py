@@ -10,22 +10,21 @@ from .errs import SnippetError
 from .use import UseSnippet
 
 #<·
-
-class SnippetManager:
+class SnippetManager: # Ok
     @staticmethod # Ok
     def start() -> None:
-        temp_name: Terminal = Terminal(field=TcSnippetConfig.TEMPLATE_NAME)
+        raw_temp_name: Terminal = Terminal(field=TcSnippetConfig.TEMPLATE_NAME)
 
-        if ( err := temp_name.check_error() ).is_err():
+        if ( err := raw_temp_name.check_error() ).is_err():
             raise err.error
 
-        value: Result= temp_name.get_field()
-        if value.is_err():
-            raise value.error
+        temp_name: Result = raw_temp_name.get_field()
+        if temp_name.is_err():
+            raise temp_name.error
 
-        action: TcFileCreator = TcFileCreator()
+        action: TcFileCreator = TcFileCreator(root='snippet')
         action.create_document(
-            tempname=value.value,
+            tempname=temp_name.value,
         )
 
         if ( err := action.check_error() ).is_err():
@@ -33,7 +32,7 @@ class SnippetManager:
 
 
     @staticmethod
-    def new() -> None:
+    def new() -> None: # Ok
         action: TcFileReader = TcFileReader()
         action.add_filters(
             props=[
