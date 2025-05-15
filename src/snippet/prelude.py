@@ -23,9 +23,9 @@ class SnippetManager: # Ok
 
         temp_name: str = terminal_content.value
 
-        action: TcFileCreator = TcFileCreator(root='snippet')
-        action.create_document(
+        action: TcFileCreator = TcFileCreator(
             tempname=temp_name,
+            root='snippet',
         )
 
         if ( err := action.check_error() ).is_err():

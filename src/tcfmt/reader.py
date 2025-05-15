@@ -23,10 +23,9 @@ class TcFileReader(SafeClass):
         self._final_content: dict = {}
         self._filters: list[str] = []
 
-        self.__build()
 
-
-    def __build(self) -> None:
+    # necesary external call
+    def build(self) -> None:
         if ( err := self._read_file() ).is_err():
             return self._use_error(err)
 
