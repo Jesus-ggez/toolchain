@@ -5,15 +5,17 @@ from src.core.result import (
     Ok,
 )
 
+
 #.?
 from .base_factory import TokenFactory
-from .errors import FactoryError
+from .errs import FactoryError
+
 
 #<·
 class CallWithArgsFactory(TokenFactory):
     tag: str = '·'
+
     def __init__(self, context: dict, token: str) -> None:
-        self.name: str = self.__class__.__name__
         super().__init__(context, token)
         separator: str = ','
 
@@ -21,16 +23,13 @@ class CallWithArgsFactory(TokenFactory):
             return
 
         if not self._is_handler():
-            self._use_handler(instance=CallWithArgsFactory)
-            return
+            return self._use_handler(instance=CallWithArgsFactory)
 
         if not self.__is_keyword():
-            self.__add_argument()
-            return
+            return self.__add_argument()
 
-        action: Result = self.__call()
-        if action.is_err():
-            self._use_error(action)
+        if ( err := self.__call() ).is_err():
+            return self._use_error(err)
 
 
     def __add_argument(self) -> None:
@@ -49,22 +48,22 @@ class CallWithArgsFactory(TokenFactory):
                 source=__name__,
             ))
 
-        call: Result = self.__wrap()
-        if call.is_err():
+        if ( err := self.__wrap_exec_func() ).is_err():
             return Err(error=FactoryError(
-                message=f'The function has failed, it says:\n\n{call.error}',
-                call='CallWithArgsFactory.__call <-> __wrap',
+                message=f'The function has failed, it says: \n\n{err.error}',
+                call='CallWithArgsFactory.__call <-> .__wrap',
                 source=__name__,
             ))
 
         return Ok()
 
 
-    def __wrap(self) -> Result[None, Exception]:
+    def __wrap_exec_func(self) -> Result[None, Exception]:
         try:
             self._context['node_pointer'](*self._context['args'])
             return Ok()
 
         except Exception as e:
-            return Err(e)
+            return Err(error=e)
+
 

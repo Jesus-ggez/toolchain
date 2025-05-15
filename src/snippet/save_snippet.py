@@ -1,8 +1,10 @@
 from typing import Any
 import os
 
+
 #¿?
 from snippet_db import SnippetDb
+
 
 #~>
 from src.tcfmt.constants import TcConfig
@@ -14,10 +16,13 @@ from src.core.result import (
     Ok,
 )
 
+
 #.?
 from .errs import MetadataError
 
+
 #<·
+
 def save_snippet(metadata: dict) -> Result[int, MetadataError]:
     if not ('target' in metadata):
         return Err(error=MetadataError(

@@ -8,7 +8,7 @@ from src.core.result import (
 #.?
 from .factories.base_factory import TokenFactory
 from .factories.data import all_data
-from .errors import TokenError
+from .errs import TokenError
 
 
 #<·

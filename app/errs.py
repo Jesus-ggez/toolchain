@@ -1,8 +1,11 @@
 #~>
 from src.core.errors import BaseError
 
+
 #<·
 class ContextError(BaseError): ...
+
+class TreeError(ContextError): ...
 
 class TokenError(ContextError):
     def __init__(self, source: str, call: str, message: str, token: str) -> None:
@@ -11,8 +14,3 @@ class TokenError(ContextError):
             source=source,
             call=call,
         )
-
-
-class TreeError(ContextError):
-    def __init__(self, source: str, call: str, message: str) -> None:
-        super().__init__(source, call, message)

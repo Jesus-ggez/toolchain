@@ -1,6 +1,7 @@
 #~>
 from src.core.safe_cls import SafeClass
 
+
 #<·
 class TokenFactory(SafeClass):
     def __init__(self, context: dict, token: str) -> None:
@@ -10,7 +11,7 @@ class TokenFactory(SafeClass):
 
 
     def _is_handler(self) -> bool:
-        return self._context['handler'] != None
+        return not (self._context['handler'] is None)
 
 
     def _use_handler(self, instance: type) -> None:

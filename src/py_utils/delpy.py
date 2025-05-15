@@ -1,6 +1,10 @@
 import os
 
 
+#~>
+
+
+#<·
 def search() -> None:
     raw: list = os.listdir()
 
@@ -23,9 +27,3 @@ def search() -> None:
                 os.chdir('..')
     return
 
-
-def main() -> None:
-    search()
-
-
-main()

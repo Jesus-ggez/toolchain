@@ -6,66 +6,65 @@ from src.core.result import (
     Ok,
 )
 
+
 #.?
-from .token_factory import ActionsFactory, TokenFactory
-from .errors import ContextError, TokenError
+from .factories.base_factory import TokenFactory
+from .token_factory import ActionsFactory
+from .errs import ContextError
+
 
 #<·
 class ContextManager(SafeClass):
     def __init__(self, context: dict, token: str) -> None:
         super().__init__()
-        self._error: Result = Ok()
-
-        constructor: Result = self.constructor(context=context, token=token)
-        if constructor.is_err():
-            self._use_error(constructor)
-            return
-
-        # handler: None | TokenFactory ['.']
-        if self._context['handler']:
-            action: TokenFactory = self._context['handler'](
-                self._context,
-                self._token,
-            )
-            if ( err := action.check_error() ).is_err():
-                self._use_error(err)
-
-            return
-
-        # handler == None
-        handler: Result = ActionsFactory.get_factory(name=self._token)
-        if handler.is_err():
-            self._use_error(handler)
-            return
-
-        # handler::None -> TokenFactory
-        action: TokenFactory = handler.value(
-            context=self._context,
-            token=self._token,
-        )
-        if action.check_error().is_err():
-            self._use_error(action.check_error())
-
-        return
-
-
-    def constructor(self, context: dict, token: str) -> Result[None, ContextError]:
-        if not context:
-            return Err(error=ContextError(
-                call='ContextManager.constructor',
-                message='Context is empty',
-                source=__name__,
-            ))
-
-        if not token:
-            return Err(error=TokenError(
-                call='ContextManager.constructor',
-                message='Invalid Token',
-                source=__name__,
-                token=token,
-            ))
 
         self._context: dict = context
         self._token: str = token
+
+        if ( err := self.__validate_parameters() ).is_err():
+            return self._use_error(err)
+
+        if self._context.get('handler') is None:
+            return self._use_error(self.__create_handler())
+
+        if ( err := self.__use_handler() ).is_err():
+            return self._use_error(err)
+
+
+
+    def __validate_parameters(self) -> Result[None, ContextError]:
+        if not self._context or not self._token:
+            return Err(error=ContextError(
+                call='ContextManager.__is_invalid_class',
+                message='invalid context or token',
+                source=__name__,
+            ))
+
+        return Ok()
+
+
+    def __use_handler(self) -> Result[None, Exception]:
+        action: TokenFactory = self._context['handler'](
+            self._context,
+            self._token,
+        )
+
+        return action.check_error()
+
+
+    def __create_handler(self) -> Result[None, Exception]:
+        get_handler: Result = ActionsFactory.get_factory(
+            name=self._token,
+        ) # return error if not exists factory
+        if get_handler.is_err(): return get_handler
+
+
+        set_action: Result = get_handler.value(
+            context=self._context,
+            token=self._token,
+        ).check_error() # direct to result
+
+        if ( err := set_action ).is_err():
+            return err
 
         return Ok()

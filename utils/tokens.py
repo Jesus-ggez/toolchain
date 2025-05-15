@@ -1,3 +1,7 @@
+#~>
+
+
+#<·
 def tokenize(raw: str) -> list:
     secure: tuple = ('_', '-')
     data: list = []
@@ -18,6 +22,7 @@ def tokenize(raw: str) -> list:
 
     if mark:
         data.append(mark)
+
     if word:
         data.append(word)
 

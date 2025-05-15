@@ -1,5 +1,6 @@
 # import traceback
 
+
 #~>
 from .result import (
     Result,
@@ -14,6 +15,7 @@ class TcErr(Exception):
     def __init__(self, source: str, call: str, message: str) -> None:
         msg: str = f'{source} | {call} | {message}'
         super().__init__(msg)
+
 
 class BaseError(TcErr): ...
 

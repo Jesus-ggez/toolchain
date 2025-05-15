@@ -3,28 +3,28 @@ from src.tcfmt.prelude import TcFileCreator, TcFileReader
 from src.c_terminal.prelude import Terminal
 from src.core.result import Result
 
+
 #.?
 from .save_snippet import save_snippet
 from .constants import TcSnippetConfig
 from .errs import SnippetError
 from .use import UseSnippet
 
+
 #<·
 class SnippetManager: # Ok
     @staticmethod # Ok
     def start() -> None:
-        raw_temp_name: Terminal = Terminal(field=TcSnippetConfig.TEMPLATE_NAME)
+        terminal_content: Terminal = Terminal(field=TcSnippetConfig.TEMPLATE_NAME)
 
-        if ( err := raw_temp_name.check_error() ).is_err():
+        if ( err := terminal_content.check_error() ).is_err():
             raise err.error
 
-        temp_name: Result = raw_temp_name.get_field()
-        if temp_name.is_err():
-            raise temp_name.error
+        temp_name: str = terminal_content.value
 
         action: TcFileCreator = TcFileCreator(root='snippet')
         action.create_document(
-            tempname=temp_name.value,
+            tempname=temp_name,
         )
 
         if ( err := action.check_error() ).is_err():
@@ -79,3 +79,4 @@ class SnippetManager: # Ok
 
         if ( err := action.check_error() ).is_err():
             raise err.error
+

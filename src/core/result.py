@@ -7,6 +7,9 @@ from typing import (
 )
 
 
+#~>
+
+
 #<·
 T = TypeVar('T', bound=Any)
 E = TypeVar('E', bound=Exception)
@@ -26,9 +29,7 @@ class Result(NamedTuple, Generic[T, E]):
 
 
     def __str__(self) -> str:
-        if self.ok:
-            return f'Ok(value={self.value})'
-        return f'Err(error={self.error})'
+        return f'Ok(value={self.value})' if self.ok else f'Err(error={self.error})'
 
 
 def Ok(value: T = None) -> Result[T, E]:

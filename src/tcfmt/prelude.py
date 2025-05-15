@@ -2,7 +2,6 @@
 from src.core.file_utils import Reader, Writer
 from src.tcfiles.data import data_templates
 from src.core.safe_cls import SafeClass
-from src.core.errors import safe_exec
 from src.core.errors import TcErr
 from src.core.result import (
     Result,
@@ -21,36 +20,31 @@ class TcFileReader(SafeClass):
     def __init__(self) -> None:
         super().__init__()
         self._file_content: list[str] = []
-        self._filters: list = []
         self._final_content: dict = {}
+        self._filters: list = []
 
 
     def build(self) -> None:
-        begin: Result = self._read_file()
-        if begin.is_err():
-            self._use_error(begin)
-            return
+        if ( err := self._read_file() ).is_err():
+            return self._use_error(err)
 
-        mid: Result = self._read_data()
-        if mid.is_err():
-            self._use_error(mid)
-            return
+        if ( err := self._read_data() ).is_err():
+            return self._use_error(err)
 
 
     def _read_file(self) -> Result[None, TcErr]:
-        res: Result = Reader.as_list(TcConfig.FILE_NAME)
-        if res.is_err():
-            return res
+        file: Result = Reader.as_list(TcConfig.FILE_NAME)
+        if file.is_err():
+            return file
 
-        self._file_content.extend(res.value[1:])
+        self._file_content.extend(file.value[1:])
         return Ok()
 
 
     def _read_data(self) -> Result[None, TcFmtError]:
         for line in self._file_content:
-            res: Result = self._use_filters(item=line)
-            if res.is_err():
-                return res
+            if ( err := self._use_filters(item=line) ).is_err():
+                return err
 
         return Ok()
 
@@ -67,16 +61,13 @@ class TcFileReader(SafeClass):
 
 
     def _use_filters(self, item: str) -> Result[None, TcFmtError]:
-        for filt in self._filters:
-            data: Result = get_property(
-                item=item,
-                name=filt,
-            )
+        if not self._filters:
+            return Ok()
 
-            if data.is_ok():
+        for filt in self._filters.copy():
+            if ( val := get_property(item=item, name=filt) ).is_ok():
                 self._filters.remove(filt)
-                self._final_content.update( { filt: data.value } )
-
+                self._final_content.update( { filt: val.value } )
                 return Ok()
 
         return Err(error=TcFmtError(
@@ -95,34 +86,32 @@ class TcFileCreator(SafeClass):
     def __init__(self, root: str) -> None:
         super().__init__()
         if not root:
-            self._use_error(Err(error=TcErr(
+            return self._use_error(Err(error=TcErr(
                 message='Invalid tree name',
                 call='TcFileCreator()',
                 source=__name__,
             )))
+
         self._data_templates: dict = data_templates[root]
 
 
     def create_document(self, tempname: str) -> None:
         if not tempname:
-            self._use_error(Err(error=TcFmtError(
+            return self._use_error(Err(error=TcFmtError(
                 call='TcFileCreator.create_document',
                 message='Invalid template name',
                 source=__name__,
-            ))); return
+            )))
 
         if not (tempname in self._data_templates):
-            self._use_error(Err(error=TcFmtError(
+            return self._use_error(Err(error=TcFmtError(
                 call='TcFileCreator.create_document',
                 message='Invalid template name',
                 source=__name__,
-            ))); return
+            )))
 
-        action: Result = Writer.from_str(
+        if ( err := Writer.from_str(
             content=self._data_templates[tempname],
             name=TcConfig.FILE_NAME,
-        )
-
-        if action.is_err():
-            self._use_error(action)
-            return
+        ) ).is_err():
+            return self._use_error(err)

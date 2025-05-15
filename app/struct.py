@@ -4,23 +4,22 @@ from src.core.result import (
     Ok,
 )
 
+
 #.?
 from .context import ContextManager
 from .data import forest
 
 
 #<·
-def create_struct(tokens: list[str], context: dict) -> Result[None, Exception]:
-    context.update(
-        {
-            'node_pointer': forest,
-            'handler': None,
-            'init': True,
-            'args': [],
-        }
-    )
+def create_struct(tokens: list[str]) -> Result[None, Exception]:
+    context: dict = {
+        'node_pointer': forest,
+        'handler': None,
+        'init': True,
+        'args': [],
+    }
 
-    if tokens[0].replace('_', 's').isalnum():
+    if tokens[0].replace('_', 'z').isalnum():
         tokens.insert(0, ':')
 
     for token in tokens:

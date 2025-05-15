@@ -1,5 +1,6 @@
 from sys import argv as arguments
 
+
 #~>
 from src.core.result import (
     Result,
@@ -8,6 +9,7 @@ from src.core.result import (
 )
 
 
+#<·
 def is_empty_cmd() -> bool:
     return not arguments
 

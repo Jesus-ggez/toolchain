@@ -4,20 +4,22 @@ from src.core.result import (
     Err,
     Ok,
 )
+
+
 #.?
 from .base_factory import TokenFactory
-from .errors import FactoryError
+from .errs import FactoryError
+
 
 #<·
 class OnlyCallFactory(TokenFactory):
     tag: str = '.'
+
     def __init__(self, context: dict, token: str) -> None:
-        self.name: str = self.__class__.__name__
         super().__init__(context, token)
 
-        action: Result = self.__call()
-        if action.is_err():
-            self._use_error(action)
+        if ( err := self.__call() ).is_err():
+            return self._use_error(err)
 
 
     def __call(self) -> Result[None, FactoryError]:
@@ -26,22 +28,24 @@ class OnlyCallFactory(TokenFactory):
                 message=f'This node are not a function:\t' + self._token,
                 call='OnlyCallFactory.__call',
                 source=__name__,
-            ))
+           ))
 
-        call: Result = self.__wrap()
-        if call.is_err():
+        if ( err := self.__wrap_exec_func() ).is_err():
             return Err(error=FactoryError(
-                message=f'The function has failed, it says:\n\n{call.error}',
+                message=f'The function has failed, it says:\n\n{err.error}',
                 call='OnlyCallFactory.__call <-> __wrap',
                 source=__name__,
             ))
 
         return Ok()
 
-    def __wrap(self) -> Result[None, Exception]:
+
+    def __wrap_exec_func(self) -> Result[None, Exception]:
         try:
             self._context['node_pointer']()
             return Ok()
 
         except Exception as e:
-            return Err(e)
+            return Err(error=e)
+
+

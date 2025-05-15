@@ -1,11 +1,11 @@
 #~>
-from src.tcfmt.prelude import TcFileCreator, TcFileReader
 from src.c_terminal.prelude import Terminal
 from src.core.result import Result
 
+
 #.?
 from .constants import TcProjectConfig
-from .errs import ProjectError
+
 
 #<·
 class ProjectManager:
@@ -27,3 +27,4 @@ class ProjectManager:
 
         if ( err := action.check_error() ).is_err():
             raise err.error
+
