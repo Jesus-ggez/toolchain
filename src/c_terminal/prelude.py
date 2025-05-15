@@ -21,6 +21,10 @@ class Terminal(SafeClass):
         self._divider: str = '-'
         self._field: str = field
 
+        self.__build()
+
+
+    def __build(self) -> None:
         if ( err := self.__validate_parameters() ).is_err():
             return self._use_error(err)
 
@@ -38,13 +42,17 @@ class Terminal(SafeClass):
         self.__value = self._parts[1]
 
 
+    def __create_error(self, msg: str) -> Result[None, TerminalError]:
+        return Err(error=TerminalError(
+            call='Terminal()',
+            source=__name__,
+            message=msg,
+        ))
+
+
     def __validate_parameters(self) -> Result[None, TerminalError]:
         if not isinstance(self._field, str) or not self._field:
-            return Err(error=TerminalError(
-                message='Unknown field name',
-                call='Terminal()',
-                source=__name__,
-            ))
+            return self.__create_error(msg='Unknown field name')
 
         return Ok()
 
@@ -63,11 +71,7 @@ class Terminal(SafeClass):
         if self.__value.startswith(self._field):
             return Ok()
 
-        return Err(error=TerminalError(
-            message='Invalid fmt to flag',
-            call='Terminal.get_field',
-            source=__name__,
-        ))
+        return self.__create_error(msg='Invalid format to flag')
 
 
     def __is_valid_format(self) -> Result[None, TerminalError]:
@@ -75,22 +79,19 @@ class Terminal(SafeClass):
             self._field,
         ).split(sep=self._divider)
 
-        return Err(error=TerminalError(
-            message='Invalid terminal value',
-            call='Terminal.get_field',
-            source=__name__,
-        )) if len(self._parts) != 2 else Ok()
+        if len(self._parts) != 2:
+            return self.__create_error(msg='Invalid terminal value')
+
+        return Ok()
 
 
     def __is_valid_final_value(self) -> Result[None, TerminalError]:
         final_value: str = self._parts[1]
 
-        return Err(error=TerminalError(
-            message=f'Invalid value for {self._field}',
-            call='Terminal.get_field',
-            source=__name__,
-        )) if not final_value else Ok()
+        if not final_value:
+            return self.__create_error(msg=f'Invalid value for {self._field}')
 
+        return Ok()
 
     @property
     def value(self) -> str:

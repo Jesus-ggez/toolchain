@@ -21,6 +21,10 @@ class ContextManager(SafeClass):
         self._context: dict = context
         self._token: str = token
 
+        self.__build()
+
+
+    def __build(self) -> None:
         if ( err := self.__validate_parameters() ).is_err():
             return self._use_error(err)
 
@@ -31,14 +35,17 @@ class ContextManager(SafeClass):
             return self._use_error(err)
 
 
+    def __create_error(self, msg: str) -> Result[None, ContextError]:
+        return Err(error=ContextError(
+            call='ContextManager',
+            source=__name__,
+            message=msg,
+        ))
+
 
     def __validate_parameters(self) -> Result[None, ContextError]:
         if not self._context or not self._token:
-            return Err(error=ContextError(
-                call='ContextManager.__is_invalid_class',
-                message='invalid context or token',
-                source=__name__,
-            ))
+            return self.__create_error(msg='Invalid context or token')
 
         return Ok()
 

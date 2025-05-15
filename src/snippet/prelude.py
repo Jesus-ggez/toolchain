@@ -1,11 +1,12 @@
 #~>
-from src.tcfmt.prelude import TcFileCreator, TcFileReader
 from src.c_terminal.prelude import Terminal
+from src.tcfmt.creator import TcFileCreator
+from src.tcfmt.reader import TcFileReader
 from src.core.result import Result
 
 
 #.?
-from .save_snippet import save_snippet
+from .save_snippet import SnippetSaver
 from .constants import TcSnippetConfig
 from .errs import SnippetError
 from .use import UseSnippet
@@ -34,7 +35,7 @@ class SnippetManager: # Ok
     @staticmethod
     def new() -> None: # Ok
         action: TcFileReader = TcFileReader()
-        action.add_filters(
+        if ( err :=action.add_filters(
             props=[
                 'version',
                 'target',
@@ -42,15 +43,19 @@ class SnippetManager: # Ok
                 'type',
                 'lang',
             ]
-        )
+        ) ).is_err():
+            raise err.error
+
         action.build()
 
         if ( err := action.check_error() ).is_err():
             raise err.error
 
-        saved: Result = save_snippet(metadata=action.final_content)
-        if saved.is_err():
-            raise saved.error
+        saved: SnippetSaver= SnippetSaver(
+            metadata=action.final_content,
+        )
+        if ( err := saved.check_error() ).is_err():
+            raise err.error
 
         print(f'new record with id: {saved.value}')
 
@@ -64,19 +69,14 @@ class SnippetManager: # Ok
                 source=__name__,
             )
 
-        alias: Terminal = Terminal(field=TcSnippetConfig.ALIAS)
-        if ( err := alias.check_error() ).is_err():
+        terminal_content: Terminal = Terminal(field=TcSnippetConfig.TEMPLATE_NAME)
+
+        if ( err := terminal_content.check_error() ).is_err():
             raise err.error
 
-        alias_v: Result = alias.get_field()
-        if alias_v.is_err():
-            raise alias_v.error
-
-        action: UseSnippet = UseSnippet(
+        if ( err := UseSnippet(
+            alias=terminal_content.value,
             identifier=identifier,
-            alias=alias_v.value,
-        )
-
-        if ( err := action.check_error() ).is_err():
+        ).check_error() ).is_err():
             raise err.error
 

@@ -7,9 +7,10 @@ from snippet_db import SnippetDb
 
 
 #~>
+from src.core.errors import TcErr, safe_exec
 from src.tcfmt.constants import TcConfig
+from src.core.safe_cls import SafeClass
 from src.core.file_utils import Reader
-from src.core.errors import safe_exec
 from src.core.result import (
     Result,
     Err,
@@ -22,54 +23,64 @@ from .errs import MetadataError
 
 
 #<·
+class SnippetSaver(SafeClass):
+    def __init__(self, metadata: dict) -> None:
+        super().__init__()
 
-def save_snippet(metadata: dict) -> Result[int, MetadataError]:
-    if not ('target' in metadata):
-        return Err(error=MetadataError(
-            message='Invalid target for reading',
-            call='save_snippet()',
-            source=__name__,
-        ))
+        self._metadata: dict = metadata
 
-    data: Result = Reader.as_str(
-        filename=metadata['target'],
-    )
-    if data.is_err():
+        if ( err := self.__validate_metadata() ).is_err():
+            return self._use_error(err)
+
+        if ( err := self.__create_data() ).is_err():
+            return self._use_error(err)
+
+        if ( err := self.__create_record() ).is_err():
+            return self._use_error(err)
+
+        if ( err := self.__remove_document() ).is_err():
+            return self._use_error(err)
+
+
+    def __validate_metadata(self) -> Result[None, MetadataError]:
+        required_keys: set = { 'target', 'name' }
+
+        if ( missing := (required_keys - self._metadata.keys()) ):
+            print(missing)
+            return Err(error=MetadataError(
+                message='Missing keys to add metadata',
+                call='save_snippet()',
+                source=__name__,
+            ))
+
+        return Ok()
+
+
+    def __create_data(self) -> Result[None, TcErr]:
+        data: Result = Reader.as_str(filename=self._metadata['target'])
+
+        if data.is_ok():
+            self._data: str = data.value
+            return Ok()
+
         return data
 
-    if not ('name' in metadata):
-        return Err(error=MetadataError(
-            message='Invalid format to snippet name',
-            call='save_snippet()',
-            source=__name__,
-        ))
 
-    dot: str = '.'
-    res: Result = ward(
-        name=metadata['name'] + dot + metadata.get('lang', 'txt'),
-        version=metadata.get('version', '0.0.0'),
-        _type=metadata.get('type', 'test'),
-        content=data.value,
-    )
-
-    if res.is_err():
-        return Err(error=res.error)
-
-    if ( err := remove_document() ).is_err():
-        return err
-
-    return Ok(res.value)
+    @safe_exec
+    def __create_record(self) -> Any:
+        self.__value = SnippetDb.add_in(
+            name=self._metadata['name'] + '.' + self._metadata.get('lang', 'txt'),
+            version=self._metadata.get('version', '0.0.0'),
+            _type=self._metadata.get('type', 'test'),
+            content=self._data,
+        )
 
 
-@safe_exec # raise rust.diesel.error or int::i32
-def ward(name: str, version: str, _type: str, content: str) -> Any:
-    return SnippetDb.add_in(
-        version=version,
-        content=content,
-        _type=_type,
-        name=name,
-    )
+    @safe_exec
+    def __remove_document(self) -> Any:
+        return os.remove(TcConfig.FILE_NAME)
 
-@safe_exec # raise Exception or None
-def remove_document() -> Any:
-    os.remove(TcConfig.FILE_NAME)
+
+    @property
+    def value(self) -> Any:
+        return self.__value
