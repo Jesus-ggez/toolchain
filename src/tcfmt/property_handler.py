@@ -77,7 +77,8 @@ class PropertyHandler(SafeClass):
 
         filt_value: Result = filt(self._payload)
 
-        if filt_value.is_err(): return filt_value
+        if filt_value.is_err():
+            return filt_value
 
         self._value: list | str = filt_value.value
 

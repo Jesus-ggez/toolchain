@@ -50,7 +50,6 @@ class SnippetManager: # Ok
         if ( err := action.check_error() ).is_err():
             raise err.error
 
-        print(action.final_content)
         saved: SnippetSaver= SnippetSaver(
             metadata=action.final_content,
         )
@@ -69,7 +68,7 @@ class SnippetManager: # Ok
                 source=__name__,
             )
 
-        terminal_content: Terminal = Terminal(field=TcSnippetConfig.TEMPLATE_NAME)
+        terminal_content: Terminal = Terminal(field=TcSnippetConfig.ALIAS)
 
         if ( err := terminal_content.check_error() ).is_err():
             raise err.error

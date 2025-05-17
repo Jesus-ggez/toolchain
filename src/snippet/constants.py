@@ -1,5 +1,4 @@
 #<·
 class TcSnippetConfig:
     TEMPLATE_NAME: str = '--tempname'
-    ALIAS: str = '--alias'
-
+    ALIAS: str = '--as'

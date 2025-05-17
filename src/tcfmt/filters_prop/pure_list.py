@@ -30,5 +30,4 @@ def filt_list(v: str) -> Result[list, FilterPropertyError]:
             end_values.append(val.value)
             continue
 
-    print(v, 'ok')
     return Ok(end_values)

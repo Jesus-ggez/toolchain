@@ -19,5 +19,4 @@ def filt_str(v: str) -> Result[str, FilterPropertyError]:
             source=__name__,
         ))
 
-    print(v, 'ok')
     return Ok(v.strip('"').strip())

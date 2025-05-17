@@ -71,6 +71,8 @@ class Terminal(SafeClass):
         if self.__value.startswith(self._field):
             return Ok()
 
+        print(self._field, self.__value)
+
         return self.__create_error(msg='Invalid format to flag')
 
 

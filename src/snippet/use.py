@@ -30,10 +30,8 @@ class UseSnippet(SafeClass):
         if len(identifier) <= 3 and self._identifier.isalnum():
             action = self.__read_from_id
 
-        res: Result = action()
-        if res.is_err():
-            self._use_error(res)
-            return
+        if ( err := action() ).is_err():
+            return self._use_error(err)
 
         self.create_snippet(alias)
 
