@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 
 #~>
 from utils.terminal import is_empty_cmd, get_next_arg
+from nucleus.constants import TcGlobalContext
 from src.core.errors import safe_exec
 from app.struct import create_struct
 from src.core.result import Result
@@ -22,6 +23,8 @@ def main() -> None:
     context: Result = get_next_arg()
     if context.is_err():
         return
+
+    TcGlobalContext()
 
     tokens: list[str] = tokenize(raw=context.value)
 

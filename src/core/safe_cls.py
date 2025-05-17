@@ -17,6 +17,10 @@ class SafeClass:
 
 
     def check_error(self) -> Result[None, Exception]:
+        from nucleus.prelude import TcLog
+
+        TcLog(v=self._state)
+
         return self._state
 
 
@@ -26,3 +30,5 @@ class SafeClass:
 
     def __str__(self) -> str:
         return self.__class__.__name__ + 'is an class type: ' + self._tc_repr
+
+

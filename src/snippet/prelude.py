@@ -2,7 +2,6 @@
 from src.c_terminal.prelude import Terminal
 from src.tcfmt.creator import TcFileCreator
 from src.tcfmt.reader import TcFileReader
-from src.core.result import Result
 
 
 #.?
@@ -51,6 +50,7 @@ class SnippetManager: # Ok
         if ( err := action.check_error() ).is_err():
             raise err.error
 
+        print(action.final_content)
         saved: SnippetSaver= SnippetSaver(
             metadata=action.final_content,
         )

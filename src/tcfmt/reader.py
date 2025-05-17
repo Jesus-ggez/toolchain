@@ -70,9 +70,11 @@ class TcFileReader(SafeClass):
             return Ok()
 
         for filt in self._filters.copy():
-            if ( val := PropertyHandler(p=item, custom_filter=filt).check_error() ).is_ok():
+            content: PropertyHandler = PropertyHandler(p=item, custom_filter=filt)
+            if content.check_error().is_ok():
                 self._filters.remove(filt)
-                self._final_content.update( { filt: val.value } )
+
+                self._final_content.update( { filt: content.value } )
                 return Ok()
 
         return self.__create_error(msg=f'Missing property for this document: {item}')

@@ -1,18 +1,14 @@
-from typing import Any
-
-
 #~>
 from src.core.safe_cls import SafeClass
 from src.core.result import (
     Result,
     Err,
-    Ok
+    Ok,
 )
 
 
 #.?
-from .parsers.errs import ParserError
-from .parsers.data import parsers
+from .filters_prop.data import data
 from .errs import PropertyError
 
 
@@ -21,25 +17,24 @@ class PropertyHandler(SafeClass):
     def __init__(self, p: str, custom_filter: str) -> None:
         super().__init__()
 
-        self._custom_filter: str = custom_filter
-        self._prop: str = p
+        self._p: str = p.strip()
+        self._custom_filter: str = custom_filter.strip()
 
         self.__build()
 
 
     def __build(self) -> None:
-        instructions: tuple = (
-            self.__validate_parameters,
-            self.__validate_property,
-            self.__validate_raw_format,
-            self.__validate_raw_payload,
-            self.__validate_payload_type,
-            self.__create_payload,
-        )
+        if ( err := self.__validate_parameters() ).is_err():
+            return self._use_error(err)
 
-        for instruction in instructions:
-            if ( err := instruction() ).is_err():
-                return self._use_error(err)
+        if ( err := self.__validate_property_name() ).is_err():
+            return self._use_error(err)
+
+        if ( err := self.__create_raw_payload() ).is_err():
+            return self._use_error(err)
+
+        if ( err := self.__create_valid_payload() ).is_err():
+            return self._use_error(err)
 
 
     def __create_error(self, msg: str) -> Result[None, PropertyError]:
@@ -51,53 +46,44 @@ class PropertyHandler(SafeClass):
 
 
     def __validate_parameters(self) -> Result[None, PropertyError]:
-        if not self._prop.strip() or not self._custom_filter.strip():
-            return self.__create_error(msg='Property not found')
-        return Ok()
-
-
-    def __validate_property(self) -> Result[None, PropertyError]:
-        if self._prop.startswith(self._custom_filter):
-            return Ok()
-
-        return self.__create_error(msg='Invalid Property')
-
-
-    def __validate_raw_format(self) -> Result[None, PropertyError]:
-        self._parts: list[str] = self._prop.removeprefix(
-            self._custom_filter,
-        ).split('=')
-
-        if self._parts != 2:
-            return self.__create_error(msg='Invalid format property')
-        return Ok()
-
-
-    def __validate_raw_payload(self) -> Result[None, PropertyError]:
-        if not self._parts[1].strip():
-            return self.__create_error(msg=f'Invalid payload from {self._prop}')
-
-        self._raw_payload: str = self._parts[1]
-        return Ok()
-
-
-    def __validate_payload_type(self) -> Result[None, PropertyError]:
-        if not (self._raw_payload[0] in parsers):
-            return self.__create_error(msg='Invalid format to use payload')
+        if not self._p or not self._custom_filter:
+            return self.__create_error(msg='Invallid parameters')
 
         return Ok()
 
 
-    def __create_payload(self) -> Result[None, ParserError]:
-        action: Result = parsers[self._raw_payload[0]](self._raw_payload)
+    def __validate_property_name(self) -> Result[None, PropertyError]:
+        if not self._p.startswith(self._custom_filter):
+            return self.__create_error(msg='Invalid property name')
 
-        if action.is_ok():
-            self.__value = action.value
-            return Ok()
+        return Ok()
 
-        return action
+
+    def __create_raw_payload(self) -> Result[None, PropertyError]:
+        _raw_payload: str = self._p.removeprefix(self._custom_filter).strip()
+
+        if not _raw_payload.startswith('='):
+            return self.__create_error(msg=f'Invalid syntax: {_raw_payload}')
+
+        self._payload: str = _raw_payload.removeprefix('=').strip()
+        return Ok()
+
+
+    def __create_valid_payload(self) -> Result[None, PropertyError]:
+        filt = data.get(self._payload[0])
+
+        if filt is None:
+            return self.__create_error(msg=f'Invalid format to create payload: {self._payload}')
+
+        filt_value: Result = filt(self._payload)
+
+        if filt_value.is_err(): return filt_value
+
+        self._value: list | str = filt_value.value
+
+        return Ok()
 
 
     @property
-    def value(self) -> Any:
-        return self.__value
+    def value(self) -> str | list:
+        return self._value

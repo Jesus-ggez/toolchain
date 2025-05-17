@@ -49,6 +49,7 @@ class TcFileCreator(SafeClass):
             message=msg,
         ))
 
+
     def __validate_parameters(self) -> Result[None, TcTcfmtCreatorError]:
         if not self._root or not self._tempname:
             return self.__create_error(msg='Invalid parameters')
