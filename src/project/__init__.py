@@ -7,5 +7,6 @@ from .prelude import ProjectManager
 
 #<·
 data: dict = {
-    'start': ProjectManager.start
+    'start': ProjectManager.start,
+    'new': ProjectManager.new,
 }

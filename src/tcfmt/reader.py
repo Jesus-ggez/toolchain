@@ -52,6 +52,12 @@ class TcFileReader(SafeClass):
 
     def _read_data(self) -> Result[None, TcTcfmtReaderError]:
         for line in self._file_content:
+            if line.startswith('#'):
+                continue
+
+            if not line.strip():
+                continue
+
             if ( err := self._use_filters(item=line) ).is_err():
                 return err
 

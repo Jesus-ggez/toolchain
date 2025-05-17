@@ -17,16 +17,12 @@ def filt_list(v: str) -> Result[list, FilterPropertyError]:
     pure_values: str = v.strip('[]').strip()
 
     if not pure_values:
-        return Err(error=FilterPropertyError(
-            message=f'Invalid content: {v.strip('"')}',
-            call='fn::filt_list',
-            source=__name__,
-        ))
+        return Ok([])
 
     end_values: list[str] = []
 
     for value in pure_values.split(','):
-        if ( val := filt_str(v=value) ).is_ok():
+        if ( val := filt_str(v=value.strip()) ).is_ok():
             end_values.append(val.value)
             continue
 

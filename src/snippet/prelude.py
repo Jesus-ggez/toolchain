@@ -16,14 +16,11 @@ class SnippetManager: # Ok
     @staticmethod # Ok
     def start() -> None:
         terminal_content: Terminal = Terminal(field=TcSnippetConfig.TEMPLATE_NAME)
-
         if ( err := terminal_content.check_error() ).is_err():
             raise err.error
 
-        temp_name: str = terminal_content.value
-
         action: TcFileCreator = TcFileCreator(
-            tempname=temp_name,
+            tempname=terminal_content.value,
             root='snippet',
         )
 
@@ -34,7 +31,7 @@ class SnippetManager: # Ok
     @staticmethod
     def new() -> None: # Ok
         action: TcFileReader = TcFileReader()
-        if ( err :=action.add_filters(
+        if ( err := action.add_filters(
             props=[
                 'version',
                 'target',

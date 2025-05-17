@@ -2,6 +2,7 @@
 from src.c_terminal.prelude import Terminal
 from src.tcfmt.creator import TcFileCreator
 from src.core.result import Result
+from src.tcfmt.reader import TcFileReader
 
 
 #.?
@@ -11,7 +12,7 @@ from .constants import TcProjectConfig
 #<·
 class ProjectManager:
     @staticmethod
-    def start() -> None: # Ok?
+    def start() -> None: # Ok
         terminal_content: Terminal = Terminal(field=TcProjectConfig.TEMPLATE_NAME)
         if ( err := terminal_content.check_error() ).is_err():
             raise err.error
@@ -23,3 +24,28 @@ class ProjectManager:
 
         if ( err := action.check_error() ).is_err():
             raise err.error
+
+
+    @staticmethod
+    def new() -> None:
+        action: TcFileReader = TcFileReader()
+        if ( err := action.add_filters(
+            props=[
+                'project-oficial-name',
+                'entrypoints',
+                'commands',
+                'version',
+                'target',
+                'dotenv',
+                'ignore',
+                'langs',
+            ]
+        ) ).is_err():
+            raise err.error
+
+        action.build()
+
+        if ( err := action.check_error() ).is_err():
+            raise err.error
+
+        print(action.final_content)
