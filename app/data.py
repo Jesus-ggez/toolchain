@@ -1,6 +1,7 @@
 #~>
-from src.snippet import data as sdata
 from src.py_utils import data as pydata
+from src.snippet import data as sdata
+from src.project import data as pdata
 
 
 #<·
@@ -9,6 +10,7 @@ def print_ok_with_args(*args): print(*args)
 
 forest: dict = {
     'snippet': sdata,
+    'project': pdata,
 }
 
 test: dict = {
