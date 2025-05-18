@@ -6,7 +6,6 @@ from src.tcfmt.reader import TcFileReader
 
 #.?
 from .constants import TcProjectConfig
-#from .save_project import SaveProject
 
 
 #<·
@@ -49,16 +48,4 @@ class ProjectManager:
             raise err.error
 
         print(action.final_content)
-        """
-        save_action: SaveProject = SaveProject(m=action.final_content)
-        if ( err := save_action.check_error() ).is_err():
-            raise err.error
 
-        print(save_action)
-
-        """
-
-
-    @staticmethod
-    def use() -> None:
-        ...
