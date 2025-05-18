@@ -8,7 +8,6 @@ from .result import (
 #<·
 class SafeClass:
     def __init__(self) -> None:
-        self._tc_repr: str = 'Coordinator'
         self._state: Result = Ok()
 
 
@@ -22,13 +21,3 @@ class SafeClass:
         TcLog(v=self._state)
 
         return self._state
-
-
-    def __repr__(self) -> str:
-        return self._tc_repr
-
-
-    def __str__(self) -> str:
-        return self.__class__.__name__ + 'is an class type: ' + self._tc_repr
-
-

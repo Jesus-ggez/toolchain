@@ -29,6 +29,10 @@ class SnippetSaver(SafeClass):
 
         self._metadata: dict = metadata
 
+        self.__build()
+
+
+    def __build(self) -> None:
         if ( err := self.__validate_metadata() ).is_err():
             return self._use_error(err)
 

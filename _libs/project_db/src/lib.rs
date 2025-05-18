@@ -9,7 +9,8 @@ use main_py::ProjectDb;
 
 //<·
 #[pymodule]
-fn snippet_db(m: &Bound<'_, PyModule>) -> PyResult<()> {
+
+fn project_db(m: &Bound<'_, PyModule>) -> PyResult<()> {
     let _ = m.add_class::<ProjectDb>()?;
     Ok(())
 }
