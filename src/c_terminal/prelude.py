@@ -30,14 +30,13 @@ class Terminal(SafeClass):
 
         if self.__is_argument_default().is_ok(): return
 
-        if ( err := self.__is_valid_argument() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__is_valid_format() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__is_valid_final_value() ).is_err():
-            return self._use_error(err)
+        for check in (
+            self.__is_valid_argument,
+            self.__is_valid_format,
+            self.__is_valid_final_value,
+        ):
+            if ( err := check() ).is_err():
+                return self._use_error(err)
 
         self.__value = self._parts[1]
 

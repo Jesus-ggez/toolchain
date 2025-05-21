@@ -42,17 +42,14 @@ class FileObject(VOIdentity):
 
 
     def __build(self) -> None:
-        if ( err := self.__validate_parameters() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__create_content() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__create_extension() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__create_name() ).is_err():
-            return self._use_error(err)
+        for check in (
+            self.__validate_parameters,
+            self.__create_content,
+            self.__create_extension,
+            self.__create_name,
+        ):
+            if ( err := check() ).is_err():
+                return self._use_error(err)
 
 
     def __create_error(self, msg: str) -> Result[None, ValueObjectCreationError]:
@@ -100,6 +97,7 @@ class FileObject(VOIdentity):
 
     def __has_extension(self) -> bool:
         return '.' in self._file_name
+
 
     def __create_name(self) -> Result[None, Exception]:
         self._name: str = self._file_name.removesuffix(self._extension_name)

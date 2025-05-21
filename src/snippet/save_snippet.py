@@ -33,17 +33,14 @@ class SnippetSaver(SafeClass):
 
 
     def __build(self) -> None:
-        if ( err := self.__validate_metadata() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__create_data() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__create_record() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__remove_document() ).is_err():
-            return self._use_error(err)
+        for check in (
+            self.__validate_metadata,
+            self.__create_data,
+            self.__create_record,
+            self.__remove_document,
+        ):
+            if ( err := check() ).is_err():
+                return self._use_error(err)
 
 
     def __validate_metadata(self) -> Result[None, MetadataError]:

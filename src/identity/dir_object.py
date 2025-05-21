@@ -47,16 +47,14 @@ class DirObject(VOIdentity):
 
 
     def __build(self) -> None:
-        process: tuple = (
+        for check in (
             self.__validate_parameters,
             self.__os_move_to_objetive,
             self.__create_content,
             self.__separe_documents,
             self.__create_file_vo_content,
-        )
-
-        for proces in process:
-            if ( err := proces() ).is_err():
+        ):
+            if ( err := check() ).is_err():
                 return self._use_error(err)
 
 

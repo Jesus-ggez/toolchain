@@ -27,19 +27,21 @@ class TcFileCreator(SafeClass):
 
 
     def __build(self) -> None:
-        if ( err := self.__validate_parameters() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__validate_node() ).is_err():
-            return self._use_error(err)
+        for check in (
+            self.__validate_parameters,
+            self.__validate_node,
+        ):
+            if ( err := check() ).is_err():
+                return self._use_error(err)
 
         self._data_templates: dict = data_templates[self._root]
 
-        if ( err := self.__validate_template_exists() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__use_template() ).is_err():
-            return self._use_error(err)
+        for check in (
+            self.__validate_template_exists,
+            self.__use_template,
+        ):
+            if ( err := check() ).is_err():
+                return self._use_error(err)
 
 
     def __create_error(self, msg: str) -> Result[None, TcTcfmtCreatorError]:

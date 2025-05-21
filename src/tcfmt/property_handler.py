@@ -24,17 +24,14 @@ class PropertyHandler(SafeClass):
 
 
     def __build(self) -> None:
-        if ( err := self.__validate_parameters() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__validate_property_name() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__create_raw_payload() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__create_valid_payload() ).is_err():
-            return self._use_error(err)
+        for check in (
+            self.__validate_parameters,
+            self.__validate_property_name,
+            self.__create_raw_payload,
+            self.__create_valid_payload,
+        ):
+            if ( err := check() ).is_err():
+                return self._use_error(err)
 
 
     def __create_error(self, msg: str) -> Result[None, PropertyError]:

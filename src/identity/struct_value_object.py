@@ -1,4 +1,4 @@
-from typing import Any, NamedTuple
+from typing import Any
 
 
 #~>
@@ -18,5 +18,5 @@ class VOIdentity(SafeClass):
 
 
     @property
-    def value(self) -> NamedTuple:
+    def value(self) -> Any:
         return self._value

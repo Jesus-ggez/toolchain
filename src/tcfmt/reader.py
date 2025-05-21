@@ -26,11 +26,12 @@ class TcFileReader(SafeClass):
 
     # necesary external call
     def build(self) -> None:
-        if ( err := self._read_file() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self._read_data() ).is_err():
-            return self._use_error(err)
+        for check in (
+            self._read_file,
+            self._read_data,
+        ):
+            if ( err := check() ).is_err():
+                return self._use_error(err)
 
 
     def __create_error(self, msg: str) -> Result[None, TcTcfmtReaderError]:
