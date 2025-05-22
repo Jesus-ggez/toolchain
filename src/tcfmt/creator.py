@@ -59,14 +59,14 @@ class TcFileCreator(SafeClass):
 
 
     def __validate_node(self) -> Result[None, TcTcfmtCreatorError]:
-        if not (self._root in data_templates):
+        if not self._root in data_templates:
             return self.__create_error(msg='Invalid node name for tempname tree use')
 
         return Ok()
 
 
     def __validate_template_exists(self) -> Result[None, TcTcfmtCreatorError]:
-        if not (self._tempname in self._data_templates):
+        if not self._tempname in self._data_templates:
             return self.__create_error(msg='Invalid template name')
 
         return Ok()

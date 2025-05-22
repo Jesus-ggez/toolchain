@@ -18,6 +18,10 @@ class OnlyCallFactory(TokenFactory):
     def __init__(self, context: dict, token: str) -> None:
         super().__init__(context, token)
 
+        self.__build()
+
+
+    def __build(self) -> None:
         if ( err := self.__call() ).is_err():
             return self._use_error(err)
 
@@ -25,7 +29,7 @@ class OnlyCallFactory(TokenFactory):
     def __call(self) -> Result[None, FactoryError]:
         if not callable(self._context['node_pointer']):
             return Err(error=FactoryError(
-                message=f'This node are not a function:\t' + self._token,
+                message='This node are not a function:\t' + self._token,
                 call='OnlyCallFactory.__call',
                 source=__name__,
            ))
@@ -47,5 +51,3 @@ class OnlyCallFactory(TokenFactory):
 
         except Exception as e:
             return Err(error=e)
-
-

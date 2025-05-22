@@ -12,7 +12,8 @@ from .constants import TcConfig
 #<·
 class TcLog:
     def __init__(self, v: Any) -> None:
-        if not TcConfig['details']: return
+        if not TcConfig['details']:
+            return
 
         self._value: Any = v
 

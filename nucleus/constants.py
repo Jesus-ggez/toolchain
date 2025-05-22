@@ -1,7 +1,7 @@
 #~>
 from src.core.safe_cls import SafeClass
-from utils.terminal import arguments
 from src.core.result import Ok, Result
+from utils.terminal import arguments
 
 
 #<·
@@ -22,15 +22,17 @@ class TcGlobalContext(SafeClass):
 
 
     def __build(self) -> None:
-        if ( err := self.__filter_cases() ).is_err():
-            return self._use_error(err)
-
-        if ( err := self.__use_cases() ).is_err():
-            return self._use_error(err)
+        for check in (
+            self.__filter_cases,
+            self.__use_cases,
+        ):
+            if ( err := check() ).is_err():
+                return self._use_error(err)
 
 
     def __filter_cases(self) -> Result[None, Exception]:
-        if not arguments: return Ok()
+        if not arguments:
+            return Ok()
 
         for argument in arguments.copy():
             if not argument[0].isalnum():

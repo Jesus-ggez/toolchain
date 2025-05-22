@@ -22,6 +22,10 @@ class CallWithArgsFactory(TokenFactory):
         if self._token == separator:
             return
 
+        self.__build()
+
+
+    def __build(self) -> None:
         if not self._is_handler():
             return self._use_handler(instance=CallWithArgsFactory)
 
@@ -43,7 +47,7 @@ class CallWithArgsFactory(TokenFactory):
     def __call(self) -> Result[None, FactoryError]:
         if not callable(self._context['node_pointer']):
             return Err(error=FactoryError(
-                message=f'This node are not a function:\t' + self._token,
+                message='This node are not a function:\t' + self._token,
                 call='CallWithArgsFactory.__call',
                 source=__name__,
             ))
@@ -65,5 +69,3 @@ class CallWithArgsFactory(TokenFactory):
 
         except Exception as e:
             return Err(error=e)
-
-

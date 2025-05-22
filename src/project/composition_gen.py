@@ -1,6 +1,10 @@
 from typing import Any
 
 
+#¿?
+from snippet_db import Identifier
+
+
 #~>
 from src.core.safe_cls import SafeClass
 from src.core.errors import safe_exec
@@ -9,10 +13,6 @@ from src.core.result import (
     Err,
     Ok,
 )
-
-
-#¿?
-from snippet_db import Identifier
 
 
 #.?
@@ -27,6 +27,9 @@ class CompositionGenerator(SafeClass):
         self._dir_content: list[int] = dir_content
         self._dir_name: str = dir_name.strip()
         self._identifiers: list[str] = []
+        self._ids: list[str] = []
+        self._value: str = ''
+
 
         self.__build()
 
@@ -60,8 +63,6 @@ class CompositionGenerator(SafeClass):
 
 
     def __create_composition_id(self) -> Result[None, MetadataError]:
-        self._ids: list[str] = []
-
         for item_id in self._dir_content:
             if not isinstance(item_id, int) or not item_id:
                 return self.__create_error(msg=f'Invalid type value: {item_id} == {type(item_id)}')
@@ -77,10 +78,10 @@ class CompositionGenerator(SafeClass):
 
     def __create_composition(self) -> Result[None, MetadataError]:
         if not self._ids:
-            self._value: str = self._dir_name + '[]'
+            self._value += self._dir_name + '[]'
             return Ok()
 
-        self._value: str = self._dir_name + '[' + ','.join(self._ids) + ']'
+        self._value += self._dir_name + '[' + ','.join(self._ids) + ']'
 
         return Ok()
 

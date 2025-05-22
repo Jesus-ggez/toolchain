@@ -8,16 +8,16 @@ import os
 def search() -> None:
     raw: list = os.listdir()
 
-    for dir in raw:
-        if 'pycache' in dir and os.path.isdir(dir):
-            os.system(f'rm -r {dir}')
+    for dir_ in raw:
+        if 'pycache' in dir_ and os.path.isdir(dir_):
+            os.system(f'rm -r {dir_}')
 
     new: list = os.listdir()
 
-    for dir in new:
-        if os.path.isdir(dir):
+    for dir_ in new:
+        if os.path.isdir(dir_):
             try:
-                os.chdir(dir)
+                os.chdir(dir_)
                 search()
 
             except Exception as e:
@@ -25,5 +25,3 @@ def search() -> None:
 
             finally:
                 os.chdir('..')
-    return
-

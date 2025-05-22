@@ -63,7 +63,8 @@ class ContextManager(SafeClass):
         get_handler: Result = ActionsFactory.get_factory(
             name=self._token,
         ) # return error if not exists factory
-        if get_handler.is_err(): return get_handler
+        if get_handler.is_err():
+            return get_handler
 
 
         set_action: Result = get_handler.value(

@@ -1,5 +1,5 @@
 #~>
-from src.identity.dir_object import DirObject, DirVO
+from src.identity.dir_object import DirObject #, DirVO
 from src.core.safe_cls import SafeClass
 from src.core.errors import TcErr
 from src.core.result import (
@@ -10,7 +10,7 @@ from src.core.result import (
 
 
 #.?
-from .snippet_saver import SnippetSaver
+#from .snippet_saver import SnippetSaver
 from .errs import ProjectError
 
 
@@ -27,6 +27,7 @@ class ProjectSaver(SafeClass):
     def __build(self) -> None:
         for check in (
             self.__validate_parameters,
+            self.__create_data,
         ):
             if ( err := check() ).is_err():
                 return self._use_error(err)
@@ -54,21 +55,3 @@ class ProjectSaver(SafeClass):
             return err
 
         return Ok()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

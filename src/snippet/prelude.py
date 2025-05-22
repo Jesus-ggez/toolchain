@@ -75,4 +75,3 @@ class SnippetManager: # Ok
             identifier=identifier,
         ).check_error() ).is_err():
             raise err.error
-

@@ -17,9 +17,11 @@ class Terminal(SafeClass):
     def __init__(self, field: str) -> None:
         super().__init__()
 
+        self._parts: list[str] = []
         self._default: str = '_'
         self._divider: str = '-'
         self._field: str = field
+        self.__value: str = ''
 
         self.__build()
 
@@ -28,7 +30,8 @@ class Terminal(SafeClass):
         if ( err := self.__validate_parameters() ).is_err():
             return self._use_error(err)
 
-        if self.__is_argument_default().is_ok(): return
+        if self.__is_argument_default().is_ok():
+            return
 
         for check in (
             self.__is_valid_argument,

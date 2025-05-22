@@ -30,4 +30,3 @@ def safe_exec(func):
             #traceback.print_exc()
             return Err(e)
     return wrapper
-

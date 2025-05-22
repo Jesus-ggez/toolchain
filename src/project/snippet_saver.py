@@ -24,6 +24,7 @@ class SnippetSaver(SafeClass):
     def __init__(self, data: FileVO) -> None:
         super().__init__()
 
+        self._value: int = 0
         self._data: FileVO = data
 
         self.__build()
@@ -48,7 +49,9 @@ class SnippetSaver(SafeClass):
 
     def __validate_parameters(self) -> Result[None, ProjectError]:
         if not isinstance(self._data, FileVO):
-            return self.__create_error(msg=f'Invalid parameters: {self._data} == {type(self._data)}')
+            return self.__create_error(
+                msg=f'Invalid parameters: {self._data} == {type(self._data)}'
+            )
 
         return Ok()
 
@@ -66,4 +69,3 @@ class SnippetSaver(SafeClass):
     @property
     def value(self) -> int:
         return self._value
-

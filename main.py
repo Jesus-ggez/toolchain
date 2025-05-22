@@ -1,12 +1,17 @@
+"""
+use -> python ~/toolchain/main.py
+"""
 from dotenv import load_dotenv
 
 #~>
 from utils.terminal import is_empty_cmd, get_next_arg
-from nucleus.constants import TcGlobalContext
-from src.core.errors import safe_exec
-from app.struct import create_struct
-from src.core.result import Result
 from utils.tokens import tokenize
+
+from nucleus.constants import TcGlobalContext
+from app.struct import create_struct
+
+from src.core.errors import safe_exec
+from src.core.result import Result
 
 
 #<·
@@ -15,6 +20,7 @@ load_dotenv()
 
 @safe_exec
 def main() -> None:
+    """ run ALL"""
     get_next_arg() # del "main.py" from arguments = []
 
     if is_empty_cmd():

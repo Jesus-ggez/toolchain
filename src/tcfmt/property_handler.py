@@ -19,6 +19,8 @@ class PropertyHandler(SafeClass):
 
         self._p: str = p.strip()
         self._custom_filter: str = custom_filter.strip()
+        self._value: list[str] | str = []
+        self._payload: str = ''
 
         self.__build()
 
@@ -77,7 +79,7 @@ class PropertyHandler(SafeClass):
         if filt_value.is_err():
             return filt_value
 
-        self._value: list | str = filt_value.value
+        self._value = filt_value.value
 
         return Ok()
 

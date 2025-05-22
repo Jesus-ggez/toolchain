@@ -11,9 +11,8 @@ class TokenFactory(SafeClass):
 
 
     def _is_handler(self) -> bool:
-        return not (self._context['handler'] is None)
+        return not self._context['handler'] is None
 
 
     def _use_handler(self, instance: type) -> None:
         self._context['handler'] = instance
-

@@ -18,6 +18,10 @@ class MoveNodeFactory(TokenFactory):
     def __init__(self, context: dict, token: str) -> None:
         super().__init__(context, token)
 
+        self.__build()
+
+
+    def __build(self) -> None:
         if not self._is_handler():
             return self._use_handler(instance=MoveNodeFactory)
 
@@ -41,7 +45,7 @@ class MoveNodeFactory(TokenFactory):
                 source=__name__,
             ))
 
-        if not (self._token in current):
+        if not self._token in current:
             return Err(error=FactoryError(
                 message='Node not found:\t' + self._token,
                 call='MoveNodeFactory.__move',
@@ -50,4 +54,3 @@ class MoveNodeFactory(TokenFactory):
 
         self._context['node_pointer'] = current[self._token]
         return Ok()
-

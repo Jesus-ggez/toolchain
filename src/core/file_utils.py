@@ -12,7 +12,7 @@ class Reader:
     @staticmethod
     def as_list(filename: str) -> Result[list, FileReaderError]:
         try:
-            with open(filename, 'r') as file:
+            with open(filename, 'r', encoding='utf-8') as file:
                 return Ok(file.readlines())
 
         except Exception as e:
@@ -26,7 +26,7 @@ class Reader:
     @staticmethod
     def as_str(filename: str) -> Result[str, FileReaderError]:
         try:
-            with open(filename, 'r') as file:
+            with open(filename, 'r', encoding='utf-8') as file:
                 return Ok(file.read())
 
         except Exception as e:
@@ -41,7 +41,7 @@ class Writer:
     @staticmethod
     def from_list(content: list, name: str) -> Result[None, FileWriterError]:
         try:
-            with open(name, 'w') as file:
+            with open(name, 'w', encoding='utf-8') as file:
                 file.writelines(content)
                 return Ok()
 
@@ -55,7 +55,7 @@ class Writer:
     @staticmethod
     def from_str(content: str, name: str) -> Result[None, FileWriterError]:
         try:
-            with open(name, 'w') as file:
+            with open(name, 'w', encoding='utf-8') as file:
                 file.write(content)
                 return Ok()
 
@@ -70,7 +70,7 @@ class Writer:
     @staticmethod
     def extends(content: list, name: str) -> Result[None, FileWriterError]:
         try:
-            with open(name, 'a') as file:
+            with open(name, 'a', encoding='utf-8') as file:
                 file.writelines(content)
                 return Ok()
 

@@ -18,6 +18,10 @@ class CallWithArgFactory(TokenFactory):
     def __init__(self, context: dict, token: str) -> None:
         super().__init__(context, token)
 
+        self.__build()
+
+
+    def __build(self) -> None:
         if not self._is_handler():
             return self._use_handler(instance=CallWithArgFactory)
 
@@ -28,7 +32,7 @@ class CallWithArgFactory(TokenFactory):
     def __call(self) -> Result[None, FactoryError]:
         if not callable(self._context['node_pointer']):
             return Err(error=FactoryError(
-                message=f'This node are not a function:\t' + self._token,
+                message='This node are not a function:\t' + self._token,
                 call='CallWithArgFactory.__call',
                 source=__name__,
             ))
@@ -50,5 +54,3 @@ class CallWithArgFactory(TokenFactory):
 
         except Exception as e:
             return Err(error=e)
-
-

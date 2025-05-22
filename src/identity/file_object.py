@@ -30,6 +30,9 @@ class FileObject(VOIdentity):
         self._model = FileVO
 
         self._file_name: str = file_name.strip()
+        self._extension_name: str = ''
+        self._content: str = ''
+        self._name: str = ''
 
         self.__build()
 
@@ -81,8 +84,6 @@ class FileObject(VOIdentity):
 
 
     def __create_extension(self) -> Result[None, ValueObjectCreationError]:
-        self._extension_name: str = ''
-
         if not self.__has_extension():
             return Ok()
 

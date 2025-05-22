@@ -66,7 +66,8 @@ class TcFileReader(SafeClass):
 
 
     def add_filters(self, props: list[str]) -> Result[None, TcTcfmtReaderError]:
-        if not props: return self.__create_error(msg='This field must be empty')
+        if not props:
+            return self.__create_error(msg='This field must be empty')
 
         self._filters.extend(props)
         return Ok()

@@ -1,7 +1,6 @@
 #~>
 from src.core.result import (
     Result,
-    Err,
     Ok,
 )
 

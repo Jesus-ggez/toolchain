@@ -32,6 +32,9 @@ class DirObject(VOIdentity):
         self._model = DirVO
 
         self._dir_name: str = dir_name.strip()
+        self._file_names: list[str] = []
+        self._dir_names: list[str] = []
+        self._content: list = []
 
         self.__build()
 
@@ -70,8 +73,6 @@ class DirObject(VOIdentity):
 
 
     def __create_content(self) -> Result[None, ValueObjectCreationError]:
-        self._content: list = []
-
         raw_content: Result = self.__os_get_items()
         if raw_content.is_err():
             return raw_content
@@ -83,9 +84,6 @@ class DirObject(VOIdentity):
 
 
     def __separe_documents(self) -> Result[None, ValueObjectCreationError]:
-        self._file_names: list = []
-        self._dir_names: list = []
-
         if not self._content:
             return Ok()
 

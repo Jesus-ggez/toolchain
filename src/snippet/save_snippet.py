@@ -28,6 +28,8 @@ class SnippetSaver(SafeClass):
         super().__init__()
 
         self._metadata: dict = metadata
+        self.__value: Any = None
+        self._data: str = ''
 
         self.__build()
 
@@ -46,7 +48,9 @@ class SnippetSaver(SafeClass):
     def __validate_metadata(self) -> Result[None, MetadataError]:
         required_keys: set = { 'target', 'name' }
 
-        if ( missing := (required_keys - self._metadata.keys()) ):
+        missing: set = required_keys - self._metadata.keys()
+
+        if missing:
             print(missing)
             return Err(error=MetadataError(
                 message='Missing keys to add metadata',
@@ -61,7 +65,7 @@ class SnippetSaver(SafeClass):
         data: Result = Reader.as_str(filename=self._metadata['target'])
 
         if data.is_ok():
-            self._data: str = data.value
+            self._data = data.value
             return Ok()
 
         return data

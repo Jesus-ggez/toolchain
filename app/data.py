@@ -5,8 +5,10 @@ from src.project import data as pdata
 
 
 #<·
-def print_ok(): print('Ok')
-def print_ok_with_args(*args): print(*args)
+def print_ok():
+    print('Ok')
+def print_ok_with_args(*args):
+    print(*args)
 
 forest: dict = {
     'snippet': sdata,
@@ -25,4 +27,3 @@ test: dict = {
 
 #forest.update(test)
 forest.update(pydata)
-

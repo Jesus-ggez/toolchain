@@ -24,16 +24,22 @@ from .errs import SnippetError
 class UseSnippet(SafeClass):
     def __init__(self, identifier: str, alias: str) -> None:
         super().__init__()
+
         self._identifier: str = identifier
+        self._content: str = ''
+        self._alias: str = alias
 
-        action = self.__read_from_name
+        self._action = self.__read_from_name
         if len(identifier) <= 3 and self._identifier.isalnum():
-            action = self.__read_from_id
+            self._action = self.__read_from_id
 
-        if ( err := action() ).is_err():
+        self.__build()
+
+    def __build(self) -> None:
+        if ( err := self._action() ).is_err():
             return self._use_error(err)
 
-        self.create_snippet(alias)
+        self.create_snippet(self._alias)
 
 
     @safe_exec
@@ -44,14 +50,14 @@ class UseSnippet(SafeClass):
             s=v[-3:],
         )
         print(_id)
-        self._content: str = SnippetDb.find_by_id(
+        self._content = SnippetDb.find_by_id(
             id=_id,
         )
 
 
     @safe_exec
     def __read_from_name(self) -> Any:
-        self._content: str =  SnippetDb.find_by_name(
+        self._content =  SnippetDb.find_by_name(
             name=self._identifier,
         )
 
