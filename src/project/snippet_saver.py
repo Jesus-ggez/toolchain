@@ -48,7 +48,7 @@ class SnippetSaver(SafeClass):
 
     def __validate_parameters(self) -> Result[None, ProjectError]:
         if not isinstance(self._data, FileVO):
-            return self.__create_error(msg='Invalid parameters')
+            return self.__create_error(msg=f'Invalid parameters: {self._data} == {type(self._data)}')
 
         return Ok()
 

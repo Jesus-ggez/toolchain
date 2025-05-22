@@ -1,4 +1,5 @@
 #~>
+from .errors import TcErr
 from .result import (
     Result,
     Ok,
@@ -15,7 +16,7 @@ class SafeClass:
         self._state: Result = e
 
 
-    def check_error(self) -> Result[None, Exception]:
+    def check_error(self) -> Result[None, TcErr]:
         from nucleus.prelude import TcLog
 
         TcLog(v=self._state)

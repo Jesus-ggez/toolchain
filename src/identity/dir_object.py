@@ -13,7 +13,6 @@ from src.core.result import (
 
 #.?
 from .struct_value_object import VOIdentity
-from .file_object import FileObject, FileVO
 from .errs import ValueObjectCreationError
 
 
@@ -22,7 +21,6 @@ class DirVO(NamedTuple):
     raw_content: list[str]
     name: str
 
-    content_vo: list[VOIdentity]
     files: list[str]
     dirs: list[str]
 
@@ -38,7 +36,6 @@ class DirObject(VOIdentity):
         self.__build()
 
         self._create_value_object(
-            content_vo=self._content_vo,
             raw_content=self._content,
             files=self._file_names,
             dirs=self._dir_names,
@@ -52,7 +49,6 @@ class DirObject(VOIdentity):
             self.__os_move_to_objetive,
             self.__create_content,
             self.__separe_documents,
-            self.__create_file_vo_content,
         ):
             if ( err := check() ).is_err():
                 return self._use_error(err)
@@ -103,19 +99,6 @@ class DirObject(VOIdentity):
                 continue
 
             return self.__create_error(msg=f'Unknown document type: {item}')
-
-        return Ok()
-
-
-    def __create_file_vo_content(self) -> Result[None, ValueObjectCreationError]:
-        self._content_vo: list[FileVO] = []
-        if not self._file_names:
-            return Ok()
-
-        for item in self._file_names:
-            raw: FileObject = FileObject(file_name=item)
-            if raw.check_error().is_err():
-                self._content.append(raw.value)
 
         return Ok()
 
