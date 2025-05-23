@@ -30,5 +30,5 @@ class VOIdentity(SafeClass):
 
 
     @property
-    def value(self) -> type:
+    def value(self) -> Any:
         return self._value

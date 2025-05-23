@@ -11,6 +11,7 @@ from src.core.errors import TcErr, safe_exec
 from src.tcfmt.constants import TcConfig
 from src.core.safe_cls import SafeClass
 from src.core.file_utils import Reader
+from nucleus.prelude import TcLog
 from src.core.result import (
     Result,
     Err,
@@ -51,7 +52,7 @@ class SnippetSaver(SafeClass):
         missing: set = required_keys - self._metadata.keys()
 
         if missing:
-            print(missing)
+            TcLog(missing)
             return Err(error=MetadataError(
                 message='Missing keys to add metadata',
                 call='save_snippet()',

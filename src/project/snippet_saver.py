@@ -2,7 +2,9 @@ from typing import Any
 
 
 #¿?
+from snippet_db import Identifier
 from project_db import ProjectDb
+
 
 #~>
 from src.identity.file_object import FileVO
@@ -34,6 +36,7 @@ class SnippetSaver(SafeClass):
         for check in (
             self.__validate_parameters,
             self.__use_data,
+            self.__create_id,
         ):
             if ( err := check() ).is_err():
                 return self._use_error(err)
@@ -65,7 +68,12 @@ class SnippetSaver(SafeClass):
 
         return Ok()
 
+    @safe_exec
+    def __create_id(self) -> Any:
+        self._repr_value: str = Identifier.from_number(
+            num=self._value,
+        )
 
     @property
-    def value(self) -> int:
-        return self._value
+    def value(self) -> str:
+        return self._repr_value

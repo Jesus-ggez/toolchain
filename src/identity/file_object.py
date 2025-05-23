@@ -57,7 +57,7 @@ class FileObject(VOIdentity):
 
     def __create_error(self, msg: str) -> Result[None, ValueObjectCreationError]:
         return Err(error=ValueObjectCreationError(
-            call='FileObject',
+            call='FileObject()',
             source=__name__,
             message=msg,
         ))
