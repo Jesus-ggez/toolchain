@@ -58,7 +58,7 @@ fn create_tprojects(conn: &mut SqliteConnection) {
             langs TEXT NOT NULL,
             entrypoints TEXT,
             commands TEXT,
-            env TEXT,
+            env TEXT
         );
         "#,
     )
