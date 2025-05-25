@@ -8,15 +8,18 @@ from src.core.result import (
 
 
 #.?
+from .recursive_reader import RecursiveReader
 from .errs import ProjectError
 
 
 #<·
 class ProjectSaver(SafeClass):
-    def __init__(self, path: str) -> None:
+    def __init__(self, metadata: dict) -> None:
         super().__init__()
 
-        self._path: str = path.strip()
+        self._ignore: list = metadata.get('ignore', [])
+
+        self._path: str = metadata.get('target', '')
         self._project_dirs: list = []
         self._context: dict = {}
 
@@ -26,6 +29,7 @@ class ProjectSaver(SafeClass):
     def __build(self) -> None:
         for check in (
             self.__validate_parameters,
+            self.__create_reader,
         ):
             if ( err := check() ).is_err():
                 return self._use_error(err)
@@ -46,9 +50,11 @@ class ProjectSaver(SafeClass):
         return Ok()
 
 
+    def __create_reader(self) -> Result[None, ProjectError]:
+        if ( err := RecursiveReader(path=self._path, ignore=self._ignore).check_error() ).is_err():
+            return err
 
-
-
+        return Ok()
 
 
 

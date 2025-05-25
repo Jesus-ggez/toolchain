@@ -11,7 +11,7 @@ pub fn establish_connection() -> SqliteConnection {
     let database_url = env::var("database_url").unwrap_or_else(|_| "test.db".to_string());
 
     // create_db
-    if database_url.starts_with("sqlite:") || !database_url.contains("://") {
+    if database_url.starts_with("sqlite:") || ! database_url.contains("://") {
         let db_path = database_url.replace("sqlite:", "");
         if !Path::new(&db_path).exists() {
             std::fs::File::create(&db_path).expect("Failed to create Db file");

@@ -5,7 +5,7 @@ from src.tcfmt.reader import TcFileReader
 
 
 #.?
-#from .project_saver import ProjectSaver
+from .logic.project_saver import ProjectSaver
 from .constants import TcProjectConfig
 
 
@@ -49,3 +49,7 @@ class ProjectManager:
             raise err.error
 
         print(action.final_content)
+
+        if ( err := ProjectSaver(metadata=action.final_content).check_error() ).is_err():
+            raise err.error
+

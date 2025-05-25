@@ -103,9 +103,9 @@ class DirObject(VOIdentity):
 
     @safe_exec
     def __os_get_items(self) -> Any:
-        os.listdir()
+        return os.listdir()
 
 
     @safe_exec
     def __os_move_to_objetive(self) -> Any:
-        os.chdir(self._dir_name)
+        return os.chdir(self._dir_name)
