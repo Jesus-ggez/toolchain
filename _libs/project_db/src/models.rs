@@ -1,10 +1,10 @@
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
-use crate::schema::{project, snippet};
+use crate::schema::{projects, snippets};
 
 //<·
 #[derive(Queryable, Selectable, Serialize, Deserialize, Clone)]
-#[diesel(table_name = snippet)]
+#[diesel(table_name = snippets)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Snippet {
     pub id: i32,
@@ -13,7 +13,7 @@ pub struct Snippet {
 }
 
 #[derive(Insertable)]
-#[diesel(table_name = snippet)]
+#[diesel(table_name = snippets)]
 pub struct NewSnippet<'a> {
     pub content: &'a str,
     pub name: &'a str,
@@ -21,7 +21,7 @@ pub struct NewSnippet<'a> {
 
 // Project
 #[derive(Queryable, Selectable, Serialize, Deserialize, Clone)]
-#[diesel(table_name = project)]
+#[diesel(table_name = projects)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Project {
     pub id: i32,
@@ -36,7 +36,7 @@ pub struct Project {
 }
 
 #[derive(Insertable)]
-#[diesel(table_name = project)]
+#[diesel(table_name = projects)]
 pub struct NewProject<'a> {
     pub composition: &'a str,
     pub entrypoints: &'a str,

@@ -3,7 +3,7 @@ use pyo3::prelude::*;
 
 use crate::db::establish_connection;
 use crate::models::{NewProject, NewSnippet, Project, Snippet};
-use crate::schema::{project, snippet};
+use crate::schema::{projects, snippets};
 
 //<·
 #[pyclass]
@@ -13,7 +13,7 @@ pub struct ProjectDb;
 impl ProjectDb {
     #[staticmethod]
     fn set_snippet(name: String, content: String) -> PyResult<i32> {
-        let res = diesel::insert_into(snippet::table)
+        let res = diesel::insert_into(snippets::table)
             // struct { ... }
             .values(&NewSnippet {
                 content: &content,
@@ -33,7 +33,7 @@ impl ProjectDb {
 
     #[staticmethod]
     fn get_snippet(id: i32) -> PyResult<String> {
-        Ok(snippet::table
+        Ok(snippets::table
             .find(id)
             .select(Snippet::as_select())
             .first(&mut establish_connection())
@@ -44,9 +44,9 @@ impl ProjectDb {
 
     #[staticmethod]
     fn delete_snippet(id_: i32) -> PyResult<bool> {
-        use crate::schema::snippet::dsl::*;
+        use crate::schema::snippets::dsl::*;
 
-        let res = diesel::delete(snippet.filter(id.eq(id_)))
+        let res = diesel::delete(snippets.filter(id.eq(id_)))
             .execute(&mut establish_connection())
             .unwrap_or(0);
 
@@ -63,7 +63,7 @@ impl ProjectDb {
         name: String,
         env: String,
     ) -> PyResult<i32> {
-        diesel::insert_into(project::table)
+        diesel::insert_into(projects::table)
             .values(&NewProject {
                 composition: &composition,
                 entrypoints: &entrypoints,
@@ -80,7 +80,7 @@ impl ProjectDb {
 
     #[staticmethod]
     fn get_project(id: i32) -> PyResult<String> {
-        Ok(project::table
+        Ok(projects::table
             .find(id)
             .select(Project::as_select())
             .first(&mut establish_connection())
@@ -91,9 +91,9 @@ impl ProjectDb {
 
     #[staticmethod]
     fn delete_project(id_: i32) -> PyResult<bool> {
-        use crate::schema::project::dsl::*;
+        use crate::schema::projects::dsl::*;
 
-        let res = diesel::delete(project.filter(id.eq(id_)))
+        let res = diesel::delete(projects.filter(id.eq(id_)))
             .execute(&mut establish_connection())
             .unwrap_or(0);
 

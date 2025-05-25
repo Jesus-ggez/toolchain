@@ -1,5 +1,5 @@
 diesel::table! {
-    snippet (id) {
+    snippets (id) {
         id -> Integer,
         content -> Text,
         name -> Text,
@@ -7,7 +7,7 @@ diesel::table! {
 }
 
 diesel::table! {
-    project (id) {
+    projects (id) {
         id -> Integer,
         composition -> Text,
         entrypoints -> Text,
