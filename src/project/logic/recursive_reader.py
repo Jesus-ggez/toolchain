@@ -53,7 +53,6 @@ class RecursiveReader(SafeClass):
         if ( err := self.__ignore_items() ).is_err():
             return err
 
-        print(self._current_context)
         return Ok()
 
 
@@ -63,7 +62,6 @@ class RecursiveReader(SafeClass):
         ]
 
         while True:
-            print(len(stack_pseudo_recursion))
             if not stack_pseudo_recursion:
                 break
 
@@ -140,6 +138,7 @@ class RecursiveReader(SafeClass):
             if ( err := data.check_error() ).is_err():
                 return err
 
+            print(data.value)
             ids.append(data.value)
 
         self._temporal_file_repr.clear()

@@ -13,15 +13,22 @@ pub struct ProjectDb;
 impl ProjectDb {
     #[staticmethod]
     fn set_snippet(name: String, content: String) -> PyResult<i32> {
-        diesel::insert_into(snippet::table)
+        let res = diesel::insert_into(snippet::table)
             // struct { ... }
             .values(&NewSnippet {
                 content: &content,
                 name: &name,
             })
             .get_result::<Snippet>(&mut establish_connection())
-            .map(|res| res.id)
-            .or_else(|_| Ok(0))
+            .map(|res| res.id);
+
+        match res {
+            Ok(id) => Ok(id),
+            Err(e) => {
+                eprintln!("Error inserting snippet: {:?}", e);
+                Ok(0)
+            }
+        }
     }
 
     #[staticmethod]

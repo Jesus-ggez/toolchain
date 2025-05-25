@@ -8,7 +8,7 @@ pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
 
     // env_db_url  || test.db
-    let database_url = env::var("database_url").unwrap_or_else(|_| "test.db".to_string());
+    let database_url = env::var("project_database_url").unwrap_or_else(|_| "test.db".to_string());
 
     // create_db
     if database_url.starts_with("sqlite:") || ! database_url.contains("://") {
