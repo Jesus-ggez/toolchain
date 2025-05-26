@@ -48,8 +48,10 @@ class ProjectManager:
         if ( err := action.check_error() ).is_err():
             raise err.error
 
-        #print(action.final_content)
-
-        if ( err := ProjectSaver(metadata=action.final_content).check_error() ).is_err():
+        project_content: ProjectSaver = ProjectSaver(metadata=action.final_content)
+        if ( err := project_content.check_error() ).is_err():
             raise err.error
+
+        print(project_content.value)
+
 

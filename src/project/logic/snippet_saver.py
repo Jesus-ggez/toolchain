@@ -61,15 +61,10 @@ class SnippetSaver(SafeClass):
 
     @safe_exec
     def __use_data(self) -> Any:
-        val: int = ProjectDb.set_snippet(
+        self._value: int = ProjectDb.set_snippet(
             content=self._data.content,
             name=self._data.raw_name,
         )
-
-        if not val:
-            raise ValueError(f'invalid id {val}')
-
-        self._value = val
 
     @safe_exec
     def __create_id(self) -> Any:

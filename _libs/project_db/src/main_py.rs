@@ -58,24 +58,37 @@ impl ProjectDb {
         composition: String,
         entrypoints: String,
         commands: String,
+
         version: String,
         langs: String,
         name: String,
+
         env: String,
     ) -> PyResult<i32> {
-        diesel::insert_into(projects::table)
+        let res = diesel::insert_into(projects::table)
             .values(&NewProject {
                 composition: &composition,
                 entrypoints: &entrypoints,
                 commands: &commands,
+
                 version: &version,
                 langs: &langs,
                 name: &name,
+
                 env: &env,
             })
             .get_result::<Project>(&mut establish_connection())
-            .map(|res| res.id)
-            .or_else(|_| Ok(0))
+            .map(|res| res.id);
+
+        match res {
+            Ok(id) => Ok(id),
+            Err(e) => {
+                eprintln!("Error inserting snippet: {:?}", e);
+                Ok(0)
+            }
+        }
+
+
     }
 
     #[staticmethod]

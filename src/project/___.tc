@@ -1,6 +1,6 @@
 #·?
 target = "."
-project-oficial-name = "name-type_or_composition.libs-foo"
+project-oficial-name = "name-type_or_composition.libs-foo2"
 version = "0.0.0"
 
 langs = [ "python", "rust", ""]
