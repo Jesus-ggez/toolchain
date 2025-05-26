@@ -73,7 +73,7 @@ class ProjectSaver(SafeClass):
 
     @safe_exec
     def __create_record(self) -> Any:
-        self._value: str = 'project saved succesfully whit ID: '
+        self._value: str = ''
 
         entrypoints: str = ''.join(self._metadata.get('entrypoints', []))
         commands: str = ''.join(self._metadata.get('commands', ''))
@@ -90,10 +90,8 @@ class ProjectSaver(SafeClass):
             env=env,
         )
 
-        if not id_project:
-            raise ValueError(f'Error creating record, data: {self._metadata}')
-
-        self._value += str(id_project)
+        if id_project:
+            self._value += 'project saved succesfully whit ID: ' + str(id_project)
 
     @property
     def value(self) -> str:

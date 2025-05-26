@@ -29,7 +29,7 @@ class RecursiveReader(SafeClass):
         self._ignore: list[str] = ignore
         self._path: str = path.strip()
 
-        self._current_dir_space: Any = None
+        self._mut_curr_dir_space: Any = None
 
         self.__build()
 
@@ -50,13 +50,13 @@ class RecursiveReader(SafeClass):
 
         discard_values(item_refr=dir_space.value, ignored=self._ignore)
 
-        self._current_dir_space = dir_space.value
+        self._mut_curr_dir_space = dir_space.value
         return Ok()
 
 
     def __create_recursion(self) -> Result[None, TcErr]:
         stack: list[tuple] = [
-            ( self._current_dir_space, [] )
+            ( self._mut_curr_dir_space, [] )
         ]
 
         while True:
@@ -69,7 +69,7 @@ class RecursiveReader(SafeClass):
                 if ( err := self.__create_directory(path=item_stack[0].dirs.pop()) ).is_err():
                     return err
 
-                new_stack_item: tuple = (self._current_dir_space, [])
+                new_stack_item: tuple = (self._mut_curr_dir_space, [])
                 stack.append(new_stack_item)
 
                 continue
@@ -78,7 +78,7 @@ class RecursiveReader(SafeClass):
             if ( err := self.___use_files_from_curr_dir_space(refr=raw_file_repr) ).is_err():
                 return err
 
-            if ( err := self.___use_data_from_prcess_curr_dir_space(refr=raw_file_repr) ).is_err():
+            if ( err := self.___process_current_files(refr=raw_file_repr) ).is_err():
                 return err
 
             node_repr: str = item_stack[0].name
@@ -93,7 +93,6 @@ class RecursiveReader(SafeClass):
 
             node_repr += node_repr_content.value
 
-            print(node_repr)
             TcLog(stack)
             TcLog(node_repr)
 
@@ -102,7 +101,7 @@ class RecursiveReader(SafeClass):
                 self._value = node_repr
                 break
 
-            self._current_dir_space, storage = stack[-1]
+            self._mut_curr_dir_space, storage = stack[-1]
             storage.append(node_repr)
 
             if ( err := self.___move_out() ).is_err():
@@ -112,7 +111,7 @@ class RecursiveReader(SafeClass):
 
 
     def ___use_files_from_curr_dir_space(self, refr: list) -> Result[None, TcErr]:
-        data: list[str] = self._current_dir_space.files
+        data: list[str] = self._mut_curr_dir_space.files
 
         for item in data:
             file_obj: FileObject = FileObject(file_name=item)
@@ -126,7 +125,7 @@ class RecursiveReader(SafeClass):
         return Ok()
 
 
-    def ___use_data_from_prcess_curr_dir_space(self, refr: list) -> Result[None, TcErr]:
+    def ___process_current_files(self, refr: list) -> Result[None, TcErr]:
         ids: list[str] = []
 
         for item in refr:
