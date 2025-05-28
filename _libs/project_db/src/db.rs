@@ -10,7 +10,6 @@ pub fn establish_connection() -> SqliteConnection {
 
     // var env
     let database_url = env::var("project_database_url").unwrap_or_else(|_| "test.db".to_string());
-    let test = env::var("test").unwrap_or_else(|_| "false".to_string());
 
     // create_db
     if database_url.starts_with("sqlite:") || !database_url.contains("://") {
@@ -23,11 +22,6 @@ pub fn establish_connection() -> SqliteConnection {
     // connection
     let mut conn = SqliteConnection::establish(&database_url)
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url));
-
-    // test
-    if test == "true" {
-        reset_db(&mut conn);
-    }
 
     // run migrations
     create_tsnippets(&mut conn);
@@ -71,17 +65,4 @@ fn create_tprojects(conn: &mut SqliteConnection) {
     )
     .execute(conn)
     .expect("Failed to run migration");
-}
-
-fn reset_db(conn: &mut SqliteConnection) {
-    use crate::schema::projects::dsl::*;
-    use crate::schema::snippets::dsl::*;
-
-    diesel::delete(snippets)
-        .execute(conn)
-        .expect("failed deleting db");
-
-    diesel::delete(projects)
-        .execute(conn)
-        .expect("failed deleting db");
 }
