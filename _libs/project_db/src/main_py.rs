@@ -83,7 +83,7 @@ impl ProjectDb {
         match res {
             Ok(id) => Ok(id),
             Err(e) => {
-                eprintln!("Error inserting snippet: {:?}", e);
+                eprintln!("Error inserting project: {:?}", e);
                 Ok(0)
             }
         }

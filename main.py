@@ -1,6 +1,3 @@
-"""
-use -> python ~/toolchain/main.py
-"""
 from dotenv import load_dotenv
 
 #~>
@@ -20,7 +17,6 @@ load_dotenv()
 
 @safe_exec
 def main() -> None:
-    """ run ALL"""
     get_next_arg() # del "main.py" from arguments = []
 
     if is_empty_cmd():

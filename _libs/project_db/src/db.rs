@@ -1,17 +1,19 @@
 use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
 use dotenvy::dotenv;
-use std::path::Path;
 use std::env;
+use std::path::Path;
 
+//<·
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
 
-    // env_db_url  || test.db
+    // var env
     let database_url = env::var("project_database_url").unwrap_or_else(|_| "test.db".to_string());
+    let test = env::var("test").unwrap_or_else(|_| "false".to_string());
 
     // create_db
-    if database_url.starts_with("sqlite:") || ! database_url.contains("://") {
+    if database_url.starts_with("sqlite:") || !database_url.contains("://") {
         let db_path = database_url.replace("sqlite:", "");
         if !Path::new(&db_path).exists() {
             std::fs::File::create(&db_path).expect("Failed to create Db file");
@@ -21,6 +23,11 @@ pub fn establish_connection() -> SqliteConnection {
     // connection
     let mut conn = SqliteConnection::establish(&database_url)
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url));
+
+    // test
+    if test == "true" {
+        reset_db(&mut conn);
+    }
 
     // run migrations
     create_tsnippets(&mut conn);
@@ -66,3 +73,15 @@ fn create_tprojects(conn: &mut SqliteConnection) {
     .expect("Failed to run migration");
 }
 
+fn reset_db(conn: &mut SqliteConnection) {
+    use crate::schema::projects::dsl::*;
+    use crate::schema::snippets::dsl::*;
+
+    diesel::delete(snippets)
+        .execute(conn)
+        .expect("failed deleting db");
+
+    diesel::delete(projects)
+        .execute(conn)
+        .expect("failed deleting db");
+}

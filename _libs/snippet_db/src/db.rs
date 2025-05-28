@@ -1,14 +1,15 @@
 use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
 use dotenvy::dotenv;
-use std::path::Path;
 use std::env;
+use std::path::Path;
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
 
-    // env_db_url  || test.db
+    // var env
     let database_url = env::var("snippet_database_url").unwrap_or_else(|_| "test.db".to_string());
+    let test = env::var("test").unwrap_or_else(|_| "false".to_string());
 
     // create_db
     if database_url.starts_with("sqlite:") || !database_url.contains("://") {
@@ -21,6 +22,11 @@ pub fn establish_connection() -> SqliteConnection {
     // connection
     let mut conn = SqliteConnection::establish(&database_url)
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url));
+
+    // test
+    if test == "true" {
+        reset_db(&mut conn);
+    }
 
     // run migrations
     run_migrations(&mut conn);
@@ -44,4 +50,12 @@ fn run_migrations(conn: &mut SqliteConnection) {
     )
     .execute(conn)
     .expect("Failed to run migration");
+}
+
+fn reset_db(conn: &mut SqliteConnection) {
+    use crate::schema::snippet::dsl::*;
+
+    diesel::delete(snippet)
+        .execute(conn)
+        .expect("failed deleting db");
 }

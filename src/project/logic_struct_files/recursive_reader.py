@@ -6,7 +6,6 @@ import os
 from src.project.struct_repr.file_repr import CreatorFilesRepr
 from src.project.struct_repr.dir_repr import CreatorDirsRepr
 from src.identity.dir_object import DirObject, DirVO
-from src.identity.file_object import FileObject
 from src.core.errors import TcErr, safe_exec
 from src.core.safe_cls import SafeClass
 from nucleus.prelude import TcLog
@@ -17,6 +16,7 @@ from src.core.result import (
 
 
 #.?
+from .process_current_files import ProcessCurrentFiles
 from .discard_ignored_values import discard_values
 from .snippet_saver import SnippetSaver
 
@@ -75,7 +75,13 @@ class RecursiveReader(SafeClass):
                 continue
 
             raw_file_repr: list = []
-            if ( err := self.___use_files_from_curr_dir_space(refr=raw_file_repr) ).is_err():
+
+            action: ProcessCurrentFiles = ProcessCurrentFiles(
+                items_to_process=self._mut_curr_dir_space,
+                refr=raw_file_repr,
+            )
+
+            if ( err := action.check_error() ).is_err():
                 return err
 
             if ( err := self.___process_current_files(refr=raw_file_repr) ).is_err():
@@ -110,6 +116,7 @@ class RecursiveReader(SafeClass):
         return Ok()
 
 
+    """
     def ___use_files_from_curr_dir_space(self, refr: list) -> Result[None, TcErr]:
         data: list[str] = self._mut_curr_dir_space.files
 
@@ -124,6 +131,7 @@ class RecursiveReader(SafeClass):
 
         return Ok()
 
+    """
 
     def ___process_current_files(self, refr: list) -> Result[None, TcErr]:
         ids: list[str] = []
