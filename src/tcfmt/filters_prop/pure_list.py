@@ -12,7 +12,8 @@ from .pure_str import filt_str
 
 #<·
 def filt_list(v: str) -> Result[list, FilterPropertyError]:
-    # " [  ]" -> '' | '' == False -> Err
+    # " [  ]" -> ''
+    # '' -> falsy -> False -> Err
     pure_values: str = v.strip('[]').strip()
 
     if not pure_values:

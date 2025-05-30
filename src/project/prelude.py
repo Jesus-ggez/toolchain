@@ -14,6 +14,7 @@ class ProjectManager:
     @staticmethod
     def start() -> None: # Ok
         terminal_content: Terminal = Terminal(field=TcProjectConfig.TEMPLATE_NAME)
+
         if ( err := terminal_content.check_error() ).is_err():
             raise err.error
 
@@ -28,27 +29,26 @@ class ProjectManager:
 
     @staticmethod
     def new() -> None:
-        action: TcFileReader = TcFileReader()
-        if ( err := action.add_filters(
-            props=[
-                'project-oficial-name',
-                'entrypoints',
-                'commands',
-                'version',
-                'target',
-                'dotenv',
-                'ignore',
-                'langs',
-            ]
-        ) ).is_err():
+        tc_reader: TcFileReader = TcFileReader()
+        props: list = [
+            'project-oficial-name',
+            'entrypoints',
+            'commands',
+            'version',
+            'target',
+            'dotenv',
+            'ignore',
+            'langs',
+        ]
+
+        if ( err := tc_reader.add_filters(props=props) ).is_err():
             raise err.error
 
-        action.build()
-
-        if ( err := action.check_error() ).is_err():
+        tc_reader.build()
+        if ( err := tc_reader.check_error() ).is_err():
             raise err.error
 
-        project_content: ProjectSaver = ProjectSaver(metadata=action.final_content)
+        project_content: ProjectSaver = ProjectSaver(metadata=tc_reader.value)
         if ( err := project_content.check_error() ).is_err():
             raise err.error
 

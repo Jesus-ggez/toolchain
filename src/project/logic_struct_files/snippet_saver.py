@@ -27,6 +27,7 @@ class SnippetSaver(SafeClass):
         super().__init__()
 
         self._value: int = 0
+
         self._data: FileVO = data
 
         self.__build()
@@ -65,6 +66,10 @@ class SnippetSaver(SafeClass):
             content=self._data.content,
             name=self._data.raw_name,
         )
+
+        if self._value == 0:
+            raise Exception('Error saving snippet')
+
 
     @safe_exec
     def __create_id(self) -> Any:

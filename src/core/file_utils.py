@@ -1,4 +1,10 @@
+from typing import Any
+
+
 #~>
+
+
+#.?
 from .errs import FileReaderError, FileWriterError
 from .result import (
     Result,
@@ -10,17 +16,22 @@ from .result import (
 #<·
 class Reader:
     @staticmethod
+    def create_error(call_msg: str, e) -> Result[Any, FileReaderError]:
+        return Err(error=FileReaderError(
+            source=__name__,
+            message=str(e),
+            call=call_msg,
+        ))
+
+
+    @staticmethod
     def as_list(filename: str) -> Result[list, FileReaderError]:
         try:
             with open(filename, 'r', encoding='utf-8') as file:
                 return Ok(file.readlines())
 
         except Exception as e:
-            return Err(error=FileReaderError(
-                call='Reader.as_list',
-                source=__name__,
-                message=str(e),
-            ))
+            return Reader.create_error(call_msg='Reader.as_list', e=e)
 
 
     @staticmethod
@@ -30,14 +41,19 @@ class Reader:
                 return Ok(file.read())
 
         except Exception as e:
-            return Err(error=FileReaderError(
-                call='Reader.as_str',
-                source=__name__,
-                message=str(e),
-            ))
+            return Reader.create_error(call_msg='Reader.as_str', e=e)
 
 
 class Writer:
+    @staticmethod
+    def create_error(call_msg: str, e) -> Result[Any, FileWriterError]:
+        return Err(error=FileWriterError(
+            source=__name__,
+            message=str(e),
+            call=call_msg,
+        ))
+
+
     @staticmethod
     def from_list(content: list, name: str) -> Result[None, FileWriterError]:
         try:
@@ -46,11 +62,8 @@ class Writer:
                 return Ok()
 
         except Exception as e:
-            return Err(error=FileWriterError(
-                call='Writer.from_list',
-                source=__name__,
-                message=str(e),
-            ))
+            return Writer.create_error(call_msg='Writer.from_list', e=e)
+
 
     @staticmethod
     def from_str(content: str, name: str) -> Result[None, FileWriterError]:
@@ -60,11 +73,7 @@ class Writer:
                 return Ok()
 
         except Exception as e:
-            return Err(error=FileWriterError(
-                call='Writer.from_str',
-                source=__name__,
-                message=str(e),
-            ))
+            return Writer.create_error(call_msg='Writer.from_str', e=e)
 
 
     @staticmethod
@@ -75,8 +84,4 @@ class Writer:
                 return Ok()
 
         except Exception as e:
-            return Err(error=FileWriterError(
-                call='Writer.extends',
-                source=__name__,
-                message=str(e),
-            ))
+            return Writer.create_error(call_msg='Writer.extends', e=e)

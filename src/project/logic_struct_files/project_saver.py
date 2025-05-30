@@ -27,8 +27,9 @@ class ProjectSaver(SafeClass):
         super().__init__()
 
         self._metadata: dict = metadata
-        self._ignore: list = metadata.get('ignore', [])
+
         self._path: str = metadata.get('target', '.')
+        self._ignore: list = metadata.get('ignore', [])
 
         self._project_dirs: list = []
         self._context: dict = {}
@@ -79,12 +80,13 @@ class ProjectSaver(SafeClass):
         commands: str = ''.join(self._metadata.get('commands', ''))
         langs: str = ''.join(self._metadata.get('langs', ''))
         env: str = ''.join(self._metadata.get('env', ''))
+        default_version: str = '0.0.0'
 
         id_project: int = ProjectDb.add_in(
             composition=self._composition,
             entrypoints=entrypoints,
             commands=commands,
-            version=self._metadata.get('version', '0.0.0'),
+            version=self._metadata.get('version', default_version),
             langs=langs,
             name=self._metadata.get('project-oficial-name', os.getcwd().split('/')[-1]),
             env=env,

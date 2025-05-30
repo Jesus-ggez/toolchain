@@ -20,20 +20,19 @@ class Terminal(SafeClass):
         self._parts: list[str] = []
         self._default: str = '_'
         self._divider: str = '-'
-        self._field: str = field
         self.__value: str = ''
+
+        self._field: str = field
 
         self.__build()
 
 
     def __build(self) -> None:
-        if ( err := self.__validate_parameters() ).is_err():
-            return self._use_error(err)
-
         if self.__is_argument_default().is_ok():
             return
 
         for check in (
+            self.__validate_parameters,
             self.__is_valid_argument,
             self.__is_valid_format,
             self.__is_valid_final_value,
@@ -72,8 +71,6 @@ class Terminal(SafeClass):
 
         if self.__value.startswith(self._field):
             return Ok()
-
-        print(self._field, self.__value)
 
         return self.__create_error(msg='Invalid format to flag')
 

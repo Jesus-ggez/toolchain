@@ -15,8 +15,9 @@ class CreatorFilesRepr(SafeClass):
     def __init__(self, items: list) -> None:
         super().__init__()
 
-        self._items: list = items
         self._value: str = ''
+
+        self._items: list = items
 
         self.__build()
 
@@ -25,11 +26,8 @@ class CreatorFilesRepr(SafeClass):
         if not self._items:
             return
 
-        for check in (
-            self.__create_from_elements,
-        ):
-            if ( err := check() ).is_err():
-                return self._use_error(err)
+        if ( err := self.__create_from_elements() ).is_err():
+            return self._use_error(err)
 
 
     def __create_from_elements(self) -> Result[None, RepresentationError]:
@@ -37,9 +35,9 @@ class CreatorFilesRepr(SafeClass):
 
         items: str = ','.join(self._items).strip()
 
-        items.removeprefix(comma).removesuffix(comma)
+        value: str = items.removeprefix(comma).removesuffix(comma)
 
-        self._value = f'[{items}]'
+        self._value = f'[{value}]'
 
         return Ok()
 

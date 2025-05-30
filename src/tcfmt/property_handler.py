@@ -17,10 +17,11 @@ class PropertyHandler(SafeClass):
     def __init__(self, p: str, custom_filter: str) -> None:
         super().__init__()
 
-        self._p: str = p.strip()
-        self._custom_filter: str = custom_filter.strip()
         self._value: list[str] | str = []
         self._payload: str = ''
+
+        self._custom_filter: str = custom_filter.strip()
+        self._p: str = p.strip()
 
         self.__build()
 
@@ -53,18 +54,19 @@ class PropertyHandler(SafeClass):
 
     def __validate_property_name(self) -> Result[None, PropertyError]:
         if not self._p.startswith(self._custom_filter):
-            return self.__create_error(msg='Invalid property name')
+            return self.__create_error(msg=f'Invalid property name: {self._p}')
 
         return Ok()
 
 
     def __create_raw_payload(self) -> Result[None, PropertyError]:
         _raw_payload: str = self._p.removeprefix(self._custom_filter).strip()
+        eq: str = '='
 
-        if not _raw_payload.startswith('='):
+        if not _raw_payload.startswith(eq):
             return self.__create_error(msg=f'Invalid syntax: {_raw_payload}')
 
-        self._payload: str = _raw_payload.removeprefix('=').strip()
+        self._payload: str = _raw_payload.removeprefix(eq).strip()
         return Ok()
 
 

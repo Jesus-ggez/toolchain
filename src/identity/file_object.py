@@ -2,6 +2,7 @@ from typing import NamedTuple
 
 
 #~>
+from src.core.safe_cls import SafeClass
 from src.core.file_utils import Reader
 from src.core.result import (
     Result,
@@ -11,7 +12,6 @@ from src.core.result import (
 
 
 #.?
-from .struct_value_object import VOIdentity
 from .errs import ValueObjectCreationError
 
 
@@ -24,19 +24,19 @@ class FileVO(NamedTuple):
     extension: str
 
 
-class FileObject(VOIdentity):
+class FileObjectCreator(SafeClass):
     def __init__(self, file_name: str) -> None:
         super().__init__()
-        self._model = FileVO
 
-        self._file_name: str = file_name.strip()
         self._extension_name: str = ''
         self._content: str = ''
         self._name: str = ''
 
+        self._file_name: str = file_name.strip()
+
         self.__build()
 
-        self._create_value_object(
+        self._value: FileVO = FileVO(
             extension=self._extension_name,
             raw_name=self._file_name,
             content=self._content,
@@ -57,7 +57,7 @@ class FileObject(VOIdentity):
 
     def __create_error(self, msg: str) -> Result[None, ValueObjectCreationError]:
         return Err(error=ValueObjectCreationError(
-            call='FileObject()',
+            call='FileObjectCreator()',
             source=__name__,
             message=msg,
         ))
@@ -84,19 +84,19 @@ class FileObject(VOIdentity):
 
 
     def __create_extension(self) -> Result[None, ValueObjectCreationError]:
-        if not self.__has_extension():
+        if not self.___has_extension():
             return Ok()
 
-        raw_extension: str = self._file_name.split('.')[-1]
+        raw_extension: str = self._file_name.split('.')[-1].strip()
 
-        if not raw_extension.strip():
+        if not raw_extension:
             return self.__create_error(msg='Invalid extension format')
 
-        self._extension_name = raw_extension.strip()
+        self._extension_name = raw_extension
         return Ok()
 
 
-    def __has_extension(self) -> bool:
+    def ___has_extension(self) -> bool:
         return '.' in self._file_name
 
 
@@ -104,3 +104,8 @@ class FileObject(VOIdentity):
         self._name: str = self._file_name.removesuffix(self._extension_name)
 
         return Ok()
+
+
+    @property
+    def value(self) -> FileVO:
+        return self._value

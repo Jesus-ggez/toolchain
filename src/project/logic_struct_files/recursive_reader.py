@@ -5,7 +5,7 @@ import os
 #~>
 from src.project.struct_repr.file_repr import CreatorFilesRepr
 from src.project.struct_repr.dir_repr import CreatorDirsRepr
-from src.identity.dir_object import DirObject, DirVO
+from src.identity.dir_object import DirObjectCreator, DirVO
 from src.core.errors import TcErr, safe_exec
 from src.core.safe_cls import SafeClass
 from nucleus.prelude import TcLog
@@ -43,7 +43,7 @@ class RecursiveReader(SafeClass):
 
 
     def __create_directory(self, path: str) -> Result[None, TcErr]:
-        dir_space: DirObject = DirObject(dir_name=path)
+        dir_space: DirObjectCreator = DirObjectCreator(dir_name=path)
 
         if ( err := dir_space.check_error() ).is_err():
             return err
@@ -84,7 +84,7 @@ class RecursiveReader(SafeClass):
             if ( err := action.check_error() ).is_err():
                 return err
 
-            if ( err := self.___process_current_files(refr=raw_file_repr) ).is_err():
+            if ( err := self.___use_current_files(refr=raw_file_repr) ).is_err():
                 return err
 
             node_repr: str = item_stack[0].name
@@ -116,24 +116,7 @@ class RecursiveReader(SafeClass):
         return Ok()
 
 
-    """
-    def ___use_files_from_curr_dir_space(self, refr: list) -> Result[None, TcErr]:
-        data: list[str] = self._mut_curr_dir_space.files
-
-        for item in data:
-            file_obj: FileObject = FileObject(file_name=item)
-
-            if ( err := file_obj.check_error() ).is_err():
-                return err
-
-            refr.append(file_obj.value)
-
-
-        return Ok()
-
-    """
-
-    def ___process_current_files(self, refr: list) -> Result[None, TcErr]:
+    def ___use_current_files(self, refr: list) -> Result[None, TcErr]:
         ids: list[str] = []
 
         for item in refr:

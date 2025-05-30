@@ -1,5 +1,5 @@
 #~>
-from src.identity.file_object import FileObject
+from src.identity.file_object import FileObjectCreator
 from src.core.safe_cls import SafeClass
 from src.core.result import (
     Result,
@@ -30,7 +30,7 @@ class ProcessCurrentFiles(SafeClass):
 
     def __build(self) -> None:
         if ( err := self.__validate_parameters() ).is_err():
-            return err
+            return self._use_error(err)
 
         if ( err := self.__process_data() ).is_err():
             return self._use_error(err)
@@ -48,10 +48,10 @@ class ProcessCurrentFiles(SafeClass):
 
 
     def __process_data(self) -> Result[None, ProjectError]:
-        data: list[str] = self._items_to_process
+        items: list[str] = self._items_to_process
 
-        for item in data:
-            file_obj: FileObject = FileObject(file_name=item)
+        for item in items:
+            file_obj: FileObjectCreator = FileObjectCreator(file_name=item)
 
             if ( err := file_obj.check_error() ).is_err():
                 return err

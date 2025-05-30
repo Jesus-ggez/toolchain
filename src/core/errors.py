@@ -1,6 +1,3 @@
-# import traceback
-
-
 #~>
 from .result import (
     Result,
@@ -27,6 +24,10 @@ def safe_exec(func):
             return Ok(result)
 
         except Exception as e:
-            #traceback.print_exc()
+            from nucleus.constants import TcConfig
+
+            if TcConfig['details']:
+                import traceback; traceback.print_exc()
+
             return Err(e)
     return wrapper

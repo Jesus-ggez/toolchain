@@ -47,9 +47,8 @@ class SnippetManager: # Ok
         if ( err := action.check_error() ).is_err():
             raise err.error
 
-        saved: SnippetSaver= SnippetSaver(
-            metadata=action.final_content,
-        )
+        saved: SnippetSaver= SnippetSaver(metadata=action.value)
+
         if ( err := saved.check_error() ).is_err():
             raise err.error
 
@@ -70,8 +69,10 @@ class SnippetManager: # Ok
         if ( err := terminal_content.check_error() ).is_err():
             raise err.error
 
-        if ( err := UseSnippet(
+        action: UseSnippet = UseSnippet(
             alias=terminal_content.value,
             identifier=identifier,
-        ).check_error() ).is_err():
+        )
+
+        if ( err := action.check_error() ).is_err():
             raise err.error

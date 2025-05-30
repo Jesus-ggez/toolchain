@@ -1,4 +1,4 @@
 #<·
 class TcProjectConfig:
     TEMPLATE_NAME: str = '--temp'
-    ALIAS: str = '--alias'
+    ALIAS: str = '--as'

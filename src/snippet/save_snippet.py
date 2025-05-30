@@ -40,7 +40,7 @@ class SnippetSaver(SafeClass):
             self.__validate_metadata,
             self.__create_data,
             self.__create_record,
-            self.__remove_document,
+            self.__remove_tc_document,
         ):
             if ( err := check() ).is_err():
                 return self._use_error(err)
@@ -53,6 +53,7 @@ class SnippetSaver(SafeClass):
 
         if missing:
             TcLog(missing)
+
             return Err(error=MetadataError(
                 message='Missing keys to add metadata',
                 call='save_snippet()',
@@ -65,11 +66,11 @@ class SnippetSaver(SafeClass):
     def __create_data(self) -> Result[None, TcErr]:
         data: Result = Reader.as_str(filename=self._metadata['target'])
 
-        if data.is_ok():
-            self._data = data.value
-            return Ok()
+        if data.is_err():
+            return data
 
-        return data
+        self._data = data.value
+        return Ok()
 
 
     @safe_exec
@@ -83,7 +84,7 @@ class SnippetSaver(SafeClass):
 
 
     @safe_exec
-    def __remove_document(self) -> Any:
+    def __remove_tc_document(self) -> Any:
         return os.remove(TcConfig.FILE_NAME)
 
 

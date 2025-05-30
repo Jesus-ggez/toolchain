@@ -25,11 +25,8 @@ class CreatorDirsRepr(SafeClass):
         if not self._items:
             return
 
-        for check in (
-            self.__create_from_elements,
-        ):
-            if ( err := check() ).is_err():
-                return self._use_error(err)
+        if ( err := self.__create_from_elements() ).is_err():
+            return self._use_error(err)
 
 
     def __create_from_elements(self) -> Result[None, RepresentationError]:
@@ -37,9 +34,9 @@ class CreatorDirsRepr(SafeClass):
 
         items: str = ','.join(self._items).strip()
 
-        items.removeprefix(dot).removesuffix(dot)
+        value: str = items.removeprefix(dot).removesuffix(dot)
 
-        self._value = f'-{items}|'
+        self._value = f'-{value}|'
 
         return Ok()
 
