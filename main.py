@@ -10,6 +10,8 @@ from app.struct import create_struct
 from src.core.errors import safe_exec
 from src.core.result import Result
 
+from env_actions import use_test_env
+
 
 #<·
 load_dotenv()
@@ -27,6 +29,9 @@ def main() -> None:
         return
 
     TcGlobalContext()
+
+    if ( err := use_test_env() ).is_err():
+        print(err)
 
     tokens: list[str] = tokenize(raw=context.value)
 

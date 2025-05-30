@@ -39,7 +39,7 @@ class ProcessCurrentFiles(SafeClass):
     def __validate_parameters(self) -> Result[None, ProjectError]:
         if not isinstance(self._items_to_process, list):
             return Err(error=ProjectError(
-                message='Invalid type of items to process',
+                message=f'Invalid type of items to process: {type(self._items_to_process)}',
                 call='ProcessCurrentFiles()',
                 source=__name__,
             ))

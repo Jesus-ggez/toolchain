@@ -77,7 +77,7 @@ class RecursiveReader(SafeClass):
             raw_file_repr: list = []
 
             action: ProcessCurrentFiles = ProcessCurrentFiles(
-                items_to_process=self._mut_curr_dir_space,
+                items_to_process=self._mut_curr_dir_space.files,
                 refr=raw_file_repr,
             )
 

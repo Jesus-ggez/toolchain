@@ -7,6 +7,7 @@ from src.tcfmt.reader import TcFileReader
 #.?
 from .logic_struct_files.project_saver import ProjectSaver
 from .constants import TcProjectConfig
+from .errs import ProjectError
 
 
 #<·
@@ -55,3 +56,24 @@ class ProjectManager:
         print(project_content.value)
 
 
+    @staticmethod
+    def use(identifier: str) -> None:
+        if not identifier:
+            raise ProjectError(
+                message='Invalid identifier',
+                call='ProjectManager.use',
+                source=__name__,
+            )
+
+        terminal_content: Terminal = Terminal(field=TcProjectConfig.TEMPLATE_NAME)
+
+        if ( err := terminal_content.check_error() ).is_err():
+            raise err.error
+
+        action: UseProject = UseProject(
+            alias=terminal_content.value,
+            identifier=identifier,
+        )
+
+        if ( err := action.check_error() ).is_err():
+            raise err.error
