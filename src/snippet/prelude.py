@@ -7,6 +7,7 @@ from src.tcfmt.reader import TcFileReader
 #.?
 from .save_snippet import SnippetSaver
 from .constants import TcSnippetConfig
+from .list_content import ListContent
 from .errs import SnippetError
 from .use import UseSnippet
 
@@ -76,3 +77,12 @@ class SnippetManager: # Ok
 
         if ( err := action.check_error() ).is_err():
             raise err.error
+
+    @staticmethod
+    def list_all() -> None:
+        action: ListContent = ListContent()
+
+        if ( err := action.check_error() ).is_err():
+            raise err.error
+
+        print(action.value)
