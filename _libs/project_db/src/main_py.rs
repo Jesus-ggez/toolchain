@@ -87,8 +87,6 @@ impl ProjectDb {
                 Ok(0)
             }
         }
-
-
     }
 
     #[staticmethod]

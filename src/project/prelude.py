@@ -6,6 +6,7 @@ from src.tcfmt.reader import TcFileReader
 
 #.?
 from .logic_struct_files.project_saver import ProjectSaver
+from .use_project.use import UseProject
 from .constants import TcProjectConfig
 from .errs import ProjectError
 
