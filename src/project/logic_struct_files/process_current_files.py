@@ -9,7 +9,7 @@ from src.core.result import (
 
 
 #.?
-from .errs import ProjectError
+from .errs import ProjectError, TcErr
 
 
 #<·
@@ -47,7 +47,7 @@ class ProcessCurrentFiles(SafeClass):
         return Ok()
 
 
-    def __process_data(self) -> Result[None, ProjectError]:
+    def __process_data(self) -> Result[None, ProjectError] | Result[None, TcErr]:
         items: list[str] = self._items_to_process
 
         for item in items:
