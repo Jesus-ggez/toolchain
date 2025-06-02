@@ -4,11 +4,9 @@ use pyo3::prelude::*;
 use crate::db::establish_connection;
 use crate::models::{NewProject, NewSnippet, Project, Snippet};
 use crate::schema::{projects, snippets};
+use crate::class_py::ProjectDb;
 
 //<·
-#[pyclass]
-pub struct ProjectDb;
-
 #[pymethods]
 impl ProjectDb {
     #[staticmethod]
