@@ -17,22 +17,18 @@ class SnippetManager: # Ok
     @staticmethod # Ok
     def start() -> None:
         terminal_content: Terminal = Terminal(field=TcSnippetConfig.TEMPLATE_NAME)
-        if ( err := terminal_content.check_error() ).is_err():
-            raise err.error
+        terminal_content.check_error().or_fail()
 
-        action: TcFileCreator = TcFileCreator(
+        TcFileCreator(
             tempname=terminal_content.value,
             root='snippet',
-        )
-
-        if ( err := action.check_error() ).is_err():
-            raise err.error
+        ).or_fail()
 
 
     @staticmethod
     def new() -> None: # Ok
         action: TcFileReader = TcFileReader()
-        if ( err := action.add_filters(
+        action.add_filters(
             props=[
                 'version',
                 'target',
@@ -40,18 +36,14 @@ class SnippetManager: # Ok
                 'type',
                 'lang',
             ]
-        ) ).is_err():
-            raise err.error
+        ).or_fail()
 
         action.build()
+        action.or_fail()
 
-        if ( err := action.check_error() ).is_err():
-            raise err.error
 
         saved: SnippetSaver= SnippetSaver(metadata=action.value)
-
-        if ( err := saved.check_error() ).is_err():
-            raise err.error
+        saved.or_fail()
 
         print(f'new record with id: {saved.value}')
 
@@ -66,23 +58,20 @@ class SnippetManager: # Ok
             )
 
         terminal_content: Terminal = Terminal(field=TcSnippetConfig.ALIAS)
-
-        if ( err := terminal_content.check_error() ).is_err():
-            raise err.error
+        terminal_content.or_fail()
 
         action: UseSnippet = UseSnippet(
             alias=terminal_content.value,
             identifier=identifier,
         )
 
-        if ( err := action.check_error() ).is_err():
-            raise err.error
+        action.or_fail()
+
 
     @staticmethod
     def list_all() -> None:
         action: ListContent = ListContent()
 
-        if ( err := action.check_error() ).is_err():
-            raise err.error
+        action.or_fail()
 
         print(action.value)

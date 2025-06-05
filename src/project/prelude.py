@@ -5,8 +5,8 @@ from src.tcfmt.reader import TcFileReader
 
 
 #.?
-from .logic_struct_files.project_saver import ProjectSaver
-from .use_project.use import UseProject
+from .use.prelude import ProjectUseWorkspace
+from .saver.prelude import ProjectSaver
 from .constants import TcProjectConfig
 from .errs import ProjectError
 
@@ -16,23 +16,19 @@ class ProjectManager:
     @staticmethod
     def start() -> None: # Ok
         terminal_content: Terminal = Terminal(field=TcProjectConfig.TEMPLATE_NAME)
+        terminal_content.or_fail()
 
-        if ( err := terminal_content.check_error() ).is_err():
-            raise err.error
-
-        action: TcFileCreator = TcFileCreator(
+        TcFileCreator(
             tempname=terminal_content.value,
             root='project',
-        )
-
-        if ( err := action.check_error() ).is_err():
-            raise err.error
+        ).or_fail()
 
 
     @staticmethod
     def new() -> None:
-        tc_reader: TcFileReader = TcFileReader()
-        props: list = [
+        data: TcFileReader = TcFileReader()
+        data.add_filters(
+            props=[
             'project-oficial-name',
             'entrypoints',
             'commands',
@@ -41,40 +37,35 @@ class ProjectManager:
             'dotenv',
             'ignore',
             'langs',
-        ]
+            ]
+        )
+        data.or_fail()
 
-        if ( err := tc_reader.add_filters(props=props) ).is_err():
-            raise err.error
+        data.build()
+        data.or_fail()
 
-        tc_reader.build()
-        if ( err := tc_reader.check_error() ).is_err():
-            raise err.error
+        last_record: ProjectSaver = ProjectSaver(metadata=data.value)
+        last_record.or_fail()
 
-        project_content: ProjectSaver = ProjectSaver(metadata=tc_reader.value)
-        if ( err := project_content.check_error() ).is_err():
-            raise err.error
-
-        print(project_content.value)
+        print('new project saved with id: ' + last_record.value)
 
 
     @staticmethod
     def use(identifier: str) -> None:
         if not identifier:
             raise ProjectError(
-                message='Invalid identifier',
-                call='ProjectManager.use',
+                message='Invalid identifier value',
+                call='ProjectManager()',
                 source=__name__,
             )
 
-        terminal_content: Terminal = Terminal(field=TcProjectConfig.TEMPLATE_NAME)
+        terminal_content: Terminal = Terminal(field=TcProjectConfig.ALIAS)
+        terminal_content.or_fail()
 
-        if ( err := terminal_content.check_error() ).is_err():
-            raise err.error
-
-        action: UseProject = UseProject(
+        record: ProjectUseWorkspace = ProjectUseWorkspace(
             alias=terminal_content.value,
             identifier=identifier,
         )
+        record.or_fail()
 
-        if ( err := action.check_error() ).is_err():
-            raise err.error
+        print(record.workspace_info)

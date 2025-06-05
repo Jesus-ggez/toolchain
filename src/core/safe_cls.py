@@ -25,3 +25,6 @@ class SafeClass:
         TcLog(v=self._state)
 
         return self._state
+
+    def or_fail(self) -> None:
+        return self._state.or_fail()

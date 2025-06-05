@@ -31,6 +31,14 @@ class Result(NamedTuple, Generic[T, E]):
         return f'Ok(value={self.value})' if self.ok else f'Err(error={self.error})'
 
 
+    def or_fail(self) -> None:
+        if not self.ok:
+            raise self.error
+
+    def expect(self, message: str) -> None:
+        print(f'Expect {message} -> ' + self.__str__())
+
+
 def Ok(value: T = None) -> Result[T, E]:
     return Result(ok=True, value=value)
 
