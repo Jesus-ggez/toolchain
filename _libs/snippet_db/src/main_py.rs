@@ -14,11 +14,6 @@ impl SnippetDb {
         logic::create::add_single(name, version, content, _type)
             .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
     }
-    /* future
-    #[staticmethod]
-    fn add_many(name: &str, version: &str, content: &str, _type: &str) -> PyResult<i32> {
-        logic::insert::add_many()
-    }*/
 
     // read
     #[staticmethod]
@@ -35,21 +30,10 @@ impl SnippetDb {
         logic::read::all_records()
             .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
     }
-    /* future
-    #[staticmethod]
-    fn find_by_filter(pattern: &str) -> PyResult<String> {
-        logic::read::by_filter(pattern)
-    }*/
 
-    // update
     // delete
     #[staticmethod]
     fn discard(id: i32) -> PyResult<()> {
         logic::delete::one(id).map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
     }
-    /* future
-    #[staticmethod]
-    fn discard_many(ids: Vec<i32>) -> PyResult<()> {
-        logic::delete::many(ids)
-    }*/
 }

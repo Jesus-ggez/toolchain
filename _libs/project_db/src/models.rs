@@ -1,6 +1,6 @@
+use crate::schema::{projects, snippets};
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
-use crate::schema::{projects, snippets};
 
 //<·
 #[derive(Queryable, Selectable, Serialize, Deserialize, Clone)]

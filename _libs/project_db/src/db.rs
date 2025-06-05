@@ -4,6 +4,8 @@ use dotenvy::dotenv;
 use std::env;
 use std::path::Path;
 
+use crate::py_tables;
+
 //<·
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
@@ -24,45 +26,8 @@ pub fn establish_connection() -> SqliteConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url));
 
     // run migrations
-    create_tsnippets(&mut conn);
-    create_tprojects(&mut conn);
+    py_tables::table_snippets(&mut conn);
+    py_tables::table_projects(&mut conn);
 
-    // implicit return
-    conn
-}
-fn create_tsnippets(conn: &mut SqliteConnection) {
-    diesel::sql_query(
-        //name TEXT NOT NULL UNIQUE,
-        r#"
-        CREATE TABLE IF NOT EXISTS snippets (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-            name TEXT NOT NULL,
-            content TEXT
-        );
-        "#,
-    )
-    .execute(conn)
-    .expect("Failed to run migration");
-}
-
-fn create_tprojects(conn: &mut SqliteConnection) {
-    diesel::sql_query(
-        //name TEXT NOT NULL UNIQUE,
-        r#"
-        CREATE TABLE IF NOT EXISTS projects (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-            composition TEXT NOT NULL UNIQUE,
-            name TEXT NOT NULL UNIQUE,
-            version TEXT NOT NULL,
-            langs TEXT NOT NULL,
-            entrypoints TEXT,
-            commands TEXT,
-            env TEXT
-        );
-        "#,
-    )
-    .execute(conn)
-    .expect("Failed to run migration");
+    return conn;
 }
