@@ -1,6 +1,6 @@
 #~>
-from src.core.errors import BaseError
+from src.core.errors import TcErr
 
 
 #<·
-class TerminalError(BaseError): ...
+class TerminalError(TcErr): ...

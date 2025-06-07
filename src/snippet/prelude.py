@@ -17,12 +17,12 @@ class SnippetManager: # Ok
     @staticmethod # Ok
     def start() -> None:
         terminal_content: Terminal = Terminal(field=TcSnippetConfig.TEMPLATE_NAME)
-        terminal_content.check_error().or_fail()
+        terminal_content.ensure_ok()
 
         TcFileCreator(
             tempname=terminal_content.value,
             root='snippet',
-        ).or_fail()
+        ).ensure_ok()
 
 
     @staticmethod
@@ -36,14 +36,14 @@ class SnippetManager: # Ok
                 'type',
                 'lang',
             ]
-        ).or_fail()
+        ).ensure_ok()
 
         action.build()
-        action.or_fail()
+        action.ensure_ok()
 
 
         saved: SnippetSaver= SnippetSaver(metadata=action.value)
-        saved.or_fail()
+        saved.ensure_ok()
 
         print(f'new record with id: {saved.value}')
 
@@ -58,20 +58,22 @@ class SnippetManager: # Ok
             )
 
         terminal_content: Terminal = Terminal(field=TcSnippetConfig.ALIAS)
-        terminal_content.or_fail()
+        terminal_content.ensure_ok()
 
         action: UseSnippet = UseSnippet(
             alias=terminal_content.value,
             identifier=identifier,
         )
 
-        action.or_fail()
+        action.ensure_ok()
+
+        print('Project created succesfully')
 
 
     @staticmethod
     def list_all() -> None:
         action: ListContent = ListContent()
 
-        action.or_fail()
+        action.ensure_ok()
 
         print(action.value)

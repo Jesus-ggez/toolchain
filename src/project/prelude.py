@@ -5,8 +5,9 @@ from src.tcfmt.reader import TcFileReader
 
 
 #.?
-from .use.prelude import ProjectUseWorkspace
-from .saver.prelude import ProjectSaver
+from .logic_struct_files.project_saver import ProjectSaver
+from .use_project.use import UseProject
+
 from .constants import TcProjectConfig
 from .errs import ProjectError
 
@@ -16,56 +17,49 @@ class ProjectManager:
     @staticmethod
     def start() -> None: # Ok
         terminal_content: Terminal = Terminal(field=TcProjectConfig.TEMPLATE_NAME)
-        terminal_content.or_fail()
 
-        TcFileCreator(
+        terminal_content.ensure_ok()
+
+        action: TcFileCreator = TcFileCreator(
             tempname=terminal_content.value,
             root='project',
-        ).or_fail()
+        )
+        action.ensure_ok()
 
 
     @staticmethod
     def new() -> None:
-        data: TcFileReader = TcFileReader()
-        data.add_filters(
-            props=[
-            'project-oficial-name',
-            'entrypoints',
-            'commands',
-            'version',
-            'target',
-            'dotenv',
-            'ignore',
-            'langs',
-            ]
-        )
-        data.or_fail()
+        tc_reader: TcFileReader = TcFileReader()
 
-        data.build()
-        data.or_fail()
+        if ( err := tc_reader.add_filters(props=TcProjectConfig.FILTERS) ).is_err():
+            raise err.error
 
-        last_record: ProjectSaver = ProjectSaver(metadata=data.value)
-        last_record.or_fail()
+        tc_reader.build()
+        tc_reader.ensure_ok()
 
-        print('new project saved with id: ' + last_record.value)
+        project_content: ProjectSaver = ProjectSaver(metadata=tc_reader.value)
+        project_content.ensure_ok()
+
+        print(project_content.value)
 
 
     @staticmethod
     def use(identifier: str) -> None:
         if not identifier:
             raise ProjectError(
-                message='Invalid identifier value',
-                call='ProjectManager()',
+                message='Invalid identifier',
+                call='ProjectManager.use',
                 source=__name__,
             )
 
-        terminal_content: Terminal = Terminal(field=TcProjectConfig.ALIAS)
-        terminal_content.or_fail()
+        terminal_content: Terminal = Terminal(field=TcProjectConfig.TEMPLATE_NAME)
+        terminal_content.ensure_ok()
 
-        record: ProjectUseWorkspace = ProjectUseWorkspace(
+        action: UseProject = UseProject(
             alias=terminal_content.value,
             identifier=identifier,
         )
-        record.or_fail()
 
-        print(record.workspace_info)
+        action.ensure_ok()
+
+        print('Project created successfully')

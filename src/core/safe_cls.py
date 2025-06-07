@@ -26,5 +26,5 @@ class SafeClass:
 
         return self._state
 
-    def or_fail(self) -> None:
-        return self._state.or_fail()
+    def ensure_ok(self) -> None:
+        return self._state.ensure_ok()

@@ -31,7 +31,7 @@ class Result(NamedTuple, Generic[T, E]):
         return f'Ok(value={self.value})' if self.ok else f'Err(error={self.error})'
 
 
-    def or_fail(self) -> None:
+    def ensure_ok(self) -> None:
         if not self.ok:
             raise self.error
 

@@ -14,9 +14,6 @@ class TcErr(Exception):
         super().__init__(msg)
 
 
-class BaseError(TcErr): ...
-
-
 def safe_exec(func):
     def wrapper(*args, **kwargs) -> Result[T, Exception]:
         try:

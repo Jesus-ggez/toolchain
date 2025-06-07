@@ -1,9 +1,9 @@
 #~>
-from src.core.errors import BaseError
+from src.core.errors import TcErr
 
 
 #<·
-class ContextError(BaseError): ...
+class ContextError(TcErr): ...
 
 class TreeError(ContextError): ...
 
