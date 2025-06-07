@@ -5,7 +5,7 @@ from src.tcfmt.reader import TcFileReader
 
 
 #.?
-from .logic_struct_files.project_saver import ProjectSaver
+#from .logic_struct_files.project_saver import ProjectSaver
 from .use_project.use import UseProject
 
 from .constants import TcProjectConfig
@@ -29,6 +29,7 @@ class ProjectManager:
 
     @staticmethod
     def new() -> None:
+        ...
         tc_reader: TcFileReader = TcFileReader()
 
         if ( err := tc_reader.add_filters(props=TcProjectConfig.FILTERS) ).is_err():
@@ -45,6 +46,7 @@ class ProjectManager:
 
     @staticmethod
     def use(identifier: str) -> None:
+        ...
         if not identifier:
             raise ProjectError(
                 message='Invalid identifier',
