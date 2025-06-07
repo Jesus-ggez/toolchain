@@ -1,3 +1,4 @@
+
 #~>
 from src.c_terminal.prelude import Terminal
 from src.tcfmt.creator import TcFileCreator
@@ -5,10 +6,9 @@ from src.tcfmt.reader import TcFileReader
 
 
 #.?
-from .logic_struct_files.project_saver import ProjectSaver
-from .use_project.use import UseProject
-
+from .use.workspace import ProjectUseWorkspace
 from .constants import TcProjectConfig
+from .new.saver import ProjectSaver
 from .errs import ProjectError
 
 
@@ -55,7 +55,7 @@ class ProjectManager:
         terminal_content: Terminal = Terminal(field=TcProjectConfig.TEMPLATE_NAME)
         terminal_content.ensure_ok()
 
-        action: UseProject = UseProject(
+        action: ProjectUseWorkspace = ProjectUseWorkspace(
             alias=terminal_content.value,
             identifier=identifier,
         )

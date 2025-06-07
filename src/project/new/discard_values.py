@@ -51,3 +51,4 @@ def discard_values(item_refr: DirVO, ignored: list) -> None:
 
         if item in dirs:
             item_refr.dirs.remove(item)
+

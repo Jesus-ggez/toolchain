@@ -3,4 +3,5 @@ from src.core.errors import TcErr
 
 
 #<·
-class UseProjectError(TcErr): ...
+class ProjectError(TcErr): ...
+

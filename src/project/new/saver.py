@@ -1,5 +1,4 @@
 from typing import Any
-import os
 
 
 #¿?
@@ -11,14 +10,12 @@ from src.core.errors import TcErr, safe_exec
 from src.core.safe_cls import SafeClass
 from src.core.result import (
     Result,
-    Err,
     Ok,
 )
 
 
 #.?
-from .recursive_reader import RecursiveReader
-from .errs import ProjectError
+from .dfs import RecursiveReader
 
 
 #<·
@@ -28,9 +25,6 @@ class ProjectSaver(SafeClass):
 
         self._metadata: dict = metadata
 
-        self._path: str = metadata.get('target', '.')
-        self._ignore: list = metadata.get('ignore', [])
-
         self._project_dirs: list = []
         self._context: dict = {}
 
@@ -38,32 +32,18 @@ class ProjectSaver(SafeClass):
 
 
     def __build(self) -> None:
-        for check in (
-            self.__validate_parameters,
-            self.__create_reader,
-            self.__create_record,
-        ):
-            if ( err := check() ).is_err():
-                return self._use_error(err)
+        if ( err := self.__create_reader() ).is_err():
+            return self._use_error(err)
 
-
-    def __create_error(self, msg: str) -> Result[None, ProjectError]:
-        return Err(error=ProjectError(
-            call='ProjectSaver()',
-            source=__name__,
-            message=msg
-        ))
-
-
-    def __validate_parameters(self) -> Result[None, ProjectError]:
-        if not isinstance(self._path, str) or not self._path:
-            return self.__create_error(msg='Invalid parameters')
-
-        return Ok()
+        if ( err := self.__create_record() ).is_err():
+            return self._use_error(err)
 
 
     def __create_reader(self) -> Result[None, TcErr]:
-        action: RecursiveReader = RecursiveReader(path=self._path, ignore=self._ignore)
+        action: RecursiveReader = RecursiveReader(
+            ignore=self._metadata.get('ignore', []),
+            path=self._metadata.get('target', '.')
+        )
         if ( err := action.check_error() ).is_err():
             return err
 
@@ -82,13 +62,16 @@ class ProjectSaver(SafeClass):
         env: str = ''.join(self._metadata.get('env', ''))
         default_version: str = '0.0.0'
 
+        if not self._metadata.get('project-oficial-name'):
+            raise ValueError('Needs name to create project')
+
         id_project: int = ProjectDb.add_in(
             composition=self._composition,
             entrypoints=entrypoints,
             commands=commands,
             version=self._metadata.get('version', default_version),
             langs=langs,
-            name=self._metadata.get('project-oficial-name', os.getcwd().split('/')[-1]),
+            name=self._metadata['project-oficial-name'],
             env=env,
         )
 
@@ -98,15 +81,5 @@ class ProjectSaver(SafeClass):
     @property
     def value(self) -> str:
         return self._value
-
-
-
-
-
-
-
-
-
-
 
 
