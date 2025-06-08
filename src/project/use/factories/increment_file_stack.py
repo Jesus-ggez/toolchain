@@ -1,5 +1,4 @@
 #~>
-from src.project.use.tc_ast import TcAST
 from src.core.safe_cls import SafeClass
 from src.core.result import (
     Result,
@@ -13,10 +12,10 @@ from .errs import TcProjectSyntaxError
 
 #<·
 class IncrementFileStack(SafeClass):
-    def __init__(self, context: type[TcAST]) -> None:
+    def __init__(self, context: dict) -> None:
         super().__init__()
 
-        self._context: type[TcAST] = context
+        self._context: dict = context
         self.__build()
 
 
@@ -28,6 +27,8 @@ class IncrementFileStack(SafeClass):
 
 
     def __increment_stack(self) -> Result[None, TcProjectSyntaxError]:
-        self._context.file_stack.append(self._context.last_token)
+        self._context['stack'].append(
+            self._context['last_token']
+        )
 
         return Ok()

@@ -8,7 +8,6 @@ from project_db import SnippetDb
 
 
 #~>
-from src.project.use.tc_ast import TcAST
 from src.core.safe_cls import SafeClass
 from src.core.file_utils import Writer
 from src.core.errors import safe_exec
@@ -24,13 +23,13 @@ from .errs import TcErr
 
 #<·
 class CreateFilesFromStack(SafeClass):
-    def __init__(self, context: type[TcAST]) -> None:
+    def __init__(self, context: dict) -> None:
         super().__init__()
 
-        self._context: type[TcAST] = context
+        self._context: dict = context
         self.__build()
 
-        context.file_stack.clear()
+        context['stack'].clear()
 
 
     def __build(self) -> None:
@@ -41,7 +40,11 @@ class CreateFilesFromStack(SafeClass):
 
 
     def __create_all_files(self) -> Result[None, TcErr]:
-        for item in self._context.file_stack:
+        self._context['stack'].append(
+            self._context['last_token']
+        )
+
+        for item in self._context['stack']:
             data: Result = self.___get_data(raw_iden=item)
 
             if data.is_err():

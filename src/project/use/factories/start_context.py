@@ -3,17 +3,16 @@ import os
 
 
 #~>
-from src.project.use.tc_ast import TcAST
 from src.core.safe_cls import SafeClass
 from src.core.errors import safe_exec
 
 
 #<·
 class StartContext(SafeClass):
-    def __init__(self, context: type[TcAST]) -> None:
+    def __init__(self, context: dict) -> None:
         super().__init__()
 
-        self._context: type[TcAST] = context
+        self._context: dict = context
         self.__build()
 
 
@@ -29,9 +28,13 @@ class StartContext(SafeClass):
 
     @safe_exec
     def __create_dir(self) -> Any:
-        return os.mkdir(self._context.last_token)
+        return os.mkdir(
+            self._context['last_token']
+        )
 
 
     @safe_exec
     def __move_to_dir(self) -> Any:
-        return os.chdir(self._context.last_token)
+        return os.chdir(
+            self._context['last_token']
+        )

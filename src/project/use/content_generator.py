@@ -11,7 +11,6 @@ from src.core.result import (
 from .factories.get_factory import SKWFactory
 from .tokenizer import tokenize
 from .errs import UseError
-from .tc_ast import TcAST
 
 
 #<·
@@ -51,16 +50,22 @@ class ContentGenerator(SafeClass):
 
 
     def __main_loop(self) -> Result[None, UseError]:
-        local_ast: type[TcAST] = TcAST
+        local_ast: dict = {
+            'last_token': None,
+            'stack': [],
+        }
 
-        print(self._tokens)
         for token in self._tokens:
+            # ...
+            local_ast['.'] = token
+            print(local_ast)
+
             if '_' in token:
-                local_ast.last_token = token
+                local_ast['last_token'] = token
                 continue
 
             if token.isalnum():
-                local_ast.last_token = token
+                local_ast['last_token'] = token
                 continue
 
             actor: Result = SKWFactory.get_factory(key=token)
