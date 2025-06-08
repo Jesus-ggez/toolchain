@@ -25,3 +25,6 @@ def search() -> None:
 
             finally:
                 os.chdir('..')
+
+if __name__ == '__main__':
+    search()

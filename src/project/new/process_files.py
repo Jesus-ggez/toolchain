@@ -110,7 +110,7 @@ class ProcessFiles(SafeClass):
     def ___insert_data(self, item: FileVO) -> Any:
         return SnippetDb.set_snippet(
             content=item.content,
-            name=item.name,
+            name=item.raw_name,
         )
 
 

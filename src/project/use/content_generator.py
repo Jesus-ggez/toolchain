@@ -1,6 +1,5 @@
 #~>
 from src.core.safe_cls import SafeClass
-from utils.tokens import tokenize
 from src.core.result import (
     Result,
     Err,
@@ -9,7 +8,10 @@ from src.core.result import (
 
 
 #.?
+from .factories.get_factory import SKWFactory
+from .tokenizer import tokenize
 from .errs import UseError
+from .tc_ast import TcAST
 
 
 #<·
@@ -19,6 +21,7 @@ class ContentGenerator(SafeClass):
 
         self._tokens: list[str] = []
         self._struct: str = struct
+        print(self._struct)
 
         self.__build()
 
@@ -48,9 +51,24 @@ class ContentGenerator(SafeClass):
 
 
     def __main_loop(self) -> Result[None, UseError]:
+        local_ast: type[TcAST] = TcAST
+
+        print(self._tokens)
         for token in self._tokens:
-            if not token.isalnum():
-                ...
+            if '_' in token:
+                local_ast.last_token = token
+                continue
 
+            if token.isalnum():
+                local_ast.last_token = token
+                continue
 
+            actor: Result = SKWFactory.get_factory(key=token)
+
+            if actor.is_err():
+                return actor
+
+            actor.value(
+                context=local_ast,
+            )
         return Ok()

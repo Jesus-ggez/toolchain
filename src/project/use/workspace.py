@@ -1,4 +1,5 @@
 from typing import Any
+import json
 
 
 #~>
@@ -12,6 +13,7 @@ from src.core.result import (
 
 
 #¿?
+from snippet_db import Identifier
 from project_db import ProjectDb
 
 
@@ -63,7 +65,9 @@ class ProjectUseWorkspace(SafeClass):
         if not project.value:
             return self.__create_error(msg='Project not found')
 
-        if ( err := ContentGenerator(struct=project.value).check_error() ).is_err():
+        project_data: dict = json.loads(project.value)
+
+        if ( err := ContentGenerator(struct=project_data['composition']).check_error() ).is_err():
             return err
 
         return Ok()
@@ -77,5 +81,8 @@ class ProjectUseWorkspace(SafeClass):
         if len(self._identifier) > 3:
             return ProjectDb.get_by_name(self._identifier)
 
-        return ProjectDb.get_by_id(self._identifier)
+
+        v: str = '00' + self._identifier
+        _id: int =Identifier.to_number(s=v[-3:])
+        return ProjectDb.get_by_id(_id)
 
