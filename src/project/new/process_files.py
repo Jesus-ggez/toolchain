@@ -1,6 +1,11 @@
 from typing import Any
 
 
+#¿?
+from snippet_db import Identifier
+from project_db import SnippetDb
+
+
 #~>
 from src.identity.file_object import FileObjectCreator, FileVO
 from src.core.safe_cls import SafeClass
@@ -10,11 +15,6 @@ from src.core.result import (
     Err,
     Ok,
 )
-
-
-#¿?
-from snippet_db import Identifier
-from project_db import SnippetDb
 
 
 #.?
@@ -108,7 +108,7 @@ class ProcessFiles(SafeClass):
 
     @safe_exec
     def ___insert_data(self, item: FileVO) -> Any:
-        return SnippetDb.set_snipppet(
+        return SnippetDb.set_snippet(
             content=item.content,
             name=item.name,
         )

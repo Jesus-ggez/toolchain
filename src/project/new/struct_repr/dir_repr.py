@@ -16,7 +16,7 @@ class CreatorDirsRepr(SafeClass):
         super().__init__()
 
         self._items: list = items
-        self._value: str = '|'
+        self._value: str = '.'
 
         self.__build()
 
@@ -32,7 +32,7 @@ class CreatorDirsRepr(SafeClass):
     def __create_from_elements(self) -> Result[None, RepresentationError]:
         dot: str = '.'
 
-        items: str = ','.join(self._items).strip()
+        items: str = dot.join(self._items).strip()
 
         value: str = items.removeprefix(dot).removesuffix(dot)
 

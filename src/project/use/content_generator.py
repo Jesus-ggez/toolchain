@@ -27,6 +27,8 @@ class ContentGenerator(SafeClass):
         if ( err := self.__validate_parameters() ).is_err():
             return self._use_error(err)
 
+        if ( err := self.__main_loop() ).is_err():
+            return self._use_error(err)
 
     def __create_error(self, msg: str) -> Result[None, UseError]:
         return Err(error=UseError(
@@ -44,3 +46,11 @@ class ContentGenerator(SafeClass):
 
         return Ok()
 
+
+    def __main_loop(self) -> Result[None, UseError]:
+        for token in self._tokens:
+            if not token.isalnum():
+                ...
+
+
+        return Ok()

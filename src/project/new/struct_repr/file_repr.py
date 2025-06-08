@@ -33,15 +33,19 @@ class CreatorFilesRepr(SafeClass):
     def __create_from_elements(self) -> Result[None, RepresentationError]:
         comma: str = ','
 
-        items: str = ','.join(self._items).strip()
+        items: str = comma.join(self._items).strip()
 
         value: str = items.removeprefix(comma).removesuffix(comma)
 
-        self._value = f'[{value}]'
+        self._value += value
 
         return Ok()
 
 
     @property
     def value(self) -> str:
+        """
+        [] -> ''
+        [...] -> '...;'
+        """
         return self._value

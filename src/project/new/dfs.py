@@ -14,8 +14,7 @@ from src.core.result import (
 
 
 #.?
-from .struct_repr.file_repr import CreatorFilesRepr
-from .struct_repr.dir_repr import CreatorDirsRepr
+from .struct_repr.node_repr_creator import NodeReprCreator
 from .discard_values import discard_values
 from .process_files import ProcessFiles
 
@@ -62,9 +61,8 @@ class RecursiveReader(SafeClass):
             if not stack:
                 break
 
-            item_stack: tuple = stack[-1]
-
-            tree: DirVO = item_stack[0]
+            # vars
+            tree: DirVO = stack[-1][0]
 
             if tree.dirs:
                 if ( err := self.__create_directory(path=tree.dirs.pop()) ).is_err():
@@ -73,50 +71,43 @@ class RecursiveReader(SafeClass):
                 stack.append( ( self._current_tree, [] ) )
                 continue
 
-            procesed_files: ProcessFiles = ProcessFiles(
+            # filespace
+            local_node_storage: list[str] = stack[-1][1]
+
+            files_processed: ProcessFiles = ProcessFiles(
                 files=tree.files,
             )
-
-            if ( err := procesed_files.check_error() ).is_err():
+            if ( err := files_processed.check_error() ).is_err():
                 return err
 
-            node_repr_content: Result = self.___create_node_repr(
-                file_data=procesed_files.value,
-                dirs_data=item_stack[1],
+            # general nodespace
+            action_node_repr: NodeReprCreator = NodeReprCreator(
+                files=files_processed.value,
+                nodes=local_node_storage,
+                name=tree.name,
             )
+            if ( err := action_node_repr.check_error() ).is_err():
+                return err
 
-            if node_repr_content.is_err():
-                return node_repr_content
+            node_repr: str = action_node_repr.value
 
-            node_repr: str = tree.name + node_repr_content.value
+            # logs
+            TcLog(node_repr)
 
-            TcLog((stack, node_repr))
-
+            # end actions in this node
             stack.pop()
+
             if not stack:
-                self._value = node_repr
+                self._value: str = node_repr
                 break
 
-            self._current_tree, storage = stack[-1]
-            storage.append(node_repr)
+            local_node_storage: list[str] = stack[-1][1]
+            local_node_storage.append(node_repr)
 
             if ( err := self.___move_out() ).is_err():
                 return err
 
         return Ok()
-
-
-    def ___create_node_repr(self, file_data: list, dirs_data: list) -> Result[str, TcErr]:
-        files_repr: CreatorFilesRepr = CreatorFilesRepr(items=file_data)
-        dirs_repr: CreatorDirsRepr = CreatorDirsRepr(items=dirs_data)
-
-        if ( err := files_repr.check_error() ).is_err():
-            return err
-
-        if ( err := dirs_repr.check_error() ).is_err():
-            return err
-
-        return Ok(files_repr.value + dirs_repr.value)
 
 
     @safe_exec

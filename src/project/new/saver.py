@@ -80,6 +80,7 @@ class ProjectSaver(SafeClass):
 
     @property
     def value(self) -> str:
+        print(self._composition)
         return self._value
 
 
