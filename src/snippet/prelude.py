@@ -4,6 +4,9 @@ from src.tcfmt.creator import TcFileCreator
 from src.tcfmt.reader import TcFileReader
 
 
+#...
+# from .discard_snippet import SnippetDiscarder
+
 #.?
 from .save_snippet import SnippetSaver
 from .constants import TcSnippetConfig
@@ -77,3 +80,19 @@ class SnippetManager: # Ok
         action.ensure_ok()
 
         print(action.value)
+
+    """
+    @staticmethod
+    def discard(identifier: str) -> None:
+        if not identifier:
+            raise SnippetError(
+                message='Invalid identifier',
+                call='SnippetManager.use',
+                source=__name__,
+            )
+
+        action: SnippetDiscarder = SnippetDiscarder(identifier)
+        action.ensure_ok()
+
+        print('successfully removed')
+    """

@@ -1,5 +1,6 @@
 from typing import Any
 import json
+import os
 
 
 #~>
@@ -28,7 +29,7 @@ class ProjectUseWorkspace(SafeClass):
         super().__init__()
 
         self._identifier: str = identifier.strip()
-        self._alias: str = alias
+        self._alias: str = alias if alias != '_' else ''
 
         self.__build()
 
@@ -67,10 +68,19 @@ class ProjectUseWorkspace(SafeClass):
 
         project_data: dict = json.loads(project.value)
 
+        if ( err := self.___create_project_root(root_name=self._alias or project_data['name']) ).is_err():
+            return err
+
         if ( err := ContentGenerator(struct=project_data['composition']).check_error() ).is_err():
             return err
 
         return Ok()
+
+
+    @safe_exec
+    def ___create_project_root(self, root_name: str) -> Any:
+        os.mkdir(root_name)
+        return os.chdir(root_name)
 
 
     @safe_exec

@@ -28,7 +28,8 @@ class Result(NamedTuple, Generic[T, E]):
 
 
     def __str__(self) -> str:
-        return f'Ok(value={self.value})' if self.ok else f'Err(error={self.error})'
+        return f'Ok(\n\tvalue={self.value}\n)' if self.ok else f'Err(\n\terror={self.error}\n)'
+
 
 
     def ensure_ok(self) -> None:

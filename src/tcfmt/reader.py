@@ -53,8 +53,9 @@ class TcFileReader(SafeClass):
 
 
     def _read_data(self) -> Result[None, TcTcfmtReaderError]:
+        commentary: str = '#'
         for line in self._file_content:
-            if line.startswith('#'):
+            if line.startswith(commentary):
                 continue
 
             if not line.strip():

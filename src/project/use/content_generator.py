@@ -20,7 +20,6 @@ class ContentGenerator(SafeClass):
 
         self._tokens: list[str] = []
         self._struct: str = struct
-        print(self._struct)
 
         self.__build()
 
@@ -58,7 +57,6 @@ class ContentGenerator(SafeClass):
         for token in self._tokens:
             # ...
             local_ast['.'] = token
-            print(local_ast)
 
             if '_' in token:
                 local_ast['last_token'] = token

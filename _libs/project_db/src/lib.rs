@@ -8,8 +8,7 @@ mod py_snippet_table;
 mod py_tables;
 mod schema;
 
-use crate::class_py::SnippetDb;
-use crate::class_py::ProjectDb;
+use crate::class_py::{ProjectDb, SnippetDb};
 
 //<·
 #[pymodule]

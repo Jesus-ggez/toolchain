@@ -20,9 +20,7 @@ class SafeClass:
 
 
     def check_error(self) -> Result[None, TcErr]:
-        from nucleus.prelude import TcLog
-
-        TcLog(v=self._state)
+        from nucleus.prelude import TcLog; TcLog(v=self._state)
 
         return self._state
 

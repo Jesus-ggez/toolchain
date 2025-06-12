@@ -31,6 +31,11 @@ impl SnippetDb {
             .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
     }
 
+    // update
+    fn update(id: i32) -> PyResult<bool>{
+        // logica para funcion actualizar
+    }
+
     // delete
     #[staticmethod]
     fn discard(id: i32) -> PyResult<()> {

@@ -1,4 +1,3 @@
-
 #~>
 from src.c_terminal.prelude import Terminal
 from src.tcfmt.creator import TcFileCreator
@@ -52,7 +51,7 @@ class ProjectManager:
                 source=__name__,
             )
 
-        terminal_content: Terminal = Terminal(field=TcProjectConfig.TEMPLATE_NAME)
+        terminal_content: Terminal = Terminal(field=TcProjectConfig.ALIAS)
         terminal_content.ensure_ok()
 
         action: ProjectUseWorkspace = ProjectUseWorkspace(
