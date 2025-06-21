@@ -1,6 +1,6 @@
 [package]
 name = "snippet_db"
-version = "0.2.1"
+version = "1.2.1"
 edition = "2024"
 
 [lib]
@@ -14,3 +14,14 @@ libsqlite3-sys = { version = "0.30", features = ["bundled"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 dotenvy = "0.15"
+
+[package-metadata.maturin]
+include-pyi = true
+
+[profile-release]
+target-cpu = "native"
+codegen-units = 1
+panic = "abort"
+opt-level = 3
+lto = false
+

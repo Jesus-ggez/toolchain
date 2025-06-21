@@ -1,0 +1,26 @@
+class SnippetDb:
+    @staticmethod
+    def add_in(nama: str, version: str, content: str,_type: str) -> int: ...
+
+    @staticmethod
+    def find_by_id(id: int) -> str: ...
+
+    @staticmethod
+    def find_by_name(name: str) -> str: ...
+
+    @staticmethod
+    def find_all() -> str: ...
+
+    @staticmethod
+    def discard(id: int) -> None: ...
+
+
+class Identifier:
+    @staticmethod
+    def from_number(num: int) -> str: ...
+
+    @staticmethod
+    def to_number(s: str) -> int: ...
+
+    #@staticmethod
+    #def () -> : ...

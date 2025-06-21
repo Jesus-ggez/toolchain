@@ -10,7 +10,9 @@ pub struct SnippetDb;
 impl SnippetDb {
     // create
     #[staticmethod]
-    fn add_in(name: &str, version: &str, content: &str, _type: &str) -> PyResult<i32> {
+    fn add_in(
+        name: &str, version: &str, 
+        content: &str, _type: &str) -> PyResult<i32> {
         logic::create::add_single(name, version, content, _type)
             .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))
     }
@@ -32,9 +34,9 @@ impl SnippetDb {
     }
 
     // update
-    fn update(id: i32) -> PyResult<bool>{
-        // logica para funcion actualizar
-    }
+    //fn update(id: i32) -> PyResult<bool>{
+    // logica para funcion actualizar
+    //}
 
     // delete
     #[staticmethod]

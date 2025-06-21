@@ -229,7 +229,7 @@ dependencies = [
 
 [[package]]
 name = "project_db"
-version = "0.3.2"
+version = "1.3.2"
 dependencies = [
  "diesel",
  "dotenvy",
